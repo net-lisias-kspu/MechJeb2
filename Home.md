@@ -11,6 +11,7 @@ If you find a bug, you can help us solve it. First, look at the [list of issues]
 If the issue hasn't been filed already, please [make a new issue](https://github.com/MuMech/MechJeb2/issues/new) with the following information:
 - the version of MechJeb you're using
 - the steps needed to reproduce the problem (link to a .craft or persistence file if necessary)
+- a list of all other mods you have installed
 
 If you're requesting a new feature, you can skip the "steps to reproduce" and instead describe:
 - why the feature would be useful to you (it may not be obvious to us)
