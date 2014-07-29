@@ -24,8 +24,8 @@ also add
 
 from the standard packages
 
+Make sure the files in Properties/ are included and have Build Action set to "EmbeddedResource" and that their Resource ID is set to "MuMech.Properties.<filename>"
 
 Hopefully you should now be able to build MechJeb2.dll ! place this in the KSP plugins directory and the mechjeb part in the appropriate folder, don't forget to add said part to your design!!
 
-### Windows Report
-The above advice works, mostly. The compiled DLL is less than half the size of the released version. I have encountered a bug not present in the released version of MechJeb, wherein if I place the AR202 part on the side of a command module, the vessel disintegrates during launch. I'm guessing that MonoDevelop/Xamarin Studio is using a different compiler on Windows, and that's the source of the differences.
+If you have trouble with the plugin while it is running, check for clues in the log at KSP_Data/output_log.txt
