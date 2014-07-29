@@ -7,7 +7,7 @@ These notes confirmed to work with MonoDevelop on Linux and Xamarin Studio on Wi
 * Ensure the project targets .Net framework 3.5.
 * Next, locate some files from KSP itself as references. They can be found at:
 
-<Your KSP Directory>/KSP_Data/Managed
+_Your KSP Directory_/KSP_Data/Managed
 
 add
 
