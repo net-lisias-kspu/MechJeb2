@@ -1,0 +1,514 @@
+__NOTOC__
+
+==Version 2.7.0==
+
+* New launch profiles selection, including one that is the classic "KSP ascent", a "PEG" clone for RSS and the classic MJ profile
+* Scripting module Update with new features (you ll have too look)
+* New spaceplane landing AP
+* A rework of the advanced transfer code
+* A lot of FuelSim (dV) fix
+* Better FAR integration
+* A bunch of fix and UI improvement
+
+==Version 2.6.1==
+
+* Compatibility with KSP 1.3
+* Fix and improvement for the transfer calculator
+* Specific orbital energy, potential energy, and kinetic energy Orbit * Info items added
+* Ascent AP improved circularization burn inclination error
+* Ullage/RO improvement
+* Remove a large recurrent allocation that froze the game every few * seconds  from some
+* Flight recorder UI improvement and export
+* Plenty of fixes
+* Thanks to all contributors
+
+==Version 2.6.0==
+
+* Compatibility for KSP 1.2.2
+* Scripting module by @SPD13
+* Auto RCS Ullage for RO by Lamont (whose name here I forgot..)
+* Option to move the menu on any side of the screen
+* A bunch of fixes and minor features
+* stuff I most likely forgot about
+
+==Version 2.5.8==
+* Compatibility for KSP 1.1.3
+* Add ‘At the highest AN/DN’ and ‘At the nearest AN/DN’ time selectors * for inclination and plane maneuvers.
+* Add a setting for the node executor lead time
+* Custom Windows new Overlay mode
+* MJ Pod disabled since it does not work properly with the current leg code
+* FAR compatibility included
+* lots of fix
+
+
+==Version 2.5.7==
+
+* KSP 1.1
+* Stuff
+* More stuff
+
+==Version 2.5.6==
+
+* 1.1 release. Be aware that the Pod leg are not working and will generate fantom force
+* Launch Inclination improvement
+* Improvement of the Landing Sim
+* Predicted Trajectory overlay in the flight view (in Landing AP window)
+* Ascent AP Fairings autodeploy with support for Procedural Fairings
+* RSS Mode swtich in the settings windows. For now it prevents engine * shutdown when disabling the ascent AP
+* Greatly lowered memory garbage generated. May improve frame rate on some PC
+* A lot of bug fix
+
+==Version 2.5.5==
+
+* Flight Recorder Graph module
+* Education mode option (rename SmartASS to SmartACS)  see MM patch he* re https://raw.githubusercontent.com/MuMech/MechJeb2/master/MechJebEdu.c* fg
+* Improvement to the Attitude control
+* Dynamic Pressure limiter to replace the now useless terminal velocity
+* Attitude control speed limiter to save some RCS
+* Add "periapsis in target SoI" InfoItems
+* Add "minimum DV required for capture by target" InfoItems
+* Add "Docking guidance: Angular velocity" infoitem
+* Add electric throttle limiter to avoid empty batteries on ion powered craft
+
+
+==Version 2.5.1==
+* More fixes for KSP 1.0+ compatibility
+* Improved landing autopilot with parachutes
+
+==Version 2.5==
+* Moved DeltaV simulation to use KER code
+* Landing Sim code use KSP 1.0 aero model. However parachute are not properly accounted yet.
+* Display Landing prediction trajectory on the map view
+* Differential throttle control module
+* Warp to suicide burn and to atmospheric entry
+* Ascent AP Auto deploy solar panels (also an InfoItem)
+* Visual display of CoM and various velocity in the attitude menu
+* Improved velocity computation based on CoM instead of active pod
+* SMARTR module for RCS with hold relative velocity for now
+* SmartAss action can be set as vessel Actions
+* Improved node burning over multiple stages
+* Career limit related new infoItems
+* Some performance improvement
+* Reduced memory usage (lower garbage collection)
+* A memory leak fixed
+* the usual various bug fixed
+* and fixes for KSP 1.0 release
+
+==Version 2.4.2==
+* More fixes for KSP 0.90 compatibility
+
+==Version 2.4.1==
+* Compatible with KSP 0.90
+
+==Version 2.4==
+* Compatible with KSP 0.25
+* New interplanetary transfer with porkchop plots
+* Add EQ DN and EQ AN to Apoapsis maneuver
+* Add "Downrange distance" info item to flight recorder
+* Ascent autopilot option to limit the angle of attack
+* Maneuver to change the surface longitude the vessel will be over after one orbit
+* Added Force Roll option to Ascent AP
+* Add more options to SmartASS Surface Mode
+* Support for external gimbal extension (see Sarbian's signature for KM_Gimbal support)
+* Handles engines with spool time better
+* UI rescale setting
+* Import landing site from KerbTown/Kerbal-Konstructs and RSS.
+* Import Landing sites and Runways from users built files (see https://github.com/MuMech/MechJeb2/blob/dev/LandingSites.cfg)
+* Don't re-enable SmartASS after another autopilot finishes (and an option to disable it in the windows editor Misc category)
+* In flight lock of some control while the mouse is over MJ windows
+* Replace the arrow selector of some menu with a drop down. Those who don't like it can deactivate it in MJ2 Settings
+* Added a button in KSP stock AppLauncher. See settings to hide the menu handle
+* Various improvement to engine and gimbal torque information and use
+* Various fixes
+Thanks to those who submited patch for this release : BloodyRain2k, Meumeu, sanedragon, Wetmelon, xytovl
+
+==Version 2.3==
+* Compatible with KSP 0.24;
+* 0.24 changed some Parachute code. MJ landing with parachutes will be less precise until Squad fix a bug;
+* Hohmann transfer calculation to always find the first window;
+* Burn with RCS when not other engine is available;
+* Ascent AP can now schedule launches at interplanetary transfer windows;
+* More work on the docking AP;
+* Make orbital calculations compatible with RSS;
+* Add "Escape Velocity" info item;
+* Adds SUN as a Reference for ASAS adv mode;
+* And many bugs fixed;
+
+==Version 2.2.1==
+* miscellaneous fixes;
+
+==Version 2.2==
+* 0.23.5 related fixes;
+* Native Blizzy78 Toolbar Support (with default icon set from hab136 for now);
+* Reworked Docking AutoPilot;
+* Install and Compatibility checker (you get a popup if something is not right);
+* use RCS as thruster if RCS is active and engine are stopped;
+* New Rover Autopilot by BloodyRain2k with waypoints and a lot of features;
+* Maneuver mode to adjust Semi-Major Axis and LAN;
+* Selectable Celestial Body for Delta V stats while in the Editor;
+* Improved turn handling by HoneyFox;
+* Improved Landing AP;
+* Dummy part in the R&D screen to show when new features are unlocked;
+* Various fix and improvement;
+
+==Version 2.1.1==
+* 0.23 support for tweakables and R.A.P.I.E.R. engine;
+* new Rover AP with way point (and an help window);
+* 1 new mode for the Maneuver Planner : Resonant orbit;
+* 2 new modes for the Warp helper : set time and phase angle with target;
+* Windows position saved separately for editor and flight;
+* Blizzy78 toolbar is now supported with an additional module available here : [http://forum.kerbalspaceprogram.com/threads/55219];
+* new option for Rover AP : brake on pilot eject;
+* Better real time info for jet engine;
+* Compute thrust cosine loss (see this post [http://forum.kerbalspaceprogram.com/threads/12384-PART-0-22-Anatid-Robotics-MuMech-MechJeb-Autopilot-v2-1?p=861941&viewfull=1#post861941] );
+* New compact skin;
+* Some performance optimizations;
+* Support for Modular Fuel variable thrust;
+* Support for Interstellar engine;
+* New Current Biome InfoItem;
+* Various bug fix;
+
+==Version 2.1==
+* Changed the way MJ searches for Modules in other assemblies so a module in an assembly that failed loading doesn't fail loading for everything;
+* Move MJ2 Button with right click, drag & drop;
+* Docking Autopilot Improvement;
+* Let user force Roll for Smart ASS and Docking AP;
+* Improved Attitude controler;
+* Fix for some ship turning to circularize while still in atmosphere;
+* Fix exception spam when launching a vessel with no saved MJ2 setting directly form the Space Center screen;
+* Improved RCS control for Docking;
+* Added a stock-SAS toggle to Attitude Adjustment;
+* Landing Guidance control for Parachutes and Legs;
+* Fixed runway positions for 0.22;
+* Added support for selective module unlocking for Career mode;
+* Added MJ2 Pod;
+
+==Version 2.0.9 - pre-release==
+* Autostaging will only stage if eventual parachutes are also decoupled in the same stage
+* Landing improvements, especially with the touchdown
+* Improved RCS Torque
+* Increased number of significant figures in some info items
+* Fixed sepratron recognition to use placement angle and not ActivatesEvenIfDisconnected
+* Fixed new autostaging parachute check
+* Fixed math error in rendezvous autopilot match velocities step
+* Changed menu position
+* Fixed rover autopilot swerving when target heading is due north
+* Fixed ascent AP inclination field not saving
+* Fixed problems with dV simulation
+* Add a Conics Mode selector in the Node Editor
+* Warp Helper should now persist lead time and warp target
+* Added sarbian's RCS improvements
+* Added sarbian's conics relativity mode selector
+* Reworked autostaging
+* Fixed the window's buttons
+* 0.21 compatibility changes
+* Disabling SAS use, no longer needed
+
+==Version 2.0.8 - pre-release==
+* Added info items for dry mass, LF+O mass, and monoprop mass
+* Fixed loss of settings on creating a new vessel with a MJ command pod
+* Improved MoI calculations
+* Improve node execution across 2+ stages
+* Fixed maneuver nodes sometimes wrongly be placed at T-0
+* Restored docking AP warning if target is not a docking node
+* Fixed ascent AP status not showing
+* Made sure "Land at target" can't be invoked when no target exists
+* Fix auto-stage 'post' delay affecting 'pre'
+* Add a Roll field to the SmartASS SRF mode
+* Leave the ascent AP enabled when minimized
+* Added settings window that allows switching to the MJ 1 GUI skin
+* Fix signs for an angle's text representation
+* Added a "restore factory defaults" to the settings window
+* Autostaging options now minimize when autostaging is off
+* Thrust limiter toggles now light up green when active
+* Fixed ILS navball guidance only working when autopilot was on
+* Made target coordinates persistent
+* Made sure Joke module is disabled unless user enables it
+* Made sure thrust control options unhighlight when not active
+* Added a "Create and execute" button to the maneuver planner
+* Fixed RCS Avaiable Torque
+* Hopefully fixed throttle sputtering near end of gravity turn
+* Split "Rendezvous Guidance" into separate Autopilot and Planner windows
+* Changed attitude controller PID parameters to save to Type
+* Changed CFG for 0.20 GameData format
+* Changed the menu position due to the new map buttons
+
+==Version 2.0.7 - pre-release==
+* Fixing GUI Skin for compatibility with Romfarer's Lazor
+* Added "time to AN/DN" info items
+* Node burn time estimates now take throttle limits into account
+* Added a reminder for Romfarer to fix his GUI handling
+* Node executor will no longer constantly realign in low orbit
+* Added Maneuver Planner field to set tolerance of node executor
+* Improved node executor tolerance logic
+* Fixed hover over the closed menu in the Editor
+* Handle RCS thrusters with forces other than 1 kN
+* Fix the death wobble on ascent
+* Add an RCS delta-V infoitem
+* Fixed bad course corrections by landing AP
+* Disable RCS when the RCS controller is finished
+* Reduce the RCS fuel conservation threshold
+* Add a speed limit to the docking AP
+* All modules should now know about throttle limits
+* Fixed problem where ascent AP would fail to circularize
+* Added a separator item for custom windows
+* Fixed issues with selecting duplicate info items
+* Added N/S/E/W to lat/lon info items, which were missing them
+* Added info items with phase angles for all planets & moons
+* Changed Ascent Guidance to allow launching to rendezvous and plane after the first launch
+
+==Version 2.0.6 - pre-release==
+* Added moon-return burns to the Maneuver Planner
+* Fixed the LONG standing decoupler auto-staging bug
+* Fix the ascent path texture on relaunch
+* Added option to set final Pe after course correction
+* Added an experimental RCS Balancer
+* Reinstate the "Auto-warp toward apoapsis" option
+* Fixed loss of custom windows on End Flight->VAB
+* Switched default custom windows to use presets
+* Added "Target planet phase angle" info item
+* Added fuel conservation options to RCS Controller
+* Give the landing autopilot an "Auto-warp" toggle
+* Changes to Translatron PANIC!!! button, Smart A.S.S. AUTO handling, and the thrust controller interface
+
+==Version 2.0.5 - pre-release==
+* Made navball ascent guidance use inclination
+* Added auto-saving of LPA
+* Added autowarp to ascent AP timed launches
+* Add info items that show atmo+vac dV on one line
+* Made angrilov's fix to menu window Rect management
+* Added support for sharing of info windows
+* Added custom window presets
+* Target coordinates info item now uses two lines
+* Rendezvous AP can handle starting from similar orbit
+* Save/Load system overhaul. Should fix the window persistence problems
+* Added menu highlighting for active modules
+* Fixed drop-tank dV and fixed some exceptions in the VAB
+* Shrunk "Edit" and "Copy" buttons on custom windows
+
+==Version 2.0.4 - pre-release==
+* Added missing options to Throttle Control window
+* Made auto-stage toggle persistent
+* Added some new target info items
+* Fixed coast-to-AP warp
+* Made Vessel targets valid landing targets
+* Add a text box to control ascent "Turn shape"
+* Small usability improvements to windows - Default position for windows is no longer on top of warp buttons
+* Added two node info items
+* Added a pre-delay to autostaging
+* Fixed bad bug with node executor
+
+==Version 2.0.3 - pre-release==
+* Translatron added back
+* Fixed F2 sync issues
+* Added Rover Controller
+
+==Version 2.0.2 - pre-release==
+* Disabled the 4/1 joke module and added an option to the "Misc" custom windows category to re-enable it
+
+==Version 2.0.1 - pre-release==
+* Fixed Smarter A.S.S. getting locked in AUTO mode
+* Fixed GUI skin getting overridden by other plugins
+
+==Version 2.0.0 - pre-release==
+* Total rewrite
+
+==Version 1.9.8==
+* Better handling of disabled engines
+* Fixed using Launch to Rendezvous on a second launch
+* Removed fix for reversed speed in rotational frames as it was fixed in KSP 0.19
+* Fixed radial attach pods applying "magic torque"
+* Small fix for the Linux release on the AR202 part
+
+==Version 1.9.7==
+* Fixed several exceptions on loading
+* Fixed the engine-on-strut fuel flow problem
+* Added Warp to Maneuver Node
+* Translatron now accepts floating point numbers
+
+==Version 1.9.6==
+* Fixed MechJeb breaking on docking/undocking
+* "Control from here" will no longer cause spinning
+* Added SmartASS mode to align along maneuver node burn vector
+* Added check to prevent clicks from going through the vessel info window in the editor
+* Added "MechJebVesselStateUpdated" event. Other plugins can listen for this event and then modify MechJebCore.vesselState in the event handler to inform MechJeb of their capabilities.
+
+==Version 1.9.5==
+* Fixes for KSP 0.18 compatibility
+* SmartASS PAR+/- will align along the axis of a targeted docking node
+* Rendezvous module and SmartASS now use in-game target selection system
+* Rendezvous module AN/DN readouts fixed
+* Added rendezvous module readout for closest approach time and distance
+* (Re)added rendezvous module auto-align orbits function
+* Ascent AP turn shape slider now shows a numerical percentage
+* Land-at-target will land safely on Duna, and will use saner warp speeds when waiting for the deorbit burn
+* Land is more aggressive for steep descents, but (hopefully) safer for shallow descents
+* Many bugfixes
+
+==Version 1.9.4==
+* Fixes for KSP 0.17.1 compatibility;
+* Improvements to Autom8 functions and adding a standalone Autom8;
+* Vessel Information now includes delta-V predictions for each stage of the ship;
+* Vessel Information, can now display in the VAB/SPH too;
+* Added fix for Crew Tank compatibility;
+
+==Version 1.9.3==
+* Extra-fixes for KSP 0.17 compatibility, including configuration saving/loading, LOW/HIGH warp support and the landing AP location picker;
+* Finally improved the menu opening time;
+* Fixed vessel activation problems;
+* Unlocked 100k time warp;
+* Added mechjeb.setLanding() to Autom8;
+* (probably) Fixed the sync problem in Autom8;
+* Fixed some problems with ObjectToLua;
+* Added "Angle to Prograde/Retrograde" to Orbital Information;
+* Added a Phase Angle Table;
+* Fixed light initialization problem in the AR202 part.
+* "Transfer to" button now displays time away from injection point as well as delta-v;
+* The TGT+/- in rendezvous mode now points correctly at the target;
+* Fixed bug with Pod 2.0 without the landing legs;
+* Fixed problem with Landing Autopilot in Kerbol orbit;
+* Stopped the Ascent Autopilot from closing the window on completion;
+* Added Surface/Current TWR to Vessel Information;
+* Fixed an issue where a ship would separate just after coming out of warp (Was in high warp, now at warp 0) and then trying to set warp 0 again.
+* Sepratrons now ignored in auto-staging.
+
+==Version 1.9.2==
+* Changes for KSP 0.17 compatibility;
+* Added Lua interface for plugins;
+* Some bugfixes;
+
+==Version 1.9.1==
+* Added (some) support for AtmosphericEngine;
+* Improved MechJeb steering;
+* Fixed settings problem with multiple MechJebs in the same vessel;
+* New Autom8 functions: thrustActivate, thrustDeactivate, stage, getModule, ilsHold, ilsLand;
+* Re-enabled Rendezvous module;
+
+==Version 1.9==
+* Fixed MechJeb conflict with ASAS;
+* Fixed warp to Pe ignoring the time;
+* Added keep altitude and heading options to Instrument Landing System, and added a new automatic landing feature (beta);
+* Changes for KSP 0.16 compatibility;
+* New Autom8 module, with a Lua console (beta);
+
+==Version 1.8.4==
+* Fixed TRANS's transfer to Minmus function (and transfers to the Mun from slightly inclined orbits);
+* Added an Instrument Landing System for spaceplane runway landings;
+* Improved MechJeb roll control;
+* More 0.15 compatibility bugfixes;
+
+==Version 1.8.3==
+* Fixed the Core coffee intake;
+* Some more progress on RinComp integration;
+* Fixed Pod 2.0 "Landing Leg" attachment (still no auto-assembly);
+
+==Version 1.8.2==
+* Merging RinComp with MechJeb;
+* Changes for 0.15 compatibility;
+* Disabled Pod 2.0 auto-assembly (incompatible with 0.15);
+
+==Version 1.8.1==
+* TRANS burns that miss the target won't hang the game;
+* Fixed complete breakdown of MechJeb in solar orbit;
+* PE and AP+PE will reject a periapsis below the center of the planet;
+* Fixed failure of timed launch for rendezvous with targets above geosynchronous orbit;
+* Fixed bug where landing autopilot would not wait for deorbit burn point if it had deorbited before;
+* Changed the pod version reaction wheel forces;
+
+==Version 1.8==
+* New MechJeb pod;
+* Changed MechJeb attitude controller to account for available torque and inertia;
+* New orbital operations module with:
+* Adjust Pe, Ap, or both at once;
+* Circularize;
+* Automatic trans-munar injection;
+* Auto-warp to Pe, Ap, or SOI change;
+* Ascent autopilot updates:
+* Added automatic launch window timing to rendezvous with an equatorial target;
+* Added an "Ascent Stats" display;
+* Added a "heading" input as an alternative to "inclination";
+* Landing autopilot updates:
+* Point-and-click landings: can click to select target location in map view;
+* "LAND at target" can now do an automatic, properly timed deorbit burn;
+* Can specify touchdown speed;
+* Smoother, safer landings since surface height is known well in advance;
+* Will predict landing site even for trajectories that go exoatmospheric to enable targeted suborbital hops;
+* Updated help windows for the ascent and landing APs;
+* Various bugfixes;
+
+==Version 1.7.3==
+* Fixed Jeb's tampering with MechJeb systems
+
+==Version 1.7.2==
+* Added the original AR202 case
+* Improved roll handling
+* Improved interface response among the modules
+* Improved KILL ROT
+* Landing autopilot now includes the old LAND system
+* Landing autopilot now have a DMS input mode
+* Translatron LAND mode has been refurbished into a PANIC!!! button
+* Lots of bugfixes
+
+==Version 1.7.1==
+* Improvements to the reentry computer
+* Improvements to the LAND function
+
+==Version 1.7==
+* Merged MechJeb with AR202
+* The_Duck's Landing Autopilot can now do a fully automated descent to a target location after the de-orbiting burn
+* Big changes in the way MechJeb handles the ship steering
+
+==Version 1.6.1==
+* Fixed Pod version collider, could lead to problems in the VAB
+
+==Version 1.6==
+* New MechJeb Unmanned Pod version!
+* LAND function greatly improved;
+* LAND now deploys landing gears;
+* Changed Smart A.S.S. modes to roll first, then pitch/yaw;
+
+==Version 1.5.1==
+* Updated for 0.14.1 patch
+
+==Version 1.5==
+* MechJeb now activates all IDLE parts upon disconnection, and disables decouplers;
+* Fixed some multi-MechJeb errors;
+* Added Kill Horizontal Speed to Translatron;
+* Added automatic LAND mode to Translatron;
+* Improved throttle control;
+
+==Version 1.4==
+* New radial mount part;
+* Multiple MechJebs per craft allowed;
+* MechJeb can now control off-focus crafts, and will transform ejected debris containing it into a new controllable craft;
+* Translatron no longer needs Smart A.S.S. active to work;
+
+==Version 1.3==
+* New 1m MechJeb part;
+* Added Translatron window;
+* Added thrust PID controller;
+* Fixed loading settings;
+* SURF 90 90 now keeps vessel orientation;
+* Text boxes now accept +/-;
+* Smart A.S.S. now shows active values for SURF;
+* New data in Orbital and Surface windows;
+* Relaxed MechJeb input locking restrictions;
+* Resetting PID controller in case of too much error;
+
+==Version 1.2.1==
+* Fixed problems with the pause screen;
+
+==Version 1.2==
+* Added Main, Orbital and Surface windows;
+* New PID controller, K settings on CFG file;
+* All window states are saved and shared among vessels;
+* MechJeb state is saved in the vessels and resumed at focus;
+* Added deadzone for joystick users;
+* HDG and PTH input sanitized;
+
+==Version 1.1==
+* Decoupled MechJeb from the SAS/ASAS key;
+* Manual HDG/PTH entry;
+* Improved PID controller;
+* Window can now be "minimized";
+* Fixed special FX that weren't showing before;
