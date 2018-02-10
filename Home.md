@@ -1,5 +1,10 @@
 Welcome to the MechJeb2 wiki!
 
+## MechJeb documentation
+
+* [[Version History]]
+* [[Ascent Guidance]]
+
 ## How to help
 
 - Fly with MechJeb! Use it on your rockets, experiment with its features, and let us know what would make it better.
