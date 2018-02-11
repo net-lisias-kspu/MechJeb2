@@ -55,7 +55,10 @@ Main Options
     overheating
 
 -   **Limit Q to [pa]**  
-    **TODO**
+    Limits the [maximal dynamic pressure](https://en.wikipedia.org/wiki/Max_Q).
+    This avoids that pieces break off during launch because of atmospheric
+    pressure.
+    **TODO**: *specify when to use it*
 
 -   **Limit acceleration to [m/s²]**  
     Never exceed the acceleration during ascent
