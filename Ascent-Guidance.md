@@ -166,7 +166,34 @@ options can be edited, and the diagram will update as their values change:
     Varies the parabolic part of the trajectory
     
 #### Stock-style GravityTurn
-**TODO**
+
+-   **Turn start altitude**
+    Altitude in km to pitch over and initiate the Gravity Turn (higher values for lower-TWR rockets).
+
+-   **Turn start velocity**
+    Velocity in m/s which triggers pitch over and initiates the Gravity Turn (higher values for lower-TWR rockets).
+
+-   **Turn start pitch**
+    Pitch that the pitch program immediately applies.
+
+-   **Intermediate altitude**
+    Intermediate apoapsis altitude to coast to and then raise the apoapsis up to the eventual final target.  May be set to equal the final target in
+    order to skip the intermediate phase.
+
+-   **Hold AP Time**
+    At the intermediate altitude with this much time-to-apoapsis left the engine will start burning prograde to lift the apoapsis.  The engine will throttle
+    down in order to burn closer to the apoapsis.  This is very similar to the lead-time of a maneuver node in concept, but with throttling down in the case where
+    the player has initiated the burn too early (the corollary is that if you see lots of throttling down at the start, you likely need less HoldAP time).
+
+Initial Pitch Over Issues
+-------------------------
+
+The initial pitch over can cause rockets to tumble.  If the rocket gains too much speed and then attempts too large of a pitch maneuver the air resistance will
+toss it end over end.  The solutions to this can be to initiate the turn sooner, use less of a pitch angle, put fins on your rocket to stabilize it, or turn on
+or tune the AoA limiter.
+
+
+
 
 #### Powered Explicit Guidance
 
