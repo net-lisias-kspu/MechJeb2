@@ -185,37 +185,32 @@ options can be edited, and the diagram will update as their values change:
     down in order to burn closer to the apoapsis.  This is very similar to the lead-time of a maneuver node in concept, but with throttling down in the case where
     the player has initiated the burn too early (the corollary is that if you see lots of throttling down at the start, you likely need less HoldAP time).
 
-### Initial Pitch Over Issues
+##### Initial Pitch Over Issues
 
 The initial pitch over can cause rockets to tumble.  If the rocket gains too much speed and then attempts too large of a pitch maneuver the air resistance will
 toss it end over end.  The solutions to this can be to initiate the turn sooner, use less of a pitch angle, put fins on your rocket to stabilize it, or turn on
 or tune the AoA limiter.
 
-Gravity Turn Heating / Aerodynamics
------------------------------------
+##### Gravity Turn Heating / Aerodynamics
 
 After the pitch over the vessel will follow that pitch until the pitch of the surface velocity "catches up with it" (the surface velocity of the navball will "fall" down towards the horizon until it meets the
 actual pitch of the craft).  From there the vessel will follow a zero Angle-of-Attack and will gradually pitch over more and more.  If the vessel has insufficient thrust or the pitch program is too aggressive it is possible that the pitch of the craft eventually is level with the horizon and the craft never makes the intermediate apoapsis.  It is also possible that the vessel gains too much speed too low in the atmosphere and burns up (flames are actually good, but explosions are not).  The solution to this is higher TWR craft or doing a less aggressive pitch over (turning on the AoA limiter also has the effect of limiting how aggressive the pitch over is).
 
-Intermediate Altitude Heating
------------------------------
+##### Intermediate Altitude Heating
 
-You can actually burn up at your intermediate altitude if you go too fast, and your speed at that altitude is determined by your target Apoapsis.  The default altitude of 45km is good for a 100km-ish target orbit.  With a direct launch to a 10,000km orbit you may need to raise the intermediate altitude.
+You can actually burn up at your intermediate altitude if you go too fast, and your speed at that altitude is determined by your target Apoapsis.  The default altitude of 45km is good for a 100km-ish target orbit.  With a direct launch to a e.g. 10,000km orbit you may need to raise the intermediate altitude.
 
-Time to Orbit Being Long
-------------------------
+##### Time to Orbit Being Long
 
 The default behavior takes a long time because it launches to an apoapsis more than half way around Kerbin from the launch site.  This can be avoided by setting the intermediate altitude to the desired altitude and avoiding all the coasting around.  It will be slightly less efficient in terms of dV and Oeberth, but substantially faster.
 
-Low TWR Upper Stages and Intermediate Altitude Pitch Up
--------------------------------------------------------
+##### Low TWR Upper Stages and Intermediate Altitude Pitch Up
 
 The MechJeb implementation presently does no pitching up of upper stages at the intermediate altitude.  Just a TODO for the future, but really low TWR upper stages may pass through the apoapsis at the intermediate altitude and burn up without pitching up.  A higher HoldAP time may fix this.
 
-Launch Training
----------------
+##### Launch Training
 
-There's no facility for training the parameters on successive launches like with the GravityTurn mod.
+There is no facility for training the parameters on successive launches like with the GravityTurn mod.
 
 #### Powered Explicit Guidance
 
