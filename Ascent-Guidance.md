@@ -212,6 +212,17 @@ The MechJeb implementation presently does no pitching up of upper stages at the 
 
 There is no facility for training the parameters on successive launches like with the GravityTurn mod.
 
+##### Optimizing for Delta-V
+
+The ideal way to get to orbit with the least amount of dV expended is to:
+
+- Build a larger rocket (2.5m or larger) with a higher ballistic coefficient (bigger rockets have more mass per surface area).
+- Build a rocket with an excessively high TWR (>4.00 or so if you really want good results)
+- Turn the AoA limiter off
+- Pitch over very aggressively to start with, almost immediately (45 degrees or more)
+
+Lowered intermediate altitudes and lower Hold AP times should also help, but should be fairly secondary in their effect.  The point is to minimize gravity losses and trade them for drag losses as much as possible, by pitching over as hard as possible at the start, while still actually making orbit.  Turn off the Max Q limiter (it might help some for 1.25m rockets, but it is fairly useless for anything larger).
+
 #### Powered Explicit Guidance
 
 More detailed information on the Surveyor-era PEG Ascent Guidance in MechJeb can be found [here](https://github.com/lamont-granquist/MechJeb2/wiki).
