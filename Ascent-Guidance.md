@@ -169,7 +169,8 @@ options can be edited, and the diagram will update as their values change:
 **TODO**
 
 #### Powered Explicit Guidance
-**TODO**
+
+More detailed information on the Surveyor-era PEG Ascent Guidance in MechJeb can be found [here](https://github.com/lamont-granquist/MechJeb2/wiki).
 
 
 Target Options
