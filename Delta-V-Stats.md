@@ -1,0 +1,1 @@
+The _Delta-V Stats_ module shows a window with various informations about the delta-v capabilities of the current vessel and its stages.
