@@ -1,0 +1,1 @@
+The _Orbit Info_ module shows a window with various informations about the vessel's current orbit.
