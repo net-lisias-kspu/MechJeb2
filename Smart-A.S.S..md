@@ -27,12 +27,12 @@ The _Smart A.S.S._ module provides aids for vessel pitch control. Please note th
 
 ## Surface mode
 
-* SVEL +:
-* SVEL -:
-* HVEL +:
-* HVEL -:
-* SURF:
-* UP:
+* SVEL +: Orient in the direction of movement relative to the ground. Useful during lift-off for rockets which don't have fins or are otherwise instable.
+* SVEL -: Orient in the opposite direction of movement relative to the ground. Useful during reentry or aerobraking with an aerodynamically unstable craft.
+* HVEL +: Orient in the direction of horizontal movement relative to the ground.
+* HVEL -: Orient in the opposite direction of horizontal movement relative to the ground.
+* SURF: 
+* UP: Orient "up", perpendicular to the surface.
 
 ## Target mode
 
@@ -44,4 +44,3 @@ The _Smart A.S.S._ module provides aids for vessel pitch control. Please note th
 * PAR -: Orient antiparallel to the target's orientation. If the target is a docking node it orients the ship along the docking axis, pointing toward the node.
 
 ## Advanced mode
-
