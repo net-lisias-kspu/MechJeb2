@@ -1,0 +1,1 @@
+The _Vessel Info_ module shows a window with a few statistics about the current vessel.
