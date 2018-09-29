@@ -3,7 +3,7 @@ Welcome to the MechJeb2 wiki!
 ## MechJeb documentation
 
 * [[Version History]]
-* [[Ascent Guidance]]
+* [[Modules]] Overview
 
 ## How to help
 
