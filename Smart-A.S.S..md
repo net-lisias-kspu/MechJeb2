@@ -31,8 +31,16 @@ The _Smart A.S.S._ module provides aids for vessel pitch control. Please note th
 * SVEL -: Orient in the opposite direction of movement relative to the ground. Useful during reentry or aerobraking with an aerodynamically unstable craft.
 * HVEL +: Orient in the direction of horizontal movement relative to the ground.
 * HVEL -: Orient in the opposite direction of horizontal movement relative to the ground.
-* SURF: 
+* SURF: Orient the vessel in specific direction relative to surface.
 * UP: Orient "up", perpendicular to the surface.
+
+In the SURF mode, there are three tunables:
+
+* HDG: Heading. Also called or azimuth, or the direction where you want to go.
+* PIT: Pitch or inclination. 0 is horizontal and 90 is straight up. Can be negative.
+* ROL: Roll. 0 is top side up.
+
+[[Aircraft Autopilot]] is more suited to piloting aircrafts.
 
 ## Target mode
 
