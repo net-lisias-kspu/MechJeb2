@@ -22,9 +22,9 @@ There are series of modes to change your: periapsis, apoapsis, inclination, long
 
 This mode creates a manevuer to match your apoapsis to periapsis. To match apoapsis to periapsis, select "at periapsis", to match periapsis to , select "at apoapsis". Theese are the most efficient, but it can also create node at specific height or after specific time.
 
-## Rendezvous releated
+## Rendezvous related
 
-The usual sequence of manevuers to rendezvous ship in the same sphere of influence is as folows. If your orbital planes are too far off, use "match planes with target" first. There are options to schedule the burn at the cheapest, nearest or specific ascending/descending node. Then you can use Hohmann transfer to get an encounter. When this burn is completed, you can use "match velocities with target" to slow down relative to target at the closest approach.
+The usual sequence of maneuvers to rendezvous ship in the same sphere of influence is as follows. If your orbital planes are too far off, use "match planes with target" first. There are options to schedule the burn at the cheapest, nearest or specific ascending/descending node. Then you can use Hohmann transfer to get an encounter. When this burn is completed, you can use "match velocities with target" to slow down relative to target at the closest approach.
 
 ## Resonant orbit
 
