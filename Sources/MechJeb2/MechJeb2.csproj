@@ -226,6 +226,7 @@
     <Compile Include="alglib\solvers.cs" />
     <Compile Include="alglib\specialfunctions.cs" />
     <Compile Include="alglib\statistics.cs" />
+    <Compile Include="Shepperd.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx" />
