@@ -1,5 +1,7 @@
 # MechJeb2 :: Change Log
 
+* 2018-0331: 2.7.3 (MuMech) for KSP ['1.4.1', '1.4.0']
+	+ Fix the fuels sim in the editor with surface attached decouplers...
 * 2018-0331: 2.7.2 (MuMech) for KSP ['1.4.1', '1.4.0']
 	+ Fix for the engine plate autostagging
 	+ Fix for the scripting module SAS controls
