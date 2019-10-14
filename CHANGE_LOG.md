@@ -1,5 +1,9 @@
 # MechJeb2 :: Change Log
 
+* 2019-0302: 2.8.3.0 (MuMech) for KSP ['1.6.1', '1.6.0']
+	+ fix for launch-to-plane
+	+ PVG stabilization fixes
+	+ Fix xenon delta V
 * 2019-0203: 2.8.2.0 (MuMech) for KSP ['1.6.1', '1.6.0']
 	+ Primer Vector Guidance
 	+ bring back simple coplanar transfer option
