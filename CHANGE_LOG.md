@@ -1,5 +1,7 @@
 # MechJeb2 :: Change Log
 
+* 2014-1215: 2.4.1.0 (MuMech) for KSP 0.25
+	+ Various bug fix
 * 2014-1009: 2.4.0.0 (MuMech) for KSP 0.25
 	+ New interplanetary transfer with porkchop plots
 	+ Add EQ DN and EQ AN to Apoapsis maneuver
