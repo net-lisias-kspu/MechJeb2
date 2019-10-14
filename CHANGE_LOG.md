@@ -1,5 +1,14 @@
 # MechJeb2 :: Change Log
 
+* 2019-0203: 2.8.2.0 (MuMech) for KSP ['1.6.1', '1.6.0']
+	+ Primer Vector Guidance
+	+ bring back simple coplanar transfer option
+	+ make the hybrid controller the default controller
+	+ Incorporate "MechJebAndEngineerForAll" style functionality
+	+ adding ∆v display to flight recorder
+	+ add steering/drag/gravity loss to flight recorder
+	+ Add Apoapsis and Periapsis to scripting conditions
+	+ [Fixes](/linkout?remoteUrl=https%253a%252f%252fksp.sarbian.com%252fjenkins%252fjob%252fMechJeb2-Release%252f20%252f)
 * 2018-1023: 2.8.1.0 (MuMech) for KSP ['1.5.1', '1.5']
 	+ 2.8.0
 		- [Replace Hohmann Transfer with Bi-Impulsive Transfers](https://forum.kerbalspaceprogram.com/index.php?/topic/154834-14x-anatid-robotics-mumech-mechjeb-autopilot-274-23-september-2018/&do=findComment&comment=3467876)
