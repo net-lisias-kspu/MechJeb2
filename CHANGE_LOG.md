@@ -1,5 +1,24 @@
 # MechJeb2 :: Change Log
 
+* 2015-0427: 2.5 (MuMech) for KSP 1.0.0
+	+ Moved DeltaV simulation to use KER code
+	+ Landing Sim code use KSP 1.0 aero model. However parachute are not properly
+	+ accounted yet.
+		- Display Landing prediction trajectory on the map view
+		- Differential throttle control module
+		- Warp to suicide burn and to atmospheric entry
+		- Ascent AP Auto deploy solar panels (also an InfoItem)
+		- Visual display of CoM and various velocity in the attitude menu
+		- Improved velocity computation based on CoM instead of active pod
+		- SMARTR module for RCS with hold relative velocity for now
+		- SmartAss action can be set as vessel Actions
+		- Improved node burning over multiple stages
+		- Career limit related new infoItems
+		- Some performance improvement
+		- Reduced memory usage (lower garbage collection)
+		- A memory leak fixed
+		- the usual various bug fixed
+		- and fixes for KSP 1.0 release
 * 2014-1221: 2.4.2.0 (MuMech) for KSP 0.90
 	+ Bug fix related to the Tracking Station upgrade. Some function will not be
 	+ disabled until the station is upgraded.
