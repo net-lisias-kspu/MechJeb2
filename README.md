@@ -1,6 +1,6 @@
 # MechJeb2 /L Unofficial
 
-Autopilot, Information displays, and general Automation plugin
+Autopilot, Information displays, and general Automation plugin. Fork by LisiasT
 
 
 ## In a Hurry
