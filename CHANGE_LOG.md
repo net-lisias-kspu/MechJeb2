@@ -1,5 +1,14 @@
 # MechJeb2 :: Change Log
 
+* 2016-0225: 2.5.6 (MuMech) for KSP 1.0.5
+	+ Launch Inclination improvement
+	+ Improvement of the Landing Sim
+	+ Predicted Trajectory overlay in the flight view (in Landing AP window)
+	+ Ascent AP Fairings autodeploy with support for Procedural Fairings
+	+ RSS Mode swtich in the settings windows. For now it prevents engine shutdown
+	+ when disabling the ascent AP
+	+ Greatly lowered memory garbage generated. May improve frame rate on some PC
+	+ A lot of bug fix
 * 2015-1203: 2.5.5 (MuMech) for KSP 1.0.5
 	+ 1.0.5
 	+ Flight Recorder Graph module
