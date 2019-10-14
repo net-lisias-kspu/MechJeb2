@@ -1,5 +1,16 @@
 # MechJeb2 :: Change Log
 
+* 2015-1203: 2.5.5 (MuMech) for KSP 1.0.5
+	+ 1.0.5
+	+ Flight Recorder Graph module
+	+ Education mode option (rename SmartASS to SmartACS) see MM patch [here ](https://github.com/MuMech/MechJeb2/blob/master/MechJebEdu.cfg)
+	+ Improvement to the Attitude control
+	+ Dynamic Pressure limiter to replace the now useless terminal velocity
+	+ Attitude control speed limiter to save some RCS
+	+ Add "periapsis in target SoI" InfoItems
+	+ Add "minimum DV required for capture by target" InfoItems
+	+ Add "Docking guidance: Angular velocity" infoitem
+	+ Add electric throttle limiter to avoid empty batteries on ion powered craft
 * 2015-0706: 2.5.3 (MuMech) for KSP 1.0.4
 	+ Fix a bug that prevented MJ to control some ship with 2.5.2. Sorry about that
 	+ one.
