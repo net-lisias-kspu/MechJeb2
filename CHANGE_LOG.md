@@ -1,5 +1,8 @@
 # MechJeb2 :: Change Log
 
+* 2014-1221: 2.4.2.0 (MuMech) for KSP 0.90
+	+ Bug fix related to the Tracking Station upgrade. Some function will not be
+	+ disabled until the station is upgraded.
 * 2014-1215: 2.4.1.0 (MuMech) for KSP 0.25
 	+ Various bug fix
 * 2014-1009: 2.4.0.0 (MuMech) for KSP 0.25
