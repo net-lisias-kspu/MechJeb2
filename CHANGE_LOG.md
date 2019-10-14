@@ -1,5 +1,7 @@
 # MechJeb2 :: Change Log
 
+* 2016-0419: 2.5.7 (MuMech) for KSP 1.1-prerelease
+	+ Initial release for KSP 1.1
 * 2016-0225: 2.5.6 (MuMech) for KSP 1.0.5
 	+ Launch Inclination improvement
 	+ Improvement of the Landing Sim
