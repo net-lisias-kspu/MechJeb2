@@ -1,5 +1,9 @@
 # MechJeb2 :: Change Log
 
+* 2018-0331: 2.7.2 (MuMech) for KSP ['1.4.1', '1.4.0']
+	+ Fix for the engine plate autostagging
+	+ Fix for the scripting module SAS controls
+	+ Fix the MOI code to handle "control from here" properly. Should help with Docking
 * 2018-0318: 2.7.1 (MuMech) for KSP 1.4.1
 	+ No changelog provided
 * 2018-0108: 2.7.0 (MuMech) for KSP 1.3.1
