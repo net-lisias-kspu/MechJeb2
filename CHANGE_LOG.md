@@ -1,5 +1,18 @@
 # MechJeb2 :: Change Log
 
+* 2015-0705: 2.5.2 (MuMech) for KSP 1.0.4
+	+ Built for 1.0.4
+	+ New AR202 model and DDS textures
+	+ Smart A.S.S. has more options for some mods (axis control disabling, ...)
+	+ Live ascent path drawing on the ascent path editor
+	+ Better use of control surface and auto tuning
+	+ Persistent Rotation mod support
+	+ Button to disable Mechjeb in the partmodule
+	+ Lot of fix related to other mods compatibility (RF, Procedural Part,
+	+ Procedural Fairing, ...)
+		- Rework of the Staging Stats window
+		- G force info Item
+		- Many bug fix
 * 2015-0517: 2.5.1 (MuMech) for KSP 1.0.2
 	+ Lot of bug fixed related to KSP 1.0
 	+ Better precision for the landing auto pilot when using parachutes
