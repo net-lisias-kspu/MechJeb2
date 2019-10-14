@@ -1,5 +1,12 @@
 # MechJeb2 :: Change Log
 
+* 2016-1212: 2.6.0 (MuMech) for KSP 1.2
+	+ Compatibility for KSP 1.2.2
+	+ Scripting module by [@SPD13](http://forum.kerbalspaceprogram.com/index.php?/profile/165993-spd13/)
+	+ Auto RCS Ullage for RO by Lamont (whose name here I forgot..)
+	+ Option to move the menu on any side of the screen
+	+ A bunch of fixes and minor features
+	+ stuff I most likely forgot about
 * 2016-0622: 2.5.8 (MuMech) for KSP 1.1
 	+ Compatibility for KSP 1.1.3
 	+ Add ‘At the highest AN/DN’ and ‘At the nearest AN/DN’ time selectors for inclination and plane maneuvers.
