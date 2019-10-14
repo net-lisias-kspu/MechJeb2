@@ -1,5 +1,8 @@
 # MechJeb2 :: Change Log
 
+* 2015-0517: 2.5.1 (MuMech) for KSP 1.0.2
+	+ Lot of bug fixed related to KSP 1.0
+	+ Better precision for the landing auto pilot when using parachutes
 * 2015-0427: 2.5 (MuMech) for KSP 1.0.0
 	+ Moved DeltaV simulation to use KER code
 	+ Landing Sim code use KSP 1.0 aero model. However parachute are not properly
