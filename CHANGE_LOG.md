@@ -1,5 +1,12 @@
 # MechJeb2 :: Change Log
 
+* 2018-0108: 2.7.0 (MuMech) for KSP 1.3.1
+	+ New launch profiles selection, including one that is the classic "KSP ascent", a "PEG" clone for RSS and the classic MJ profile
+	+ Scripting module Update with new features (you ll have too look)
+	+ New spaceplane landing AP
+	+ A rework of the advanced transfer code
+	+ A lot of FuelSim (dV) fix
+	+ A bunch of fix and UI improvement
 * 2017-0527: 2.6.1 (MuMech) for KSP 1.3
 	+ No changelog provided
 * 2016-1212: 2.6.0 (MuMech) for KSP 1.2
