@@ -1,5 +1,13 @@
 # MechJeb2 :: Change Log
 
+* 2016-0622: 2.5.8 (MuMech) for KSP 1.1
+	+ Compatibility for KSP 1.1.3
+	+ Add ‘At the highest AN/DN’ and ‘At the nearest AN/DN’ time selectors for inclination and plane maneuvers.
+	+ Add a setting for the node executor lead time
+	+ Custom Windows new Overlay mode
+		- MJ Pod disabled since it does not work properly with the current leg code
+		- FAR compatibility included
+		- lots of fix
 * 2016-0419: 2.5.7 (MuMech) for KSP 1.1-prerelease
 	+ Initial release for KSP 1.1
 * 2016-0225: 2.5.6 (MuMech) for KSP 1.0.5
