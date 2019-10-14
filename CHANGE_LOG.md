@@ -1,5 +1,8 @@
 # MechJeb2 :: Change Log
 
+* 2015-0706: 2.5.3 (MuMech) for KSP 1.0.4
+	+ Fix a bug that prevented MJ to control some ship with 2.5.2. Sorry about that
+	+ one.
 * 2015-0705: 2.5.2 (MuMech) for KSP 1.0.4
 	+ Built for 1.0.4
 	+ New AR202 model and DDS textures
