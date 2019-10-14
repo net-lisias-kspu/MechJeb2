@@ -1,5 +1,14 @@
 # MechJeb2 :: Change Log
 
+* 2018-1023: 2.8.1.0 (MuMech) for KSP ['1.5.1', '1.5']
+	+ 2.8.0
+		- [Replace Hohmann Transfer with Bi-Impulsive Transfers](https://forum.kerbalspaceprogram.com/index.php?/topic/154834-14x-anatid-robotics-mumech-mechjeb-autopilot-274-23-september-2018/&do=findComment&comment=3467876)
+		- [ui_fix] no space after altitude meters label in ascent autopilot
+	+ 2.7.4
+		- Change the "Online Manual" link to the github wiki since the old site is gone
+		- Updated the landing sites list with the one from [@El Sancho](https://forum.kerbalspaceprogram.com/index.php?/profile/178103-el-sancho/)
+		- Improved the landing sim precision (aka "write code with both eyes opened")
+		- A bunch of small fixes
 * 2018-0331: 2.7.3 (MuMech) for KSP ['1.4.1', '1.4.0']
 	+ Fix the fuels sim in the editor with surface attached decouplers...
 * 2018-0331: 2.7.2 (MuMech) for KSP ['1.4.1', '1.4.0']
