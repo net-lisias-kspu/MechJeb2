@@ -1,5 +1,7 @@
 # MechJeb2 :: Change Log
 
+* 2017-0527: 2.6.1 (MuMech) for KSP 1.3
+	+ No changelog provided
 * 2016-1212: 2.6.0 (MuMech) for KSP 1.2
 	+ Compatibility for KSP 1.2.2
 	+ Scripting module by [@SPD13](http://forum.kerbalspaceprogram.com/index.php?/profile/165993-spd13/)
