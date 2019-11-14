@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
-using KSP.UI.Screens;
 using System.Collections.Generic;
+
+using Log = MechJeb2.Log;
 
 namespace MuMech
 {
@@ -57,7 +58,7 @@ namespace MuMech
                 stageCount += 1;
                 stages[0].staged = true;
                 stages.RemoveAt(0);
-                Debug.Log("[MechJebModuleLogicalStageTracking] dropping a stage");
+                Log.detail("[MechJebModuleLogicalStageTracking] dropping a stage");
             }
         }
 
@@ -88,7 +89,7 @@ namespace MuMech
 
                 if (j >= stages.Count)
                 {
-                    Debug.Log("[MechJebModuleLogicalStageTracking] adding a new stage: " + j);
+                    Log.detail("[MechJebModuleLogicalStageTracking] adding a new stage: " + j);
                     stages.Add(new Stage(this));
                 }
 
@@ -101,7 +102,7 @@ namespace MuMech
 
             while( stages.Count > core.stageStats.vacStats.Length )
             {
-                Debug.Log("[MechJebModuleLogicalStageTracking] upper stage disappeared (user reconfig most likely)");
+                Log.detail("[MechJebModuleLogicalStageTracking] upper stage disappeared (user reconfig most likely)");
                 stages.RemoveAt(stages.Count-1);
             }
 

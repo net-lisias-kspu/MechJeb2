@@ -5,6 +5,8 @@ using UnityEngine;
 using KSP.IO;
 using KSP.Localization;
 
+using Log = MechJeb2.Log;
+
 namespace MuMech
 {
 	public class MechJebModuleScript : DisplayModule, IMechJebModuleScriptActionsListParent
@@ -196,7 +198,7 @@ namespace MuMech
 				}
 				catch (Exception e)
 				{
-					Debug.LogError("MechJebModuleScript.LoadConfig caught an exception trying to load mechjeb_settings_script_" + slotName + "_conf.cfg: " + e);
+					Log.err(e, "MechJebModuleScript.LoadConfig caught an exception trying to load mechjeb_settings_script_{0}_conf.cfg: {1}", slotName, e);
 				}
 				if (node == null) return;
 
@@ -487,7 +489,7 @@ namespace MuMech
 				}
 				catch (Exception e)
 				{
-					Debug.LogError("MechJebModuleScript.LoadConfig caught an exception trying to load mechjeb_settings_script_" + slotName + "_" + slot + ".cfg: " + e);
+					Log.err("MechJebModuleScript.LoadConfig caught an exception trying to load mechjeb_settings_script_{0}_{1}.cfg: ", slotName, slot,  e);
 				}
 			}
 			else if (notify)

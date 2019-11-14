@@ -2,6 +2,8 @@
 using System.Reflection;
 using UnityEngine;
 
+using Log = MechJeb2.Log;
+
 namespace MuMech
 {
     public static class ReflectionUtils
@@ -40,7 +42,7 @@ namespace MuMech
 
                 if (assemblyName == "")
                 {
-                    Debug.Log("[MechJeb] ReflectionUtils: could not find assembly " + assemblyString);
+                    Log.err("ReflectionUtils: could not find assembly {0}", assemblyString);
                     return null;
                 }
 
@@ -48,7 +50,7 @@ namespace MuMech
 
                 if (type == null)
                 {
-                    Debug.Log("[MechJeb] ReflectionUtils: could not find type  " + className + ", " + assemblyName);
+                    Log.err("ReflectionUtils: could not find type  {0}, {1}", className, assemblyName);
                     return null;
                 }
 
@@ -69,7 +71,7 @@ namespace MuMech
 
             if (assemblyName == "")
             {
-                Debug.Log("[MechJeb] ReflectionUtils: could not find assembly " + assemblyString);
+                Log.err("ReflectionUtils: could not find assembly {0}", assemblyString);
                 return null;
             }
 
@@ -77,7 +79,7 @@ namespace MuMech
 
             if (type == null)
             {
-                Debug.Log("[MechJeb] ReflectionUtils: could not find type  " + className + ", " + assemblyName);
+                Log.err("ReflectionUtils: could not find type {0}, {1}", className, assemblyName);
                 return null;
             }
             return type.GetMethod(methodName, flags);
@@ -97,7 +99,7 @@ namespace MuMech
 
             if (assemblyName == "")
             {
-                Debug.Log("[MechJeb] ReflectionUtils: could not find assembly " + assemblyString);
+                Log.err("ReflectionUtils: could not find assembly {0}", assemblyString);
                 return null;
             }
 
@@ -105,7 +107,7 @@ namespace MuMech
 
             if (type == null)
             {
-                Debug.Log("[MechJeb] ReflectionUtils: could not find type  " + className + ", " + assemblyName);
+                Log.err("ReflectionUtils: could not find type {0}, {1}", className, assemblyName);
                 return null;
             }
             return type.GetMethod(methodName, flags, null, args, null);

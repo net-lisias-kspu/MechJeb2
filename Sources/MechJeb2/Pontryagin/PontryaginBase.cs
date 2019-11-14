@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
 
+using Log = MechJeb2.Log;
+
 namespace MuMech {
     public abstract class PontryaginBase {
         const double MAX_COAST_TAU = 1.5;
@@ -553,19 +555,19 @@ namespace MuMech {
                 y[5] = v0_bar[2];
             }
 
-            /*
+#if false
             if ( e.thrust > 0 )
             {
                 // time to burn the entire stage
                 double tau = e.isp * g0 * y[12] / e.thrust / t_scale;
 
                 if ( dt > tau )
-                    Debug.Log("TAU EXCEEEDED!");
+                    Log.info("TAU EXCEEEDED!");
                 // clip dt at 99.9% of tau
-//                if ( dt > 0.999 * tau && !e.infinite )
-//                    dt = 0.999 * tau;
+                if (dt > 0.999 * tau && !e.infinite)
+                    dt = 0.999 * tau;
             }
-            */
+#endif
 
             // XXX: remove this hack
             bool allvals;
@@ -988,6 +990,9 @@ namespace MuMech {
                 return true;
             }
 
+            Log.dbg("runoptimizer failed!");
+
+            // I think the following lines are pretty useless.... Lisias
             // lol
             if ( (rep.terminationtype != 2) && (rep.terminationtype != 7) )
                 return false;
@@ -1120,6 +1125,7 @@ namespace MuMech {
             }
 
             try {
+                Log.dbg("starting optimize");
                 if (last_arcs != null)
                 {
                     // since we shift the zero of tbar forwards on every re-optimize we have to do this here
@@ -1211,22 +1217,34 @@ namespace MuMech {
 
                     successful_converges += 1;
                     last_success_time = Planetarium.GetUniversalTime();
+                    Log.dbg("Optimize done");
                 }
             }
             catch (alglib.alglibexception e)
             {
+#if USE_EXCEPTION_JANITOR
                 last_alglib_exception = e;
+#else
+                Log.err(e, this);
+#endif
                 Fatal("Uncaught Alglib Exception (" + e.GetType().Name + "): " + e.Message + "; " + e.msg);
             }
             catch (Exception e)
             {
+#if USE_EXCEPTION_JANITOR
                 last_exception = e;
+#else
+                Log.err(e, this);
+#endif
                 Fatal("Uncaught Exception (" + e.GetType().Name + "): " + e.Message);
             }
         }
 
+
+#if USE_EXCEPTION_JANITOR
         public alglib.alglibexception last_alglib_exception = null;
         public Exception last_exception = null;
+#endif
 
         public Solution solution;
 
@@ -1258,8 +1276,10 @@ namespace MuMech {
             }
         }
 
+        // all of this is not needed anymore, as KSPe Logging utilities are thread safe!
+#if USE_EXCEPTION_JANITOR
         Queue<string> logQueue = new Queue<string>();
-        Mutex mut = new Mutex();
+        readonly Mutex mut = new Mutex();
 
         // lets us Debug.Log events from the computation thread in a thread-safe fashion
         //
@@ -1279,20 +1299,17 @@ namespace MuMech {
         {
             if ( last_alglib_exception != null )
             {
-                alglib.alglibexception e = last_alglib_exception;
+                Log.err(last_alglib_exception, "An exception occurred: {0}\n\tMesseage {1}\n\tMSG: {2}\nStack Trace:\n{3}",
+                        last_alglib_exception.GetType().Name, last_alglib_exception.Message, last_alglib_exception.msg, last_alglib_exception.StackTrace
+                        );
                 last_alglib_exception = null;
-                Debug.Log("An exception occurred: " + e.GetType().Name);
-                Debug.Log("Message: " + e.Message);
-                Debug.Log("MSG: " + e.msg);
-                Debug.Log("Stack Trace:\n" + e.StackTrace);
             }
             if ( last_exception != null )
             {
-                Exception e = last_exception;
+                Log.err(last_exception, "An exception occurred: {0}\n\tMesseage {1}\nStack Trace:\n{2}",
+                        last_exception.GetType().Name, last_exception.Message, last_exception.StackTrace
+                        );
                 last_exception = null;
-                Debug.Log("An exception occurred: " + e.GetType().Name);
-                Debug.Log("Message: " + e.Message);
-                Debug.Log("Stack Trace:\n" + e.StackTrace);
             }
 
             mut.WaitOne();
@@ -1302,6 +1319,8 @@ namespace MuMech {
             }
             mut.ReleaseMutex();
         }
+
+#endif
 
         public void KillThread()
         {

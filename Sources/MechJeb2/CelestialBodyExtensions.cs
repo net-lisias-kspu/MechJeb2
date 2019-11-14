@@ -1,6 +1,8 @@
 ﻿using System;
 using UnityEngine;
 
+using Log = MechJeb2.Log;
+
 namespace MuMech
 {
     public static class CelestialBodyExtensions
@@ -20,7 +22,7 @@ namespace MuMech
 
             if (airDensity <= 0) return Double.MaxValue;
 
-            //MechJebCore.print("DragLength " + airDensity.ToString("F5") + " " +  dragCoeff.ToString("F5"));
+            Log.dbg("DragLength {0:0.00000} {1:0.00000}", airDensity, dragCoeff);
 
             return mass / (0.0005 * PhysicsGlobals.DragMultiplier * airDensity * dragCoeff);
         }

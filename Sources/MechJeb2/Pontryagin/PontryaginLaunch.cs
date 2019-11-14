@@ -1,7 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.Threading;
 using UnityEngine;
+
+using Log = MechJeb2.Log;
 
 namespace MuMech {
     public class PontryaginLaunch : PontryaginBase {
@@ -437,7 +438,7 @@ namespace MuMech {
             {
                 if ( insertedCoast )
                 {
-                    DebugLog("failed to converge with a coast, removing from the solution");
+                    Log.info("failed to converge with a coast, removing from the solution");
 
                     RemoveArc(arcs, arcs.Count-2, new_sol);
                     insertedCoast = false;
@@ -467,7 +468,7 @@ namespace MuMech {
 
                 if ( coastlen < 1 )
                 {
-                    DebugLog("optimum coast of " + coastlen + " seconds was removed from the solution");
+                    Log.info("optimum coast of {0} seconds was removed from the solution", coastlen);
 
                     RemoveArc(arcs, arcs.Count-2, new_sol);
 

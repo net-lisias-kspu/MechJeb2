@@ -1,8 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using KSP.UI.Screens;
 using Smooth.Slinq;
 using UnityEngine;
+
+using Log = MechJeb2.Log;
 
 namespace MuMech
 {
@@ -210,14 +211,14 @@ namespace MuMech
                     if (!this.vessel.isActiveVessel)
                     {
                         this.currentActiveVessel = FlightGlobals.ActiveVessel;
-                        Debug.Log($"Mechjeb Autostage: Switching from {FlightGlobals.ActiveVessel.name} to vessel {this.vessel.name} to stage");
+                        Log.info($"Mechjeb Autostage: Switching from {0} to vessel {1} to stage", FlightGlobals.ActiveVessel.name, this.vessel.name);
 
                         this.remoteStagingStatus = RemoteStagingState.WaitingFocus;
                         FlightGlobals.ForceSetActiveVessel(this.vessel);
                     }
                     else
                     {
-                        Debug.Log($"Mechjeb Autostage: Executing next stage on {FlightGlobals.ActiveVessel.name}");
+                        Log.info("Mechjeb Autostage: Executing next stage on {0}", FlightGlobals.ActiveVessel.name);
 
                         if (remoteStagingStatus == RemoteStagingState.Disabled)
                         {
@@ -227,7 +228,7 @@ namespace MuMech
                         {
                             StageManager.ActivateNextStage();
                             FlightGlobals.ForceSetActiveVessel(currentActiveVessel);
-                            Debug.Log($"Mechjeb Autostage: Has switching back to {FlightGlobals.ActiveVessel.name} ");
+                            Log.info("Mechjeb Autostage: Has switching back to {0} ", FlightGlobals.ActiveVessel.name);
                             this.remoteStagingStatus = RemoteStagingState.Disabled;
                         }
                     }

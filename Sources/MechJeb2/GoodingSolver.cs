@@ -1,6 +1,8 @@
 using System;
-using UnityEngine;
 using System.Collections.Generic;
+using System.Diagnostics;
+
+using Log = MechJeb2.Log;
 
 namespace MuMech {
     public class GoodingSolver {
@@ -68,7 +70,9 @@ namespace MuMech {
 
             VLAMB(GM, R1.magnitude, R2.magnitude, theta, tof, out n, out VR11, out VT11, out VR12, out VT12, out VR21, out VT21, out VR22, out VT22);
 
-            //Debug.Log("VLAMBOUT: n= " + n + " VR11= " + VR11 + " VT11= " + VT11 + " VR12= " + VR12 + " VT12= " + VT12 + " VR21= " + VR21 + " VT21= " + VT21 + " VR22= " + VR22 + " VT22= " + VT22);
+            Log.dbg("VLAMBOUT: n= {0}; VR11= {1}; VT11= {2}; VR12= {3}; VT12= {4}; VR21= {5}; VT21= {6}; VR22= {7}; VT22= {8}",
+                    n, VR11, VT11, VR12, VT12, VR21, VT21, VR22, VT22
+                );
 
             if (nrev > 0) {
                 if (n == -1) {
@@ -105,7 +109,9 @@ namespace MuMech {
         private static void VLAMB(double GM, double R1, double R2, double TH, double TDELT,
                 out int N, out double VR11, out double VT11, out double VR12, out double VT12, out double VR21, out double VT21, out double VR22, out double VT22) {
 
-            //Debug.Log("GM= " + GM + " R1= " + R1 + " R2= " + R2 + " TH= " + TH + " TDELT= " + TDELT);
+            Log.dbg("GM= {0}; R1= {1}; R2= {2}; TH= {3}; TDELT= {4}",
+                    GM, R1, R2, TH, TDELT
+                );
             VR11 = VT11 = VR12 = VT12 = 0.0;
             VR21 = VT21 = VR22 = VT22 = 0.0;
             int M = Convert.ToInt32(Math.Floor(TH / (2.0 * Math.PI)));
@@ -458,6 +464,7 @@ Three:
             }
         }
 
+        [ConditionalAttribute("DEBUG")]
         public static void DebugLogList(List<double> l)
         {
             int i = 0;
@@ -466,7 +473,7 @@ Three:
                 str += String.Format("{0:F8}", l[n1]);
                 if (i % 6 == 5)
                 {
-                    Debug.Log(str);
+                    Log.dbg(str);
                     str = "";
                 }
                 else
@@ -553,9 +560,9 @@ Three:
                     }
                 }
             }
-            //DebugLogList(dlist);
+            DebugLogList(dlist);
 
-            Debug.Log("diffmax = " + diffmax + " n1 = " + maxn1 + " n2 = " + maxn2);
+            Log.info("diffmax = {0}; n1 = {1}; n2 = ", diffmax, maxn1, maxn2);
         }
     }
 }

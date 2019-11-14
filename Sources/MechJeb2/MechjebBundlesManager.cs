@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using TMPro;
+﻿using System.Collections;
 using UnityEngine;
+
+using Log = MechJeb2.Log;
 
 namespace MuMech
 {
@@ -31,9 +28,9 @@ namespace MuMech
         {
             // We do this in MainMenu because something is going on in that scene that kills anything loaded with a bundle
             if (diffuseAmbient)
-                MechJebCore.print("Shaders already loaded");
+                Log.info("Shaders already loaded");
 
-            MechJebCore.print("Loading Shaders Bundles");
+            Log.info("Loading Shaders Bundles");
 
             // Load the font asset bundle
             AssetBundleCreateRequest bundleLoadRequest = AssetBundle.LoadFromFileAsync(shaderPath);
@@ -42,7 +39,7 @@ namespace MuMech
             AssetBundle assetBundle = bundleLoadRequest.assetBundle;
             if (assetBundle == null)
             {
-                MechJebCore.print("Failed to load AssetBundle " + shaderPath);
+                Log.err("Failed to load AssetBundle {0}", shaderPath);
                 yield break;
             }
 
@@ -55,7 +52,7 @@ namespace MuMech
             diffuseAmbientIgnoreZ = assetLoadRequest.asset as Shader;
 
             assetBundle.Unload(false);
-            MechJebCore.print("Loaded Shaders Bundles");
+            Log.info("Loaded Shaders Bundles");
 
             comboBoxBackground = new Texture2D(16, 16, TextureFormat.RGBA32, false);
             comboBoxBackground.wrapMode = TextureWrapMode.Clamp;

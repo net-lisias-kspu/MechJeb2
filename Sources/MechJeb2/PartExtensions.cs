@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 
+using Log = MechJeb2.Log;
+
 namespace MuMech
 {
     public static class PartExtensions
@@ -61,7 +63,7 @@ namespace MuMech
             double flowMultiplier = e.FlowMultiplierAtConditions(atmDensity, machNumber);
             massFlowRate = e.FlowRateAtConditions(throttle, flowMultiplier);
             thrust = e.ThrustAtConditions(massFlowRate, isp, cosLoss);
-            //Debug.Log("thrust = " + thrust + " isp = " + isp + " massFlowRate = " + massFlowRate);
+            Log.dbg("thrust = {0} isp = {1} massFlowRate = {2}", thrust, isp, massFlowRate);
         }
 
         public static double FlowRateAtConditions(this ModuleEngines e, double throttle, double flowMultiplier)

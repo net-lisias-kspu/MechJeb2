@@ -4,6 +4,8 @@ using Smooth.Dispose;
 using Smooth.Pools;
 using UnityEngine;
 
+using LOG = MechJeb2.Log;
+
 namespace MuMech
 {
     public class ReentrySimulation
@@ -198,7 +200,7 @@ namespace MuMech
                 result.input_multiplierHasError = this.input_multiplierHasError;
                 result.input_dt = this.input_dt;
 
-                //MechJebCore.print("Sim Start");
+                LOG.dbg("Sim Start");
                 
                 if (!orbitReenters)
                 {
@@ -240,7 +242,7 @@ namespace MuMech
                     RecordTrajectory();
                 }
 
-                //MechJebCore.print("Sim ready " + result.outcome + " " + (t - startUT).ToString("F2"));
+                LOG.dbg("Sim ready " + result.outcome + " " + (t - startUT).ToString("F2"));
                 result.id = resultId++;
                 result.body = mainBody;
                 result.referenceFrame = referenceFrame;
@@ -258,7 +260,9 @@ namespace MuMech
             }
             catch (Exception ex)
             {
-                //Debug.LogError("Exception thrown during Rentry Simulation : " + ex.GetType() + ":" + ex.Message + "\n"+ ex.StackTrace);
+#if DEBUG
+                LOG.err(ex, "Exception thrown during Rentry Simulation : {0} : {1}\n{2}", ex.GetType(), ex.Message, ex.StackTrace);
+#endif
                 result.exception = ex;
                 result.outcome = Outcome.ERROR;
             }
@@ -635,38 +639,39 @@ namespace MuMech
             // Lift works with a velocity in SHIP coordinate and return a vector in ship coordinate
             Vector3d shipDrag = vessel.Drag(localVel, dynamicPressurekPa, mach);
 
-            //if (once)
-            //{
-            //    string msg = "DragForce";
-            //    msg += "\n " + mach.ToString("F3") + " " + vessel.parts[0].oPart.machNumber.ToString("F3");
-            //    msg += "\n " + Pressure(pos).ToString("F7") + " " + vessel.parts[0].oPart.vessel.staticPressurekPa.ToString("F7");
-            //    msg += "\n " + AirDensity(pos).ToString("F7") + " " + vessel.parts[0].oPart.atmDensity.ToString("F7");
-            //    msg += "\n " + vessel.parts[0].oPart.vessel.latitude.ToString("F3");
-            //
-            //
-            //    double altitude = pos.magnitude - bodyRadius;
-            //    double temp = FlightGlobals.getExternalTemperature(altitude, mainBody)
-            //                  + mainBody.atmosphereTemperatureSunMultCurve.Evaluate((float)altitude)
-            //                  * (mainBody.latitudeTemperatureBiasCurve.Evaluate(0)
-            //                     + mainBody.latitudeTemperatureSunMultCurve.Evaluate(0) * (1 + 1) * 0.5 // fix that 0 into latitude
-            //                     + mainBody.axialTemperatureSunMultCurve.Evaluate(1));
-            //
-            //    msg += "\n " + temp.ToString("F3") + " " + vessel.parts[0].oPart.vessel.atmosphericTemperature.ToString("F3");
-            //
-            //
-            //    //this.atmosphericTemperature = 
-            //    //    this.currentMainBody.GetTemperature(this.altitude) +
-            //    //    (double)this.currentMainBody.atmosphereTemperatureSunMultCurve.Evaluate((float)this.altitude) * 
-            //    //        ((double)this.currentMainBody.latitudeTemperatureBiasCurve.Evaluate((float)(num1 * 57.2957801818848)) + 
-            //    //         (double)this.currentMainBody.latitudeTemperatureSunMultCurve.Evaluate((float)(num1 * 57.2957801818848)) * (1 + this.sunDot) * 0.5
-            //    //          + (double)this.currentMainBody.axialTemperatureSunMultCurve.Evaluate(this.sunAxialDot));
-            //    //
-            //
-            //    MechJebCore.print(msg);
-            //}
+#if DEBUG && false
+            if (once)
+            {
+                string msg = "DragForce";
+                msg += "\n " + mach.ToString("F3") + " " + vessel.parts[0].oPart.machNumber.ToString("F3");
+                msg += "\n " + Pressure(pos).ToString("F7") + " " + vessel.parts[0].oPart.vessel.staticPressurekPa.ToString("F7");
+                msg += "\n " + AirDensity(pos).ToString("F7") + " " + vessel.parts[0].oPart.atmDensity.ToString("F7");
+                msg += "\n " + vessel.parts[0].oPart.vessel.latitude.ToString("F3");
 
-            //MechJebCore.print("DragForce " + airVel.magnitude.ToString("F4") + " " + mach.ToString("F4") + " " + shipDrag.magnitude.ToString("F4"));
-            //MechJebCore.print("DragForce " + AirDensity(pos).ToString("F4") + " " + airVel.sqrMagnitude.ToString("F4") + " " + dynamicPressurekPa.ToString("F4"));
+
+                double altitude = pos.magnitude - bodyRadius;
+                double temp = FlightGlobals.getExternalTemperature(altitude, mainBody)
+                              + mainBody.atmosphereTemperatureSunMultCurve.Evaluate((float)altitude)
+                              * (mainBody.latitudeTemperatureBiasCurve.Evaluate(0)
+                                 + mainBody.latitudeTemperatureSunMultCurve.Evaluate(0) * (1 + 1) * 0.5 // fix that 0 into latitude
+                                 + mainBody.axialTemperatureSunMultCurve.Evaluate(1));
+
+                msg += "\n " + temp.ToString("F3") + " " + vessel.parts[0].oPart.vessel.atmosphericTemperature.ToString("F3");
+
+
+                //this.atmosphericTemperature = 
+                //    this.currentMainBody.GetTemperature(this.altitude) +
+                //    (double)this.currentMainBody.atmosphereTemperatureSunMultCurve.Evaluate((float)this.altitude) * 
+                //        ((double)this.currentMainBody.latitudeTemperatureBiasCurve.Evaluate((float)(num1 * 57.2957801818848)) + 
+                //         (double)this.currentMainBody.latitudeTemperatureSunMultCurve.Evaluate((float)(num1 * 57.2957801818848)) * (1 + this.sunDot) * 0.5
+                //          + (double)this.currentMainBody.axialTemperatureSunMultCurve.Evaluate(this.sunAxialDot));
+                //
+
+                LOG.dbg(msg);
+            }
+            LOG.dbg("DragForce {0:0.0000} {1:0.0000} {2:0.0000}", airVel.magnitude, mach, shipDrag.magnitude);
+            LOG.dbg("DragForce {0:0.0000} {1:0.0000} {2:0.0000}", AirDensity(pos), airVel.sqrMagnitude, dynamicPressurekPa);
+#endif
 
             return - airVel.normalized * shipDrag.magnitude;
         }

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
+using Log = MechJeb2.Log;
+
 namespace MuMech
 {
     public class ComputerModule : IComparable<ComputerModule>
@@ -131,7 +133,7 @@ namespace MuMech
             }
             catch (Exception e)
             {
-                Debug.Log("MechJeb caught exception in OnLoad for " + this.GetType().Name + ": " + e);
+                Log.err(e, "caught exception in OnLoad for {0} : {1}", this.GetType().Name,  e);
             }
         }
 
@@ -146,7 +148,7 @@ namespace MuMech
             }
             catch (Exception e)
             {
-                Debug.Log("MechJeb caught exception in OnSave for " + this.GetType().Name + ": " + e);
+                Log.err(e, "caught exception in OnSave for {0} : {1}", this.GetType().Name,  e);
             }
         }
 
@@ -209,11 +211,6 @@ namespace MuMech
                     core.someModuleAreLocked = true;
                 }
             }
-        }
-
-        public static void print(object message)
-        {
-            MonoBehaviour.print("[MechJeb2] " + message);
         }
     }
 

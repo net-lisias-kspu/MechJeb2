@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using KSP.Localization;
 
+using Log = MechJeb2.Log;
+
 namespace MuMech
 {
 	public class MechJebModuleScriptActionsList
@@ -629,7 +631,7 @@ namespace MuMech
 					obj = new MechJebModuleScriptActionKos(scriptModule, core, this);
 				}
 				else {
-					Debug.LogError("MechJebModuleScript.LoadConfig : Unknown node " + scriptNode.name);
+					Log.err("MechJebModuleScript.LoadConfig : Unknown node {0}", scriptNode.name);
 				}
 				if (obj != null)
 				{

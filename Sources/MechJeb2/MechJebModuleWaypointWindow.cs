@@ -4,6 +4,9 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using UnityEngine;
 using KSP.Localization;
+
+using Log = MechJeb2.Log;
+
 namespace MuMech
 {
 	public class MechJebWaypoint {
@@ -313,7 +316,7 @@ namespace MuMech
 				}
 				catch (Exception e)
 				{
-					Debug.LogError("MechJebModuleWaypointWindow.OnLoad caught an exception trying to load mechjeb_routes.cfg: " + e);
+					Log.err(e, "MechJebModuleWaypointWindow.OnLoad caught an exception trying to load mechjeb_routes.cfg: {0}", e);
 				}
 			}
 
@@ -398,92 +401,102 @@ namespace MuMech
 					}
 				}
 			}
-
-			return null;
-
-//			var cam = FlightCamera.fetch.mainCamera;
-//			Ray ray = cam.ScreenPointToRay(Input.mousePosition);
-////			greenLine.SetPosition(0, ray.origin);
-////			greenLine.SetPosition(1, (Vector3d)ray.direction * body.Radius / 2);
-////			if (Physics.Raycast(ray, out raycast, (float)body.Radius * 4f, ~(1 << 1))) {
-//				Vector3d hit;
-//				//body.pqsController.RayIntersection(ray.origin, ray.direction, out hit);
-//				PQS.LineSphereIntersection(ray.origin - body.position, ray.direction, body.Radius, out hit);
-//				if (hit != Vector3d.zero) {
-//					hit = body.position + hit;
-//					Vector3d start = ray.origin;
-//					Vector3d end = hit;
-//					Vector3d point = Vector3d.zero;
-//					for (int i = 0; i < 16; i++) {
-//						point = (start + end) / 2;
-//						//var lat = body.GetLatitude(point);
-//						//var lon = body.GetLongitude(point);
-//						//var surf = body.GetWorldSurfacePosition(lat, lon, body.TerrainAltitude(lat, lon));
-//						var alt = body.GetAltitude(point) - body.TerrainAltitude(point);
-//						//Debug.Log(alt);
-//						if (alt > 0) {
-//							start = point;
-//						}
-//						else if (alt < 0) {
-//							end = point;
-//						}
-//						else {
-//							break;
-//						}
-//					}
-//					hit = point;
-////					redLine.SetPosition(0, ray.origin);
-////					redLine.SetPosition(1, hit);
-//					return new Coordinates(body.GetLatitude(hit), MuUtils.ClampDegrees180(body.GetLongitude(hit)));
-//				}
-//				else {
-//					return null;
-//				}
+#if false
+		{
+			var cam = FlightCamera.fetch.mainCamera;
+			Ray ray = cam.ScreenPointToRay(Input.mousePosition);
+			greenLine.SetPosition(0, ray.origin);
+			greenLine.SetPosition(1, (Vector3d)ray.direction * body.Radius / 2);
+			if (Physics.Raycast(ray, out raycast, (float)body.Radius * 4f, ~(1 << 1)))
+			{
+				Vector3d hit;
+				body.pqsController.RayIntersection(ray.origin, ray.direction, out hit);
+				PQS.LineSphereIntersection(ray.origin - body.position, ray.direction, body.Radius, out hit);
+				if (hit != Vector3d.zero)
+				{
+					hit = body.position + hit;
+					Vector3d start = ray.origin;
+					Vector3d end = hit;
+					Vector3d point = Vector3d.zero;
+					for (int i = 0;i < 16;i++)
+					{
+						point = (start + end) / 2;
+						var lat = body.GetLatitude(point);
+						var lon = body.GetLongitude(point);
+						var surf = body.GetWorldSurfacePosition(lat, lon, body.TerrainAltitude(lat, lon));
+						var alt = body.GetAltitude(point) - body.TerrainAltitude(point);
+						Log.dbg("Alt = {0}", alt);
+						if (alt > 0)
+						{
+							start = point;
+						}
+						else if (alt < 0)
+						{
+							end = point;
+						}
+						else
+						{
+							break;
+						}
+					}
+					hit = point;
+					redLine.SetPosition(0, ray.origin);
+					redLine.SetPosition(1, hit);
+					return new Coordinates(body.GetLatitude(hit), MuUtils.ClampDegrees180(body.GetLongitude(hit)));
+				}
+				else
+				{
+					return null;
+				}
 		}
+#else
+			return null;
+#endif
+			}
 
 		public static string LatToString(double Lat)
 		{
 			while (Lat >  90) { Lat -= 180; }
 			while (Lat < -90) { Lat += 180; }
-
+			
 			string ns = (Lat >= 0 ? "N" : "S");
 			Lat = Math.Abs(Lat);
-
+			
 			int h = (int)Lat;
 			Lat -= h; Lat *= 60;
-
+			
 			int m = (int)Lat;
 			Lat -= m; Lat *= 60;
-
+			
 			float s = (float)Lat;
-
+			
 			return string.Format("{0} {1}° {2}' {3:F3}\"", ns, h, m, s);
 		}
-
+		
 		public static string LonToString(double Lon)
 		{
 			while (Lon >  180) { Lon -= 360; }
 			while (Lon < -180) { Lon += 360; }
-
+			
 			string ew = (Lon >= 0 ? "E" : "W");
 			Lon = Math.Abs(Lon);
-
+			
 			int h = (int)Lon;
 			Lon -= h; Lon *= 60;
-
+			
 			int m = (int)Lon;
 			Lon -= m; Lon *= 60;
-
+			
 			float s = (float)Lon;
-
+			
 			return string.Format("{0} {1}° {2}' {3:F3}\"", ew, h, m, s);
 		}
-
+		
 		public static double ParseCoord(string LatLon, bool IsLongitute = false)
 		{
 			var match = new Regex(coordRegEx, RegexOptions.IgnoreCase).Match(LatLon);
 			var range = (IsLongitute ? 180 : 90);
-
+			
 			float nsew = 1;
 			if (match.Groups[5] != null)
 			{
@@ -597,7 +610,12 @@ namespace MuMech
 					if (Event.current.type == EventType.Repaint)
 					{
 						waypointRects[i] = GUILayoutUtility.GetLastRect();
-						//if (i == ap.WaypointIndex) { Debug.Log(Event.current.type.ToString() + " - " + waypointRects[i].ToString() + " - " + scroll.ToString()); }
+#if DEBUG
+						if (i == ap.WaypointIndex)
+						{
+							Log.dbg("{0} - {1} - {2}", Event.current.type, waypointRects[i], scroll);
+						}
+#endif
 					}
 					GUI.backgroundColor = Color.white;
 
@@ -1044,7 +1062,7 @@ namespace MuMech
 
 		public override string GetName()
 		{
-            return Localizer.Format("#MechJeb_Waypointhelper_title");//"Waypoint Help"
+			return "Waypoint Help";
 		}
 
 		public override void OnStart(PartModule.StartState state)
@@ -1071,7 +1089,7 @@ namespace MuMech
 
 		 	switch (topics[selTopic])
 		 	{
-                case "Rover Controller":
+		 		case "Rover Controller":
 		 			HelpTopic("Holding a set Heading", "To hold a specific heading just tick the box next to 'Heading control' and the autopilot will try to keep going for the entered heading." +
 		 			          "\nThis also needs to be enabled when the autopilot is supposed to drive to a waypoint" +
 		 			          "'Heading Error' simply shows the error between current heading and target heading.");
@@ -1143,7 +1161,12 @@ namespace MuMech
 
 	public class MechJebRouteRenderer : MonoBehaviour
 	{
+    // FIXME: It's possible to make this work on both Unitys. Do it.
+#if UNITY_2017
+		public static readonly Material material = new Material (Shader.Find ("Particles/Additive"));
+#else
 		public static readonly Material material = new Material (Shader.Find ("Legacy Shaders/Particles/Additive"));
+#endif
 		public MechJebModuleRoverController ap;
 		private LineRenderer pastPath;
 		private LineRenderer currPath;
@@ -1211,8 +1234,8 @@ namespace MuMech
 			if (NewLineRenderer(ref currPath)) { currPath.startColor = currPathColor; currPath.endColor=currPathColor; }
 			if (NewLineRenderer(ref nextPath)) { nextPath.startColor = nextPathColor; nextPath.endColor=nextPathColor; }
 			if (NewLineRenderer(ref selWP))    { selWP.startColor = selWPColor; selWP.endColor=selWPColor; }
-
-			//Debug.Log(ap.vessel.vesselName);
+			
+			Log.dbg("OnPreRender {0}", ap.vessel.vesselName);
 			var window = ap.core.GetComputerModule<MechJebModuleWaypointWindow>();
 			switch (ap.vessel.mainBody.bodyName)
 			{
@@ -1263,60 +1286,62 @@ namespace MuMech
 
 				if (ap.WaypointIndex > 0)
 				{
-//					Debug.Log("drawing pastPath");
+					Log.dbg("drawing pastPath");
 					pastPath.enabled = true;
 				    pastPath.positionCount = ap.WaypointIndex + 1;
 					for (int i = 0; i < ap.WaypointIndex; i++)
 					{
-//						Debug.Log("vert " + i.ToString());
+						Log.dbg("vert {0}", i);
 						pastPath.SetPosition(i, RaisePositionOverTerrain(ap.Waypoints[i].Position, targetHeight));
 					}
 					pastPath.SetPosition(ap.WaypointIndex, RaisePositionOverTerrain(ap.vessel.CoM, targetHeight));
-//					Debug.Log("pastPath drawn");
+					Log.dbg("pastPath drawn");
 				}
 				else
 				{
-//					Debug.Log("no pastPath");
+					Log.dbg("no pastPath");
 					pastPath.enabled = false;
 				}
-
+				
 				if (ap.WaypointIndex > -1)
 				{
-//					Debug.Log("drawing currPath");
+					Log.dbg("drawing currPath");
 					currPath.enabled = true;
 					currPath.SetPosition(0, RaisePositionOverTerrain(ap.vessel.CoM, targetHeight));
 					currPath.SetPosition(1, RaisePositionOverTerrain(ap.Waypoints[ap.WaypointIndex].Position, targetHeight));
-//					Debug.Log("currPath drawn");
+					Log.dbg("currPath drawn");
 				}
 				else
 				{
-//					Debug.Log("no currPath");
+					Log.dbg("no currPath");
 					currPath.enabled = false;
 				}
-
+				
 				var nextCount = ap.Waypoints.Count - ap.WaypointIndex;
 				if (nextCount > 1)
 				{
-//					Debug.Log("drawing nextPath of " + nextCount + " verts");
+					Log.dbg("drawing nextPath of {0} verts", nextCount);
 					nextPath.enabled = true;
 				    nextPath.positionCount = nextCount;
 					nextPath.SetPosition(0, RaisePositionOverTerrain((ap.WaypointIndex == -1 ? ap.vessel.CoM : (Vector3)ap.Waypoints[ap.WaypointIndex].Position), targetHeight));
 					for (int i = 0; i < nextCount - 1; i++)
 					{
-//						Debug.Log("vert " + i.ToString() + " (" + (ap.WaypointIndex + 1 + i).ToString() + ")");
+#if DEBUG
+						Log.dbg("vert {0} ({1})", i, (ap.WaypointIndex + 1 + i));
+#endif
 						nextPath.SetPosition(i + 1, RaisePositionOverTerrain(ap.Waypoints[ap.WaypointIndex + 1 + i].Position, targetHeight));
 					}
-//					Debug.Log("nextPath drawn");
+					Log.dbg("nextPath drawn");
 				}
 				else
 				{
-//					Debug.Log("no nextPath");
+					Log.dbg("no nextPath");
 					nextPath.enabled = false;
 				}
 			}
 			else
 			{
-				//Debug.Log("moo");
+				Log.dbg("moo");
 				selWP.enabled = pastPath.enabled = currPath.enabled = nextPath.enabled = false;
 			}
 		}

@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
-using KSP.UI.Screens;
 using UnityEngine;
 using KSP.Localization;
+
+using Log = MechJeb2.Log;
 
 namespace MuMech
 {
@@ -428,7 +430,7 @@ namespace MuMech
                     if ((core.attitude.attitudeError >= 2) && (useGimbal || (useDiffThrottle && core.thrust.differentialThrottle)))
                     {
                         trans_prev_thrust = targetThrottle = 0.1F;
-                        print(" targetThrottle = 0.1F");
+                        Log.detail(" targetThrottle = 0.1F");
                     }
                     else
                     {
@@ -527,19 +529,19 @@ namespace MuMech
             {
                 if (vesselState.lowestUllage < VesselState.UllageState.VeryStable)
                 {
-                    Debug.Log("MechJeb RCS auto-ullaging: found state below very stable: " + vesselState.lowestUllage);
+                    Log.info("RCS auto-ullaging: found state below very stable: {0}", vesselState.lowestUllage);
                     if (vessel.hasEnabledRCSModules())
                     {
                         if (!vessel.ActionGroups[KSPActionGroup.RCS])
                         {
-                            Debug.Log("MechJeb RCS auto-ullaging: enabling RCS action group for automatic ullaging");
+                            Log.info("RCS auto-ullaging: enabling RCS action group for automatic ullaging");
                             vessel.ActionGroups.SetGroup(KSPActionGroup.RCS, true);
                         }
-                        Debug.Log("MechJeb RCS auto-ullaging: firing RCS to stabilize ulllage");
+                        Log.info("RCS auto-ullaging: firing RCS to stabilize ulllage");
                         setTempLimit(0.0F, LimitMode.UnstableIgnition);
                         s.Z = -1.0F;
                     } else {
-                        Debug.Log("MechJeb RCS auto-ullaging: vessel has no enabled/staged RCS modules");
+                        Log.info("RCS auto-ullaging: vessel has no enabled/staged RCS modules");
                     }
                 }
             }
@@ -550,7 +552,7 @@ namespace MuMech
                 if (vesselState.lowestUllage < VesselState.UllageState.Stable)
                 {
                     ScreenMessages.PostScreenMessage(preventingUnstableIgnitionsMessage);
-                    Debug.Log("MechJeb Unstable Ignitions: preventing ignition in state: " + vesselState.lowestUllage);
+                    Log.info("Unstable Ignitions: preventing ignition in state: {0}", vesselState.lowestUllage);
                     setTempLimit(0.0F, LimitMode.UnstableIgnition);
                 }
             }
@@ -892,9 +894,10 @@ namespace MuMech
 
         private DifferentialThrottleStatus ComputeDifferentialThrottle(Vector3d torque)
         {
-            //var stopwatch = new Stopwatch();
-            //stopwatch.Start();
-
+#if DEBUG
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+#endif
             float mainThrottle = vessel.ctrlState.mainThrottle;
 
             if (mainThrottle == 0)
@@ -952,14 +955,20 @@ namespace MuMech
             alglib.minqpsetlinearterm(state, b);
             alglib.minqpsetbc(state, boundL, boundU);
             alglib.minqpsetalgobleic(state, 0.0, 0.0, 0.0, 0);
-            //var t1 = stopwatch.ElapsedMilliseconds;
+#if DEBUG
+            var t1 = stopwatch.ElapsedMilliseconds;
+#endif
             alglib.minqpoptimize(state);
-            //var t2 = stopwatch.ElapsedMilliseconds;
+#if DEBUG
+            var t2 = stopwatch.ElapsedMilliseconds;
+#endif
             double[] x;
             alglib.minqpreport report;
             alglib.minqpresults(state, out x, out report);
-            //var t3 = stopwatch.ElapsedMilliseconds;
-            //UnityEngine.Debug.LogFormat("[DiffThrottle] t1: {0}, t2: {1}, t3: {2}", t1, t2 - t1, t3 - t2);
+#if DEBUG
+            var t3 = stopwatch.ElapsedMilliseconds;
+            Log.dbg("[DiffThrottle] t1: {0}, t2: {1}, t3: {2}", t1, t2 - t1, t3 - t2);
+#endif
 
             if (x.Any(val => double.IsNaN(val)))
                 return DifferentialThrottleStatus.SolverFailed;

@@ -1,9 +1,9 @@
 ﻿using System;
-
 using UnityEngine;
-using KSP.UI.Screens;
 using System.Collections.Generic;
 using System.Reflection;
+
+using Log = MechJeb2.Log;
 
 namespace MuMech
 {
@@ -105,12 +105,12 @@ namespace MuMech
 
             if ( isLoadedPrincipia )
             {
-                // Debug.Log("FOUND PRINCIPIA!!!");
+                Log.dbg("FOUND PRINCIPIA!!!");
             }
 
             if ( !HighLogic.LoadedSceneIsFlight )
             {
-                Debug.Log("MechJebModuleGuidanceController [BUG]: PVG enabled in non-flight mode.  How does this happen?");
+                Log.err("MechJebModuleGuidanceController: PVG enabled in non-flight mode.  How does this happen?");
                 Done();
             }
 
@@ -128,8 +128,10 @@ namespace MuMech
 
             if (p != null)
             {
+#if USE_EXCEPTION_JANITOR
                 // propagate exceptions and debug information out of the solver thread
                 p.Janitorial();
+#endif
 
                 // update the position (safe to call on every tick, will not update if a thread is running)
                 p.UpdatePosition(vesselState.orbitalPosition, vesselState.orbitalVelocity, lambda, lambdaDot, tgo, vgo);
@@ -237,7 +239,7 @@ namespace MuMech
                 if (p != null)
                     p.KillThread();
 
-                Debug.Log("[MechJeb] MechJebModuleGuidanceController: setting up flightangle4constraint, rT: " + rT + " vT:" + vT + " inc:" + inc + " gamma:" + gamma);
+                Log.info("MechJebModuleGuidanceController: setting up flightangle4constraint, rT: {0}; vT:{1}; inc:{2}; gamma: {3}", rT, vT, inc, gamma);
                 PontryaginLaunch solver = NewPontryaginForLaunch(inc, sma);
                 solver.omitCoast = omitCoast;
                 solver.flightangle4constraint(rT, vT, gamma * UtilMath.Deg2Rad, inc * UtilMath.Deg2Rad);
@@ -270,7 +272,7 @@ namespace MuMech
                 if (p != null)
                     p.KillThread();
 
-                Debug.Log("[MechJeb] MechJebModuleGuidanceController: setting up flightangle5constraint, rT: " + rT + " vT:" + vT + " inc:" + inc + " gamma:" + gamma + " LAN:" + LAN + " sma: " + sma);
+                Log.info("MechJebModuleGuidanceController: setting up flightangle5constraint, rT: {0}; vT: {1}; inc: {2}; gamma: {3}; LAN: {4}; sma: {5}", rT, vT, inc, gamma, LAN, sma);
                 PontryaginLaunch solver = NewPontryaginForLaunch(inc, sma);
                 solver.omitCoast = omitCoast;
                 solver.flightangle5constraint(rT, vT, gamma * UtilMath.Deg2Rad, inc * UtilMath.Deg2Rad, LAN * UtilMath.Deg2Rad);
@@ -301,8 +303,7 @@ namespace MuMech
             Vector3d desiredHeadingVector = Math.Sin(desiredHeading * UtilMath.Deg2Rad) * vesselState.east + Math.Cos(desiredHeading * UtilMath.Deg2Rad) * vesselState.north;
             Vector3d desiredThrustVector = Math.Cos(45 * UtilMath.Deg2Rad) * desiredHeadingVector + Math.Sin(45 * UtilMath.Deg2Rad) * vesselState.up;  /* 45 pitch guess */
             lambda = desiredThrustVector;
-            Debug.Log("sma = " + sma);
-            Debug.Log("deltaV guess = " + approximateDeltaV(sma));
+            Log.info("sma = {0}; deltaV guess = {1}", sma, approximateDeltaV(sma));
             return new PontryaginLaunch(core: core, mu: mainBody.gravParameter, r0: vesselState.orbitalPosition, v0: vesselState.orbitalVelocity, pv0: lambda, dV: approximateDeltaV(sma));
         }
 
@@ -325,7 +326,7 @@ namespace MuMech
                 if (p != null)
                     p.KillThread();
 
-                Debug.Log("[MechJeb] MechJebModuleGuidanceController: setting up keplerian3constraint");
+                Log.info("MechJebModuleGuidanceController: setting up keplerian3constraint");
                 PontryaginLaunch solver = NewPontryaginForLaunch(inc, sma);
                 solver.omitCoast = omitCoast;
                 solver.keplerian3constraint(sma, ecc, inc * UtilMath.Deg2Rad);
@@ -356,7 +357,7 @@ namespace MuMech
                 if (p != null)
                     p.KillThread();
 
-                Debug.Log("[MechJeb] MechJebModuleGuidanceController: setting up keplerian4constraintArgPfree");
+                Log.info("MechJebModuleGuidanceController: setting up keplerian4constraintArgPfree");
                 PontryaginLaunch solver = NewPontryaginForLaunch(inc, sma);
                 solver.omitCoast = omitCoast;
                 solver.keplerian4constraintArgPfree(sma, ecc, inc * UtilMath.Deg2Rad, LAN * UtilMath.Deg2Rad);
@@ -388,7 +389,7 @@ namespace MuMech
                 if (p != null)
                     p.KillThread();
 
-                Debug.Log("[MechJeb] MechJebModuleGuidanceController: setting up keplerian4constraintLANfree");
+                Log.info("MechJebModuleGuidanceController: setting up keplerian4constraintLANfree");
                 PontryaginLaunch solver = NewPontryaginForLaunch(inc, sma);
                 solver.omitCoast = omitCoast;
                 solver.keplerian4constraintLANfree(sma, ecc, inc * UtilMath.Deg2Rad, ArgP * UtilMath.Deg2Rad);
@@ -420,7 +421,7 @@ namespace MuMech
                 if (p != null)
                     p.KillThread();
 
-                Debug.Log("[MechJeb] MechJebModuleGuidanceController: setting up keplerian5constraint");
+                Log.info("MechJebModuleGuidanceController: setting up keplerian5constraint");
                 PontryaginLaunch solver = NewPontryaginForLaunch(inc, sma);
                 solver.omitCoast = omitCoast;
                 solver.keplerian5constraint(sma, ecc, inc * UtilMath.Deg2Rad, LAN * UtilMath.Deg2Rad, ArgP * UtilMath.Deg2Rad);
@@ -454,7 +455,7 @@ namespace MuMech
                 if (p != null)
                     p.KillThread();
 
-                Debug.Log("[MechJeb] MechJebModuleGuidanceController: setting up flightangle3constraintMAXE");
+                Log.info("MechJebModuleGuidanceController: setting up flightangle3constraintMAXE");
                 PontryaginLaunch solver = NewPontryaginForLaunch(inc, sma);
                 solver.omitCoast = omitCoast;
                 solver.flightangle3constraintMAXE(rTm, gamma * UtilMath.Deg2Rad, inc * UtilMath.Deg2Rad, numStages);
@@ -485,9 +486,12 @@ namespace MuMech
             if (p == null || doupdate)
             {
                 if (p != null)
+                {
+                    Log.dbg("killing a thread if its there to kill");
                     p.KillThread();
+                }
 
-                Debug.Log("[MechJeb] MechJebModuleGuidanceController: setting up flightangle3constraintMAXE");
+                Log.info("MechJebModuleGuidanceController: setting up flightangle3constraintMAXE");
                 PontryaginLaunch solver = NewPontryaginForLaunch(inc, sma);
                 solver.omitCoast = omitCoast;
                 solver.flightangle4constraintMAXE(rTm, gamma * UtilMath.Deg2Rad, inc * UtilMath.Deg2Rad, LAN * UtilMath.Deg2Rad, numStages);
@@ -576,8 +580,10 @@ namespace MuMech
                 return;
 
             p.threadStart(vesselState.time);
-            //if ( p.threadStart(vesselState.time) )
-                //Debug.Log("MechJeb: started optimizer thread");
+#if DEBUG
+            if (p.threadStart(vesselState.time))
+                Log.dbg("MechJeb: started optimizer thread");
+#endif
 
             if (status == PVGStatus.INITIALIZING && p.solution != null)
                 status = PVGStatus.CONVERGED;
@@ -719,7 +725,7 @@ namespace MuMech
         public void Reset()
         {
             // lambda and lambdaDot are deliberately not cleared here
-            //Debug.Log("call stack: + " + Environment.StackTrace);
+            Log.dbg("call stack: + {0}", Environment.StackTrace);
             if (p != null)
             {
                 p.KillThread();
@@ -745,7 +751,7 @@ namespace MuMech
                 principiaEGNPCDOF = ReflectionUtils.getMethodByReflection("ksp_plugin_adapter", "principia.ksp_plugin_adapter.Interface", "ExternalGetNearestPlannedCoastDegreesOfFreedom", BindingFlags.NonPublic | BindingFlags.Static);
                 if (principiaEGNPCDOF == null)
                 {
-                    // Debug.Log("failed to find ExternalGetNearestPlannedCoastDegreesOfFreedom");
+                    Log.dbg("failed to find ExternalGetNearestPlannedCoastDegreesOfFreedom");
                     isLoadedPrincipia = false;
                     return;
                 }

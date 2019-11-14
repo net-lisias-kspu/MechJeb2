@@ -3,6 +3,8 @@ using KSP.UI.Screens;
 using UnityEngine;
 using KSP.Localization;
 
+using Log = MechJeb2.Log;
+
 namespace MuMech
 {
     public enum ascentType { CLASSIC, GRAVITYTURN, PVG };
@@ -137,7 +139,7 @@ namespace MuMech
         public void OnLaunch(EventReport report)
         {
             launchStarted = vesselState.time;
-            Debug.Log("[MechJebModuleAscentAutopilot] LaunchStarted = " + launchStarted);
+            Log.dbg("[MechJebModuleAscentAutopilot] LaunchStarted = {0}", launchStarted);
         }
 
         // wiring for launchStarted
@@ -275,7 +277,7 @@ namespace MuMech
             }
 
             if (autoThrottle) {
-                Debug.Log("prelaunch killing throttle");
+                Log.info("prelaunch killing throttle");
                 core.thrust.ThrustOff();
             }
 
@@ -283,7 +285,7 @@ namespace MuMech
 
             if (timedLaunch && tMinus > 10.0)
             {
-                status = Localizer.Format("#MechJeb_Ascent_status1");//"Pre Launch"
+                status = "Pre Launch";
                 return;
             }
 
@@ -291,7 +293,7 @@ namespace MuMech
             {
                 core.solarpanel.RetractAll();
                 if (core.solarpanel.AllRetracted()) {
-                    Debug.Log("Prelaunch -> Ascend");
+                    Log.dbg("Prelaunch -> Ascend");
                     mode = AscentMode.ASCEND;
                 }
                 else
@@ -307,8 +309,8 @@ namespace MuMech
         {
             if (timedLaunch)
             {
-                Debug.Log("Awaiting Liftoff");
                 status = Localizer.Format("#MechJeb_Ascent_status6");//"Awaiting liftoff"
+                Log.dbg("Awaiting Liftoff");
                 // kill the optimizer if it is running.
                 core.guidance.enabled = false;
 
@@ -319,10 +321,10 @@ namespace MuMech
             DriveDeployableComponents(s);
 
             if ( ascentPath.DriveAscent(s) ) {
-                if (GameSettings.VERBOSE_DEBUG_LOG) { Debug.Log("Remaining in Ascent"); }
+                Log.detail("Remaining in Ascent");
                 status = ascentPath.status;
             } else {
-                if (GameSettings.VERBOSE_DEBUG_LOG) { Debug.Log("Ascend -> Circularize"); }
+                Log.detail("Ascend -> Circularize");
                 mode = AscentMode.CIRCULARIZE;
             }
         }

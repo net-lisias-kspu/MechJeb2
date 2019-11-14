@@ -2,6 +2,8 @@ using System;
 using UnityEngine;
 using KSP.Localization;
 
+using Log  = MechJeb2.Log;
+
 namespace MuMech
 {
     public class MechJebModuleDockingAutopilot : ComputerModule
@@ -343,7 +345,7 @@ namespace MuMech
             }
             catch (Exception e)
             {
-                print(e);
+                Log.err(e, this);
             }
 
             if (zSep < 0)  //we're behind the target

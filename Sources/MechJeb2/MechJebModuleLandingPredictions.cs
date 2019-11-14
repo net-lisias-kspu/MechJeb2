@@ -5,6 +5,8 @@ using UnityEngine;
 using UnityToolbag;
 using Random = System.Random;
 
+using Log = MechJeb2.Log;
+
 namespace MuMech
 {
     public class MechJebModuleLandingPredictions : ComputerModule
@@ -21,43 +23,45 @@ namespace MuMech
         {
             get
             {
-                //if (result != null)
-                //{
-                //    if (result.body != null)
-                //    {
-                //        simDragScalar = result.prediction.firstDrag;
-                //        simLiftScalar = result.prediction.firstLift;
-                //        simDynamicPressurePa = result.prediction.dynamicPressurekPa * 1000;
-                //        simMach = result.prediction.mach;
-                //        simSpeedOfSound = result.prediction.speedOfSound;
-                //
-                //        if (result.debugLog != "")
-                //        {
-                //        
-                //            MechJebCore.print("Now".PadLeft(8)
-                //                       + " Alt:" + vesselState.altitudeASL.ToString("F0").PadLeft(6)
-                //                       + " Vel:" + vesselState.speedOrbital.ToString("F2").PadLeft(8)
-                //                       + " AirVel:" + vesselState.speedSurface.ToString("F2").PadLeft(8)
-                //                       + " SoS:" +  vesselState.speedOfSound.ToString("F2").PadLeft(6)
-                //                       + " mach:" + vesselState.mach.ToString("F2").PadLeft(6)
-                //                       + " dynP:" + (vesselState.dynamicPressure / 1000).ToString("F5").PadLeft(9)
-                //                       + " Temp:" + vessel.atmosphericTemperature.ToString("F2").PadLeft(8)
-                //                       + " Lat:" + vesselState.latitude.ToString("F2").PadLeft(6));
-                //        
-                //        
-                //            MechJebCore.print(result.debugLog);
-                //            result.debugLog = "";
-                //        
-                //            Vector3 scaledPos = ScaledSpace.LocalToScaledSpace(vessel.transform.position);
-                //            Vector3 sunVector = (FlightGlobals.Bodies[0].scaledBody.transform.position - scaledPos).normalized;
-                //        
-                //            float sunDot = Vector3.Dot(sunVector, vessel.upAxis);
-                //            float sunAxialDot = Vector3.Dot(sunVector, vessel.mainBody.bodyTransform.up);
-                //            MechJebCore.print("sunDot " + sunDot.ToString("F3") + " sunAxialDot " + sunAxialDot.ToString("F3") + " " + PhysicsGlobals.DragUsesAcceleration);
-                //        
-                //        }
-                //    }
-                //}
+#if DEBUG
+                if (result != null)
+                {
+                    if (result.body != null)
+                    {
+                        simDragScalar = result.prediction.firstDrag;
+                        simLiftScalar = result.prediction.firstLift;
+                        simDynamicPressurePa = result.prediction.dynamicPressurekPa * 1000;
+                        simMach = result.prediction.mach;
+                        simSpeedOfSound = result.prediction.speedOfSound;
+
+                        if (result.debugLog != "")
+                        {
+
+                            Log.info("Now".PadLeft(8)
+                                       + " Alt:" + vesselState.altitudeASL.ToString("F0").PadLeft(6)
+                                       + " Vel:" + vesselState.speedOrbital.ToString("F2").PadLeft(8)
+                                       + " AirVel:" + vesselState.speedSurface.ToString("F2").PadLeft(8)
+                                       + " SoS:" + vesselState.speedOfSound.ToString("F2").PadLeft(6)
+                                       + " mach:" + vesselState.mach.ToString("F2").PadLeft(6)
+                                       + " dynP:" + (vesselState.dynamicPressure / 1000).ToString("F5").PadLeft(9)
+                                       + " Temp:" + vessel.atmosphericTemperature.ToString("F2").PadLeft(8)
+                                       + " Lat:" + vesselState.latitude.ToString("F2").PadLeft(6));
+
+
+                            Log.dbg(result.debugLog);
+                            result.debugLog = "";
+
+                            Vector3 scaledPos = ScaledSpace.LocalToScaledSpace(vessel.transform.position);
+                            Vector3 sunVector = (FlightGlobals.Bodies[0].scaledBody.transform.position - scaledPos).normalized;
+
+                            float sunDot = Vector3.Dot(sunVector, vessel.upAxis);
+                            float sunAxialDot = Vector3.Dot(sunVector, vessel.mainBody.bodyTransform.up);
+                            Log.dbg("sunDot {0:0.000} sunAxialDot {1:0.000} {2}", sunDot, sunAxialDot, PhysicsGlobals.DragUsesAcceleration);
+
+                        }
+                    }
+                }
+#endif
                 return result;
             }
         }
@@ -228,7 +232,7 @@ namespace MuMech
             }
             catch (Exception ex)
             {
-                Debug.LogException(ex);
+                Log.err(ex, this);
             }
         }
 
@@ -271,7 +275,7 @@ namespace MuMech
 
             SimulatedVessel simVessel = SimulatedVessel.Borrow(vessel, simCurves, patch.StartUT, core.landing.enabled && deployChutes ? limitChutesStage : -1);
             ReentrySimulation sim = ReentrySimulation.Borrow(patch, patch.StartUT, simVessel, simCurves, descentSpeedPolicy, decelEndAltitudeASL, vesselState.limitedMaxThrustAccel, parachuteMultiplierForThisSimulation, altitudeOfPreviousPrediction, addParachuteError, dt, Time.fixedDeltaTime, maxOrbits, noSkipToFreefall);
-            //MechJebCore.print("Sim ran with dt=" + dt.ToString("F3"));
+            Log.dbg("Sim ran with dt={0:0.000}", dt);
 
             //Run the simulation in a separate thread
             ThreadPool.QueueUserWorkItem(RunSimulation, sim);
@@ -335,7 +339,7 @@ namespace MuMech
                         }
                     }
                     
-                    //Debug.Log("Result:" + this.result.outcome + " Time to run: " + millisecondsToCompletion + " millisecondsBetweenSimulations: " + millisecondsBetweenSimulations + " new dt: " + dt + " Time.fixedDeltaTime " + Time.fixedDeltaTime + "\n" + this.result.ToString()); // Note the endASL will be zero as it has not yet been calculated, and we are not allowed to calculate it from this thread :(
+                    Log.dbg("Result: {0} Time to run: {1} millisecondsBetweenSimulations: {2} new dt: {3} Time.fixedDeltaTime {4}\n{5}", this.result.outcome, millisecondsToCompletion, millisecondsBetweenSimulations, dt, Time.fixedDeltaTime, this.result); // Note the endASL will be zero as it has not yet been calculated, and we are not allowed to calculate it from this thread :(
 
                     //start the stopwatch that will count off this delay
                     stopwatch.Start();
@@ -344,9 +348,7 @@ namespace MuMech
             }
             catch (Exception ex)
             {
-                //Debug.Log(string.Format("Exception in MechJebModuleLandingPredictions.RunSimulation\n{0}", ex.StackTrace));
-                //Debug.LogException(ex);
-                Dispatcher.InvokeAsync(() => Debug.LogException(ex));
+                Log.aerr(ex, "Exception in MechJebModuleLandingPredictions.RunSimulation\n{0}", ex.StackTrace);
             }
             finally
             {
@@ -384,7 +386,7 @@ namespace MuMech
                     else
                     {
                         if (newResult.exception != null)
-                            print("Exception in the last simulation\n" + newResult.exception.Message + "\n" + newResult.exception.StackTrace);
+                            Log.info("Exception in the last simulation\n{0}\n{1}", newResult.exception.Message, newResult.exception.StackTrace);
                         newResult.Release();
                     }
                 }

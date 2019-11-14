@@ -4,6 +4,8 @@ using UniLinq;
 using Smooth.Slinq;
 using UnityEngine;
 
+using Log = MechJeb2.Log;
+
 namespace MuMech
 {
     public static class VesselExtensions
@@ -286,20 +288,14 @@ namespace MuMech
             Vector3 minBounds = new Vector3();
             Vector3 maxBounds = new Vector3();
 
-            if (debug)
-            {
-                MonoBehaviour.print("[GetBoundingBox] Start " + vessel.vesselName);
-            }
+            Log.dbg("[GetBoundingBox] Start {0}", vessel.vesselName);
 
             for (int i = 0; i < vessel.parts.Count; i++)
             {
                 Part p = vessel.parts[i];
                 PartExtensions.Vector3Pair partBox = p.GetBoundingBox();
 
-                if (debug)
-                {
-                    MonoBehaviour.print("[GetBoundingBox] " + p.name + " " + (partBox.p1 - partBox.p2).magnitude.ToString("F3"));
-                }
+                Log.dbg("[GetBoundingBox] {0} {1:0.000}", p.name , (partBox.p1 - partBox.p2).magnitude);
 
                 maxBounds.x = Mathf.Max(maxBounds.x, partBox.p1.x);
                 minBounds.x = Mathf.Min(minBounds.x, partBox.p2.x);
@@ -323,7 +319,7 @@ namespace MuMech
 
             if (debug)
             {
-                MonoBehaviour.print("[GetBoundingBox] End " + vessel.vesselName);
+                Log.info("[GetBoundingBox] End {0}", vessel.vesselName);
             }
 
             MechJebModuleDockingAutopilot.Box3d box = new MechJebModuleDockingAutopilot.Box3d();

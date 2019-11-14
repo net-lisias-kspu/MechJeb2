@@ -2,6 +2,8 @@
 using System.IO;
 using KSP.UI.Screens;
 
+using Log = MechJeb2.Log;
+
 namespace MuMech
 {
     //A class to record flight data, currently deltaV and time
@@ -277,12 +279,12 @@ namespace MuMech
                 lastRecordTime = vesselState.time;
                 historyIdx++;
                 Record(historyIdx);
-                //if (TimeWarp.WarpMode == TimeWarp.Modes.HIGH)
-                //    print("WRP " + historyIdx + " " + history[historyIdx].downRange.ToString("F0") + " " + history[historyIdx].AoA.ToString("F2"));
-                //else
-                //{
-                //    print("STD " + historyIdx + " " + history[historyIdx].downRange.ToString("F0") + " " + history[historyIdx].AoA.ToString("F2"));
-                //}
+#if DEBUG
+                if (TimeWarp.WarpMode == TimeWarp.Modes.HIGH)
+                    Log.dbg("WRP {0} {1:0} {2:0.00}", historyIdx, history[historyIdx].downRange, history[historyIdx].AoA);
+                else
+                    Log.dbg("STD {0} {1:0} {2:0.00}", historyIdx, history[historyIdx].downRange, history[historyIdx].AoA);
+#endif
             }
         }
 

@@ -1,7 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.Threading;
 using UnityEngine;
+
+using Log = MechJeb2.Log;
 
 namespace MuMech {
     public class PontryaginNode : PontryaginBase {
@@ -144,17 +145,21 @@ namespace MuMech {
             double[] y0_saved = new double[y0.Length];
             Array.Copy(y0, y0_saved, y0.Length);
 
-            //for(int j = 0; j < y0.Length; j++)
-            //    Debug.Log("bootstrap - y0[" + j + "] = " + y0[j]);
-            //Debug.Log("running optimizer");
+#if DEBUG
+            for (int j = 0;j < y0.Length;j++)
+                Log.dbg("bootstrap - y0[{0}] = {1}", j, y0[j]);
+            Log.dbg("running optimizer");
+#endif
 
             bool success = runOptimizer(arcs);
 
             if ( !success )
             {
-                //for(int k = 0; k < y0.Length; k++)
-                //    Debug.Log("failed - y0[" + k + "] = " + y0[k]);
-                //Debug.Log("optimizer failed12");
+#if DEBUG
+                for (int k = 0;k < y0.Length;k++)
+                    Log.dbg("failed - y0[{0}] = {1}", k, y0[k]);
+                Log.dbg("optimizer failed12");
+#endif
                 y0 = null;
                 return;
             }
@@ -162,35 +167,39 @@ namespace MuMech {
             Solution new_sol = new Solution(t_scale, v_scale, r_scale, t0);
             multipleIntegrate(y0, new_sol, arcs, 10);
 
-            //Debug.Log("optimizer done");
+            Log.dbg("optimizer done");
             if ( new_sol.tgo(new_sol.t0, 0) < 0 )
             {
                 // coast is less than zero, delete it and reconverge
                 RemoveArc(arcs, 0, new_sol);
                 UpdateY0(arcs); // reset to current starting position
                 multipleIntegrate(y0, yf, arcs, initialize: true);
-                //Debug.Log("running optimizer4");
+                Log.dbg("running optimizer4");
                 bcfun = terminal5constraint;
 
                 if ( !runOptimizer(arcs) )
                 {
-                    //for(int k = 0; k < y0.Length; k++)
-                    //    Debug.Log("failed - y0[" + k + "] = " + y0[k]);
-                    //Debug.Log("optimizer failed14");
+#if DEBUG
+                    for (int k = 0;k < y0.Length;k++)
+                        Log.dbg("failed - y0[{0}] = {1}", k, y0[k]);
+                    Log.dbg("optimizer failed14");
+#endif
                     y0 = null;
                     return;
                 }
 
-                //Debug.Log("optimizer done");
+                Log.dbg("optimizer done");
                 new_sol = new Solution(t_scale, v_scale, r_scale, t0);
                 multipleIntegrate(y0, new_sol, arcs, 10);
             }
 
-            //for(int k = 0; k < y0.Length; k++)
-                //Debug.Log("new y0[" + k + "] = " + y0[k]);
+#if DEBUG
+            for(int k = 0; k < y0.Length; k++)
+                Log.dbg("new y0[{0}] = {1}", k, y0[k]);
+#endif
 
             this.solution = new_sol;
-            //Debug.Log("done with bootstrap");
+            Log.dbg("done with bootstrap");
         }
     }
 }

@@ -4,6 +4,8 @@ using System.Threading;
 using UnityEngine;
 using UnityEngine.Profiling;
 
+using Log = MechJeb2.Log;
+
 namespace MuMech
 {
     //Other modules can request that the stage stats be computed by calling RequestUpdate
@@ -206,7 +208,7 @@ namespace MuMech
             }
             catch (Exception e)
             {
-                print("Exception in MechJebModuleStageStats.StartSimulation(): " + e + "\n" + e.StackTrace);
+                Log.err(e, "Exception in MechJebModuleStageStats.StartSimulation(): {0}\n", e.StackTrace);
 
                 // Stop timing the simulation
                 stopwatch.Stop();
@@ -236,7 +238,7 @@ namespace MuMech
             }
             catch (Exception e)
             {
-                print("Exception in MechJebModuleStageStats.RunSimulation(): " + e);
+                Log.err(e, "Exception in MechJebModuleStageStats.RunSimulation(): {0}", e.Message);
             }
 
             //see how long the simulation took

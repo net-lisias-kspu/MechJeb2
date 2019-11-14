@@ -1,6 +1,8 @@
 using System;
 using UnityEngine;
 
+using Log = MechJeb2.Log;
+
 /*
  * This is the Space-Shuttle Conic State Extrpolator
  *
@@ -179,7 +181,7 @@ namespace MuMech
             E = 1 - 0.5*a*zs*zs;
             if ( ((1.0+E)/2.0) < 0 )
             {
-                Debug.Log("uh oh!");
+                Log.err("uh oh!");
             }
             double w = Math.Sqrt( (1.0+E)/2.0 );
             D = w*zs;
