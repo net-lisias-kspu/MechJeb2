@@ -1,7 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.Threading;
 using UnityEngine;
+
+using Log = MechJeb2.Log;
 
 namespace MuMech {
     public class PontryaginLaunch : PontryaginBase {
@@ -61,11 +62,11 @@ namespace MuMech {
         // 4-constraint PEG with free LAN
         public void flightangle4constraint(double rTm, double vTm, double gamma, double inc)
         {
-            //Debug.Log("call stack: + " + Environment.StackTrace);
+            Log.dbg("call stack: {0}", Environment.StackTrace);
             this.rTm = rTm / r_scale;
             this.vTm = vTm / v_scale;
-            //Debug.Log("4constraint vTm = " + vTm + " v_scale = " + v_scale + " vTm_bar = " + this.vTm );
-            //Debug.Log("4constraint rTm = " + rTm + " r_scale = " + r_scale + " rTm_bar = " + this.rTm );
+            Log.dbg("4constraint vTm = {0} v_scale = {1} vTm_bar = {2}", vTm, v_scale, this.vTm );
+            Log.dbg("4constraint rTm = {0} r_scale = {1} rTm_bar = {2}", rTm, r_scale, this.rTm );
             this.gamma = gamma;
             this.inc = inc;
             bcfun = flightangle4constraint;
@@ -133,26 +134,29 @@ namespace MuMech {
             yf = new double[arcs.Count*13];
             multipleIntegrate(y0, yf, arcs, initialize: true);
 
-            //Debug.Log("optimizer hT = " + hT.magnitude * r_scale * v_scale);
-            //Debug.Log("r_scale = " + r_scale);
-            //Debug.Log("v_scale = " + v_scale);
-            //Debug.Log("rTm = " + rTm * r_scale + " " + rTm);
-            //Debug.Log("vTm = " + vTm * v_scale + " " + vTm);
+#if DEBUG
+            Log.dbg("optimizer hT = " + hT.magnitude * r_scale * v_scale);
+            Log.dbg("r_scale = {0} rTm = {1} {2}" + r_scale, rTm * r_scale,  rTm);
+            Log.dbg("v_scale = {0} vTm = {1} {2}" + v_scale, vTm * v_scale,  vTm);
 
-            //for(int j = 0; j < y0.Length; j++)
-            //    Debug.Log("bootstrap - y0[" + j + "] = " + y0[j]);
+            for (int j = 0;j < y0.Length;j++)
+                Log.dbg("bootstrap - y0[{0}] = {1}", j, y0[j]);
 
-            //Debug.Log("running optimizer");
+            Log.dbg("running optimizer");
+#endif
 
             if ( !runOptimizer(arcs) )
             {
-                //for(int k = 0; k < y0.Length; k++)
-                    //Debug.Log("failed - y0[" + k + "] = " + y0[k]);
+#if DEBUG
+                for (int k = 0;k < y0.Length;k++)
+                    Log.dbg("failed - y0[{0}] = {1}", k, y0[k]);
+#endif
+
                 Fatal("Target is unreachable even with infinite ISP");
                 return;
             }
 
-            //Debug.Log("optimizer done");
+            Log.dbg("optimizer done");
 
             Solution new_sol = new Solution(t_scale, v_scale, r_scale, t0);
             multipleIntegrate(y0, new_sol, arcs, 10);
@@ -166,11 +170,13 @@ namespace MuMech {
                 }
             }
 
-            //for(int k = 0; k < y0.Length; k++)
-            //   Debug.Log("y0[" + k + "] = " + y0[k]);
+#if DEBUG
+            for (int k = 0;k < y0.Length;k++)
+                Log.dbg("y0[{0}] = {1}", k, y0[k]);
 
-            //Debug.Log("arcs.Count = " + arcs.Count);
-            //Debug.Log("segments.Count = " + new_sol.segments.Count);
+            Log.dbg("arcs.Count = {0}", arcs.Count);
+            Log.dbg("segments.Count = {1}", new_sol.segments.Count);
+#endif
 
             bool insertedCoast = false;
 
@@ -181,25 +187,29 @@ namespace MuMech {
             }
             arcs[arcs.Count-1].infinite = false;
 
-            //Debug.Log("running optimizer3");
+            Log.dbg("running optimizer3");
 
             if ( !runOptimizer(arcs) )
             {
                 Fatal("Target is unreachable");
-                //for(int k = 0; k < y0.Length; k++)
-                    //Debug.Log("failed - y0[" + k + "] = " + y0[k]);
-                //Debug.Log("optimizer failed6");
+#if DEBUG
+                for (int k = 0;k < y0.Length;k++)
+                    Log.dbg("failed - y0[{0}] = {1}", k, y0[k]);
+                Log.dbg("optimizer failed6");
+#endif
                 y0 = null;
                 return;
             }
 
-            //Debug.Log("optimizer done");
+            Log.dbg("optimizer done");
 
             new_sol = new Solution(t_scale, v_scale, r_scale, t0);
             multipleIntegrate(y0, new_sol, arcs, 10);
 
-            //for(int k = 0; k < y0.Length; k++)
-            //    Debug.Log("y0[" + k + "] = " + y0[k]);
+#if DEBUG
+            for (int k = 0;k < y0.Length;k++)
+                Log.dbg("y0[{0}] = {1}", k, y0[k]);
+#endif
 
             if (insertedCoast)
             {
@@ -219,27 +229,28 @@ namespace MuMech {
                 }
             }
 
-            //for(int k = 0; k < y0.Length; k++)
-                //Debug.Log("new y0[" + k + "] = " + y0[k]);
+#if DEBUG
+            for (int k = 0;k < y0.Length;k++)
+                Log.dbg("new y0[{0}] = {1}", k, y0[k]);
+#endif
 
             this.solution = new_sol;
-            //Debug.Log("done with bootstrap");
+            Log.dbg("done with bootstrap");
 
             yf = new double[arcs.Count*13];
             multipleIntegrate(y0, yf, arcs);
 
-            //for(int k = 0; k < yf.Length; k++)
-                //Debug.Log("new yf[" + k + "] = " + yf[k]);
-
+#if DEBUG
+            for (int k = 0;k < yf.Length;k++)
+                Log.dbg("new yf[{0}] = {1}", k, yf[k]);
+#endif
         }
 
         public override void Optimize(double t0)
         {
             base.Optimize(t0);
-            //Debug.Log("r_scale = " + r_scale);
-            //Debug.Log("v_scale = " + v_scale);
-            //Debug.Log("rTm = " + rTm * r_scale + " " + rTm);
-            //Debug.Log("vTm = " + vTm * v_scale + " " + vTm);
+            Log.dbg("r_scale = {0} rTm = {1} {2}", r_scale, rTm * r_scale, rTm);
+            Log.dbg("v_scale = {0} rTm = {1} {2}", v_scale, vTm * v_scale, vTm);
         }
     }
 }

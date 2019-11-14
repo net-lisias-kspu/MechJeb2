@@ -17,7 +17,7 @@ namespace MechJeb2
             }
             catch (KSPe.Util.InstallmentException e)
             {
-                Log.error(e.ToShortMessage());
+                Log.err(e.ToShortMessage());
                 KSPe.Common.Dialogs.ShowStopperAlertBox.Show(e);
             }
         }

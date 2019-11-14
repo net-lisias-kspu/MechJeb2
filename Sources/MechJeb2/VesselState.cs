@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Smooth.Pools;
 using UnityEngine;
 using System.Reflection;
+
+using Log = MechJeb2.Log;
 
 namespace MuMech
 {
@@ -293,35 +294,35 @@ namespace MuMech
             isLoadedRealFuels = ReflectionUtils.isAssemblyLoaded("RealFuels");
             if (isLoadedRealFuels)
             {
-                Debug.Log("MechJeb: RealFuels Assembly is loaded");
+                Log.info("MechJeb: RealFuels Assembly is loaded");
                 RFullageSetField = ReflectionUtils.getFieldByReflection("RealFuels", "RealFuels.ModuleEnginesRF", "ullageSet");
                 if (RFullageSetField == null)
                 {
-                    Debug.Log("MechJeb BUG: RealFuels loaded, but RealFuels.ModuleEnginesRF has no ullageSet field, disabling RF");
+                    Log.err("RealFuels loaded, but RealFuels.ModuleEnginesRF has no ullageSet field, disabling RF");
                     isLoadedRealFuels = false;
                 }
                 RFGetUllageStabilityMethod = ReflectionUtils.getMethodByReflection("RealFuels", "RealFuels.Ullage.UllageSet", "GetUllageStability", BindingFlags.Public|BindingFlags.Instance);
                 if (RFGetUllageStabilityMethod == null)
                 {
-                    Debug.Log("MechJeb BUG: RealFuels loaded, but RealFuels.Ullage.UllageSet has no GetUllageStability method, disabling RF");
+                    Log.err("RealFuels loaded, but RealFuels.Ullage.UllageSet has no GetUllageStability method, disabling RF");
                     isLoadedRealFuels = false;
                 }
                 RFignitionsField = ReflectionUtils.getFieldByReflection("RealFuels", "RealFuels.ModuleEnginesRF", "ignitions");
                 if (RFignitionsField == null)
                 {
-                    Debug.Log("MechJeb BUG: RealFuels loaded, but RealFuels.ModuleEnginesRF has no ignitions field, disabling RF");
+                    Log.err("RealFuels loaded, but RealFuels.ModuleEnginesRF has no ignitions field, disabling RF");
                     isLoadedRealFuels = false;
                 }
                 RFullageField = ReflectionUtils.getFieldByReflection("RealFuels", "RealFuels.ModuleEnginesRF", "ullage");
                 if (RFullageField == null)
                 {
-                    Debug.Log("MechJeb BUG: RealFuels loaded, but RealFuels.ModuleEnginesRF has no ullage field, disabling RF");
+                    Log.err("RealFuels loaded, but RealFuels.ModuleEnginesRF has no ullage field, disabling RF");
                     isLoadedRealFuels = false;
                 }
                 FieldInfo RFveryStableField = ReflectionUtils.getFieldByReflection("RealFuels", "RealFuels.Ullage.UllageSimulator", "veryStable", BindingFlags.NonPublic|BindingFlags.Static);
                 if (RFveryStableField == null)
                 {
-                    Debug.Log("MechJeb BUG: RealFuels loaded, but RealFuels.Ullage.UllageSimulator has no veryStable field, disabling RF");
+                    Log.err("RealFuels loaded, but RealFuels.Ullage.UllageSimulator has no veryStable field, disabling RF");
                     isLoadedRealFuels = false;
                 }
                 try
@@ -330,14 +331,14 @@ namespace MuMech
                 }
                 catch (Exception e1)
                 {
-                    Debug.Log("MechJeb BUG Exception thrown while getting veryStable value from RealFuels, ullage integration disabled: " + e1.Message);
+                    Log.err(e1, "Exception thrown while getting veryStable value from RealFuels, ullage integration disabled: {0}", e1.Message);
                     isLoadedRealFuels = false;
                     return;
                 }
                 FieldInfo RFstableField = ReflectionUtils.getFieldByReflection("RealFuels", "RealFuels.Ullage.UllageSimulator", "stable", BindingFlags.NonPublic|BindingFlags.Static);
                 if (RFstableField == null)
                 {
-                    Debug.Log("MechJeb BUG: RealFuels loaded, but RealFuels.Ullage.UllageSimulator has no stable field, disabling RF");
+                    Log.err("RealFuels loaded, but RealFuels.Ullage.UllageSimulator has no stable field, disabling RF");
                     isLoadedRealFuels = false;
                 }
                 try
@@ -346,14 +347,14 @@ namespace MuMech
                 }
                 catch (Exception e2)
                 {
-                    Debug.Log("MechJeb BUG Exception thrown while getting stable value from RealFuels, ullage integration disabled: " + e2.Message);
+                    Log.err(e2, "Exception thrown while getting stable value from RealFuels, ullage integration disabled: {0}", e2.Message);
                     isLoadedRealFuels = false;
                     return;
                 }
                 FieldInfo RFriskyField = ReflectionUtils.getFieldByReflection("RealFuels", "RealFuels.Ullage.UllageSimulator", "risky", BindingFlags.NonPublic|BindingFlags.Static);
                 if (RFriskyField == null)
                 {
-                    Debug.Log("MechJeb BUG: RealFuels loaded, but RealFuels.Ullage.UllageSimulator has no risky field, disabling RF");
+                    Log.err("RealFuels loaded, but RealFuels.Ullage.UllageSimulator has no risky field, disabling RF");
                     isLoadedRealFuels = false;
                 }
                 try
@@ -362,14 +363,14 @@ namespace MuMech
                 }
                 catch (Exception e3)
                 {
-                    Debug.Log("MechJeb BUG Exception thrown while getting risky value from RealFuels, ullage integration disabled: " + e3.Message);
+                    Log.err(e3, "Exception thrown while getting risky value from RealFuels, ullage integration disabled: {0}", e3.Message);
                     isLoadedRealFuels = false;
                     return;
                 }
                 FieldInfo RFveryRiskyField = ReflectionUtils.getFieldByReflection("RealFuels", "RealFuels.Ullage.UllageSimulator", "veryRisky", BindingFlags.NonPublic|BindingFlags.Static);
                 if (RFveryRiskyField == null)
                 {
-                    Debug.Log("MechJeb BUG: RealFuels loaded, but RealFuels.Ullage.UllageSimulator has no veryRisky field, disabling RF");
+                    Log.err("RealFuels loaded, but RealFuels.Ullage.UllageSimulator has no veryRisky field, disabling RF");
                     isLoadedRealFuels = false;
                 }
                 try
@@ -378,14 +379,14 @@ namespace MuMech
                 }
                 catch (Exception e4)
                 {
-                    Debug.Log("MechJeb BUG Exception thrown while getting veryRisky value from RealFuels, ullage integration disabled: " + e4.Message);
+                    Log.err(e4, "Exception thrown while getting veryRisky value from RealFuels, ullage integration disabled: {0}", e4.Message);
                     isLoadedRealFuels = false;
                     return;
                 }
                 FieldInfo RFunstableField = ReflectionUtils.getFieldByReflection("RealFuels", "RealFuels.Ullage.UllageSimulator", "unstable", BindingFlags.NonPublic|BindingFlags.Static);
                 if (RFunstableField == null)
                 {
-                    Debug.Log("MechJeb BUG: RealFuels loaded, but RealFuels.Ullage.UllageSimulator has no unstable field, disabling RF");
+                    Log.err("RealFuels loaded, but RealFuels.Ullage.UllageSimulator has no unstable field, disabling RF");
                     isLoadedRealFuels = false;
                 }
                 try
@@ -394,13 +395,13 @@ namespace MuMech
                 }
                 catch (Exception e5)
                 {
-                    Debug.Log("MechJeb BUG Exception thrown while getting unstable value from RealFuels, ullage integration disabled: " + e5.Message);
+                    Log.err(e5, "Exception thrown while getting unstable value from RealFuels, ullage integration disabled: {0}", e5.Message);
                     isLoadedRealFuels = false;
                     return;
                 }
                 if (isLoadedRealFuels)
                 {
-                    Debug.Log("MechJeb: RealFuels Assembly is wired up properly");
+                    Log.info("RealFuels Assembly is wired up properly");
                 }
             }
             isLoadedFAR = ReflectionUtils.isAssemblyLoaded("FerramAerospaceResearch");
@@ -418,7 +419,7 @@ namespace MuMech
                     );
                     if (methodInfo == null)
                     {
-                        Debug.Log("MJ BUG: FAR loaded, but FerramAerospaceResearch.FARAPI has no " + name + " method. Disabling FAR");
+                        Log.err("FAR loaded, but FerramAerospaceResearch.FARAPI has no {0} method. Disabling FAR", name);
                         isLoadedFAR = false;
                     }
                     else
@@ -435,7 +436,7 @@ namespace MuMech
                     new Type[] { typeof(Vessel), typeof(Vector3).MakeByRefType(), typeof(Vector3).MakeByRefType(), typeof(Vector3), typeof(double) }
                 );
                 if (FARCalculateVesselAeroForcesMethodInfo == null){
-                    Debug.Log("MJ BUG: FAR loaded, but FerramAerospaceResearch.FARAPI has no CalculateVesselAeroForces method, disabling FAR");
+                    Log.err("FAR loaded, but FerramAerospaceResearch.FARAPI has no CalculateVesselAeroForces method, disabling FAR");
                     isLoadedFAR = false;
                 }
                 else
@@ -545,12 +546,12 @@ namespace MuMech
 
             //SimulatedVessel simVessel = SimulatedVessel.New(vessel);
 
-            //MechJebCore.print("KPA " + vessel.dynamicPressurekPa.ToString("F9"));
+            //Log.dbg("KPA " + vessel.dynamicPressurekPa.ToString("F9"));
 
             //Vector3 localVel = vessel.GetTransform().InverseTransformDirection( vessel.srf_velocity );
             //Vector3 localVel = vessel.GetTransform().InverseTransformDirection( vessel.rigidbody.velocity + Krakensbane.GetFrameVelocity());
 
-            //MechJebCore.print(MuUtils.PrettyPrint(localVel));
+            //Log.dbg(MuUtils.PrettyPrint(localVel));
 
             //Vector3 simDrag = simVessel.Drag(localVel,
             //    (float)(0.0005 * vessel.atmDensity * vessel.srf_velocity.sqrMagnitude),
@@ -573,9 +574,9 @@ namespace MuMech
             //    exposedArea += part.exposedArea;
             //    skinExposedArea += part.skinExposedArea;
             //    radiativeArea += part.radiativeArea;
-            //    //MechJebCore.print(part.name + " " + part.exposedArea.ToString("F4") + " " + part.skinExposedArea.ToString("F4"));
+            //    //Log.dbg(part.name + " " + part.exposedArea.ToString("F4") + " " + part.skinExposedArea.ToString("F4"));
             //}
-            //MechJebCore.print(exposedArea.ToString("F2") + " " + skinExposedArea.ToString("F2") + " " + radiativeArea.ToString("F2"));
+            //Log.dbg(exposedArea.ToString("F2") + " " + skinExposedArea.ToString("F2") + " " + radiativeArea.ToString("F2"));
 
             //message = "\nPools :\n" +
             //          SimulatedVessel.PoolSize + " SimulatedVessel\n" +
@@ -1434,14 +1435,14 @@ namespace MuMech
                 }
                 catch (ArgumentException e1)
                 {
-                    Debug.Log("MechJeb BUG ArgumentError thrown while getting ullage from RealFuels, ullage integration disabled: " + e1.Message);
+                    Log.err(e1, "ArgumentError thrown while getting ullage from RealFuels, ullage integration disabled: {0}", e1.Message);
                     RFullageField = null;
                     return;
                 }
 
                 if (ullage == null)
                 {
-                    Debug.Log("MechJeb BUG: getting ullage from RealFuels casted to null, ullage status likely broken");
+                    Log.err("getting ullage from RealFuels casted to null, ullage status likely broken");
                     return;
                 }
 
@@ -1458,14 +1459,14 @@ namespace MuMech
                 }
                 catch (ArgumentException e2)
                 {
-                    Debug.Log("MechJeb BUG ArgumentError thrown while getting ignitions from RealFuels, ullage integration disabled: " + e2.Message);
+                    Log.err(e2, "ArgumentError thrown while getting ignitions from RealFuels, ullage integration disabled: {0}", e2.Message);
                     RFignitionsField = null;
                     return;
                 }
 
                 if (ignitions == null)
                 {
-                    Debug.Log("MechJeb BUG: getting ignitions from RealFuels casted to null, ullage status likely broken");
+                    Log.err("getting ignitions from RealFuels casted to null, ullage status likely broken");
                     return;
                 }
 
@@ -1486,7 +1487,7 @@ namespace MuMech
                     var ullageSet = RFullageSetField.GetValue(e);
                     if (ullageSet == null)
                     {
-                        Debug.Log("MechJeb BUG: getting propellantStatus from RealFuels casted to null, ullage status likely broken");
+                        Log.err("getting propellantStatus from RealFuels casted to null, ullage status likely broken");
                         return;
                     }
                     try
@@ -1495,14 +1496,14 @@ namespace MuMech
                     }
                     catch (Exception e4)
                     {
-                        Debug.Log("MechJeb BUG Exception thrown while calling GetUllageStability from RealFuels, ullage integration disabled: " + e4.Message);
+                        Log.err(e4, "Exception thrown while calling GetUllageStability from RealFuels, ullage integration disabled: {0}", e4.Message);
                         RFullageSetField = null;
                         return;
                     }
                 }
                 catch (Exception e3)
                 {
-                    Debug.Log("MechJeb BUG Exception thrown while getting ullageSet from RealFuels, ullage integration disabled: " + e3.Message);
+                    Log.err(e3, "Exception thrown while getting ullageSet from RealFuels, ullage integration disabled: {0}", e3.Message);
                     RFullageSetField = null;
                     return;
                 }
@@ -1562,7 +1563,7 @@ namespace MuMech
                     // if (e.finalThrust == 0f && minThrust > 0f)
                     //    minThrust = maxThrust = 0;
 
-                    //MechJebCore.print(maxThrust.ToString("F2") + " " + minThrust.ToString("F2") + " " + e.minFuelFlow.ToString("F2") + " " + e.maxFuelFlow.ToString("F2") + " " + e.flowMultiplier.ToString("F2") + " " + Isp.ToString("F2") + " " + thrustLimiter.ToString("F3"));
+                    Log.dbg(maxThrust.ToString("F2") + " " + minThrust.ToString("F2") + " " + e.minFuelFlow.ToString("F2") + " " + e.maxFuelFlow.ToString("F2") + " " + e.flowMultiplier.ToString("F2") + " " + Isp.ToString("F2") + " " + thrustLimiter.ToString("F3"));
 
                     double eMaxThrust = minThrust + (maxThrust - minThrust) * thrustLimiter;
                     double eMinThrust = e.throttleLocked ? eMaxThrust : minThrust;

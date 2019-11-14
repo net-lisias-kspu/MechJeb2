@@ -8,8 +8,10 @@ using KSP.IO;
 using System.Diagnostics;
 using UnityEngine.Profiling;
 using UnityToolbag;
-using Debug = UnityEngine.Debug;
+
 using File = KSP.IO.File;
+
+using Log = MechJeb2.Log;
 
 namespace MuMech
 {
@@ -156,12 +158,12 @@ namespace MuMech
                 }
                 else
                 {
-                    Debug.LogError("MechJeb couldn't find MechJebModuleSmartASS for orbital control via action group.");
+                    Log.err("couldn't find MechJebModuleSmartASS for orbital control via action group.");
                 }
             }
             else
             {
-                Debug.LogError("MechJeb couldn't find the master MechJeb module for the current vessel.");
+                Log.err("couldn't find the master MechJeb module for the current vessel.");
             }
         }
 
@@ -224,12 +226,12 @@ namespace MuMech
                 }
                 else
                 {
-                    Debug.LogError("MechJeb couldn't find MechJebModuleTranslatron for translatron control via action group.");
+                    Log.err("couldn't find MechJebModuleTranslatron for translatron control via action group.");
                 }
             }
             else
             {
-                Debug.LogError("MechJeb couldn't find the master MechJeb module for the current vessel.");
+                Log.err("couldn't find the master MechJeb module for the current vessel.");
             }
         }
 
@@ -272,12 +274,12 @@ namespace MuMech
                 }
                 else
                 {
-                    Debug.LogError("MechJeb couldn't find MechJebModuleTranslatron for translatron control via action group.");
+                    Log.err("couldn't find MechJebModuleTranslatron for translatron control via action group.");
                 }
             }
             else
             {
-                Debug.LogError("MechJeb couldn't find the master MechJeb module for the current vessel.");
+                Log.err("couldn't find the master MechJeb module for the current vessel.");
             }
         }
 
@@ -295,12 +297,12 @@ namespace MuMech
                 }
                 else
                 {
-                    Debug.LogError("MechJeb couldn't find MechJebModuleTranslatron for translatron control via action group.");
+                    Log.err("couldn't find MechJebModuleTranslatron for translatron control via action group.");
                 }
             }
             else
             {
-                Debug.LogError("MechJeb couldn't find the master MechJeb module for the current vessel.");
+                Log.err("couldn't find the master MechJeb module for the current vessel.");
             }
         }
 
@@ -475,7 +477,7 @@ namespace MuMech
                 }
                 catch (Exception e)
                 {
-                    Debug.LogError("MechJeb module " + module.GetType().Name + " threw an exception in OnStart: " + e);
+                    Log.err(e, "module {0} threw an exception in OnStart: {1}", module.GetType().Name, e);
                 }
             }
 
@@ -497,7 +499,7 @@ namespace MuMech
                 }
                 catch (Exception e)
                 {
-                    Debug.LogError("MechJeb module " + module.GetType().Name + " threw an exception in OnActive: " + e);
+                    Log.err(e, "module {0} threw an exception in OnActive: {1}", module.GetType().Name, e);
                 }
             }
         }
@@ -512,7 +514,7 @@ namespace MuMech
                 }
                 catch (Exception e)
                 {
-                    Debug.LogError("MechJeb module " + module.GetType().Name + " threw an exception in OnInactive: " + e);
+                    Log.err(e, "module {0} threw an exception in OnInactive: {1}", module.GetType().Name, e);
                 }
             }
         }
@@ -529,7 +531,7 @@ namespace MuMech
                 }
                 catch (Exception e)
                 {
-                    Debug.LogError("MechJeb module " + module.GetType().Name + " threw an exception in OnAwake: " + e);
+                    Log.err(e, "module {0} threw an exception in OnAwake: {1}", module.GetType().Name, e);
                 }
             }
         }
@@ -558,7 +560,7 @@ namespace MuMech
             {
                 if (HighLogic.LoadedSceneIsFlight && (lastFocus != null) && lastFocus.loaded && (lastFocus.GetMasterMechJeb() != null))
                 {
-                    print("Focus changed! Forcing " + lastFocus.vesselName + " to save");
+                    Log.info("Focus changed! Forcing {0} to save", lastFocus.vesselName);
                     lastFocus.GetMasterMechJeb().OnSave(null);
                 }
 
@@ -593,7 +595,7 @@ namespace MuMech
                 }
                 catch (Exception e)
                 {
-                    Debug.LogError("MechJeb module " + module.GetType().Name + " threw an exception in OnFixedUpdate: " + e);
+                    Log.err(e, "module {0} threw an exception in OnFixedUpdate: {1}", module.GetType().Name, e);
                 }
                 Profiler.EndSample();
             }
@@ -606,8 +608,8 @@ namespace MuMech
             bool needToSave = false;
             foreach (ComputerModule module in GetComputerModules<ComputerModule>())
             {
-                //if (module.dirty)
-                //    print(module.profilerName + " is dirty");
+                if (module.dirty)
+                    Log.dbg("{0} is dirty", module.profilerName);
                 needToSave |= module.dirty;
             }
             return needToSave;
@@ -635,7 +637,7 @@ namespace MuMech
                 {
                     if (NeedToSave())
                     {
-                        //print("Periodic settings save");
+                        Log.dbg("Periodic settings save");
                         OnSave(null);
                     }
                     lastSettingsSaveTime = Time.time;
@@ -653,7 +655,7 @@ namespace MuMech
                     }
                     catch (Exception e)
                     {
-                        Debug.LogError("MechJeb module " + module.GetType().Name + " threw an exception in UnlockCheck: " + e);
+                        Log.err(e, "module {0} threw an exception in UnlockCheck: {1}", module.GetType().Name, e);
                     }
                 }
             }
@@ -677,7 +679,7 @@ namespace MuMech
                 }
                 catch (Exception e)
                 {
-                    Debug.LogError("MechJeb module " + module.GetType().Name + " threw an exception in OnUpdate: " + e);
+                    Log.err(e, "module {0} threw an exception in OnUpdate: {1}", module.GetType().Name, e);
                 }
                 Profiler.EndSample();
             }
@@ -700,7 +702,7 @@ namespace MuMech
                     }
                     catch (Exception e)
                     {
-                        Debug.LogError("MechJeb moduleRegistry creation threw an exception in LoadComputerModules loading " + ass.FullName + ": " + e);
+                        Log.err(e, "moduleRegistry creation threw an exception in LoadComputerModules loading {0}: {1}", ass.FullName, e);
                     }
                 }
             }
@@ -723,7 +725,7 @@ namespace MuMech
                 version = dev_version;
 
             if (HighLogic.LoadedSceneIsEditor || HighLogic.LoadedSceneIsFlight)
-                print("Loading Mechjeb " + version);
+                Log.info("Loading Mechjeb {0}", version);
 
             try
             {
@@ -741,7 +743,7 @@ namespace MuMech
             }
             catch (Exception e)
             {
-                Debug.LogError("MechJeb moduleRegistry loading threw an exception in LoadComputerModules: " + e);
+                Log.err(e, "moduleRegistry loading threw an exception in LoadComputerModules: {0}", e);
             }
 
             attitude = GetComputerModule<MechJebModuleAttitudeController>();
@@ -802,7 +804,7 @@ namespace MuMech
                     }
                     catch (Exception e)
                     {
-                        Debug.LogError("MechJebCore.OnLoad caught an exception trying to load mechjeb_settings_global.cfg: " + e);
+                        Log.err(e, "MechJebCore.OnLoad caught an exception trying to load mechjeb_settings_global.cfg: {0}", e);
                         generateDefaultWindows = true;
                     }
                 }
@@ -821,7 +823,7 @@ namespace MuMech
                     }
                     catch (Exception e)
                     {
-                        Debug.LogError("MechJebCore.OnLoad caught an exception trying to load mechjeb_settings_type_" + vesselName + ".cfg: " + e);
+                        Log.err(e, "MechJebCore.OnLoad caught an exception trying to load mechjeb_settings_type_{0}.cfg: {1}", vesselName, e);
                     }
                 }
 
@@ -844,18 +846,12 @@ namespace MuMech
                         }
                         catch (Exception e)
                         {
-                            Debug.LogError("MechJeb module " + module.GetType().Name + " threw an exception in OnLoad: " + e);
+                            Log.err(e, "module {0} threw an exception in OnLoad: {1}", module.GetType().Name, e);
                         }
                     }
                 }
 
-                /*Debug.Log("OnLoad: loading from");
-                Debug.Log("Local:");
-                Debug.Log(local.ToString());
-                Debug.Log("Type:");
-                Debug.Log(type.ToString());
-                Debug.Log("Global:");
-                Debug.Log(global.ToString());*/
+                Log.dbg("OnLoad: loading from\n\tLocal: {0}\n\tType: {1}\n\tGlobal: {0}", local, type, global);
 
                 // Remove any currently loaded custom windows
                 MechJebModuleCustomInfoWindow win;
@@ -876,7 +872,7 @@ namespace MuMech
                     }
                     catch (Exception e)
                     {
-                        Debug.LogError("MechJeb module " + module.GetType().Name + " threw an exception in OnLoad: " + e);
+                        Log.err("module threw an exception in OnLoad: {0} {1}", module.GetType().Name, e);
                     }
                 }
 
@@ -889,7 +885,7 @@ namespace MuMech
             }
             catch (Exception e)
             {
-                Debug.LogError("MechJeb caught exception in core OnLoad: " + e);
+                Log.err(e, "caught exception in core OnLoad: {0}", e);
             }
         }
 
@@ -934,18 +930,12 @@ namespace MuMech
                     }
                     catch (Exception e)
                     {
-                        Debug.LogError("MechJeb module " + module.GetType().Name + " threw an exception in OnSave: " + e);
+                        Log.err(e, "module {0} threw an exception in OnSave: {0} {1}", module.GetType().Name, e);
                     }
                     Profiler.EndSample();
                 }
 
-                /*Debug.Log("OnSave:");
-                Debug.Log("Local:");
-                Debug.Log(local.ToString());
-                Debug.Log("Type:");
-                Debug.Log(type.ToString());
-                Debug.Log("Global:");
-                Debug.Log(global.ToString());*/
+                Log.dbg("OnSave:\n\tLocal: {0}\n\tType: {1}\n\tGlobal: {2}", local, type, global);
                 Profiler.EndSample();
                 Profiler.BeginSample("MechJebCore.OnSave.sfsNode");
                 if (sfsNode != null) sfsNode.nodes.Add(local);
@@ -969,7 +959,7 @@ namespace MuMech
             }
             catch (Exception e)
             {
-                Debug.LogError("MechJeb caught exception in core OnSave: " + e);
+                Log.err(e, "MechJeb caught exception in core OnSave: {0}", e);
             }
             Profiler.EndSample();
         }
@@ -999,7 +989,7 @@ namespace MuMech
                 }
                 catch (Exception e)
                 {
-                    Debug.LogError("MechJeb module " + module.GetType().Name + " threw an exception in OnDestroy: " + e);
+                    Log.err(e, "module {0} threw an exception in OnDestroy: ", module.GetType().Name, e);
                 }
             }
             if (vessel != null)
@@ -1039,7 +1029,7 @@ namespace MuMech
                     }
                     catch (Exception e)
                     {
-                        Debug.LogError("MechJeb module " + module.GetType().Name + " threw an exception in Drive: " + e);
+                        Log.err(e, "module {0} threw an exception in Drive: {1}", module.GetType().Name, e);
                     }
                     Profiler.EndSample();
                 }
@@ -1103,7 +1093,7 @@ namespace MuMech
                     }
                     catch (Exception e)
                     {
-                        Debug.LogError("MechJeb module " + module.GetType().Name + " threw an exception in DrawGUI: " + e);
+                        Log.err(e, "module {0} threw an exception in DrawGUI: {1}", module.GetType().Name, e);
                     }
                     Profiler.EndSample();
                 }
@@ -1175,12 +1165,6 @@ namespace MuMech
                 InputLockManager.RemoveControlLock(lockId);
             }
             weLockedInputs = false;
-        }
-
-
-        public new static void print(object message)
-        {
-            MonoBehaviour.print("[MechJeb2] " + message);
         }
     }
 }

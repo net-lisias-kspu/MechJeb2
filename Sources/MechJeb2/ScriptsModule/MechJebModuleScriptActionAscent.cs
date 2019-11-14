@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+using Log = MechJeb2.Log;
+
 namespace MuMech
 {
     public class MechJebModuleScriptActionAscent : MechJebModuleScriptAction
@@ -131,7 +133,7 @@ namespace MuMech
             }
             */
             autopilot.users.Add(this);
-            Debug.Log("Autopilot should be engaged!");
+            Log.info("Autopilot should be engaged!");
         }
 
         override public void endAction()

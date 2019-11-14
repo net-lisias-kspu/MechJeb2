@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
+using Log = MechJeb2.Log;
+
 namespace MuMech
 {
 	public class MechJebModuleRoverController : ComputerModule
@@ -291,10 +293,10 @@ namespace MuMech
 										ControlHeading = ControlSpeed = false;
 									}
 								}
-//								else {
-//									Debug.Log("Is this even getting called?");
+								else {
+									Log.dbg("Is this even getting called?");
 //									WaypointIndex++;
-//								}
+								}
 							}
 						}
 						else
@@ -363,7 +365,9 @@ namespace MuMech
 					// s.wheelThrottle = (!LimitAcceleration ? Mathf.Clamp(act, -1, 1) : // I think I'm using these ( ? : ) a bit too much
 						// (traction == 0 ? 0 : (act < 0 ? Mathf.Clamp(act, -1f, 1f) : (lastThrottle + Mathf.Clamp(act - lastThrottle, -0.01f, 0.01f)) * (traction < tractionLimit ? -1 : 1))));
 //						(lastThrottle + Mathf.Clamp(act, -0.01f, 0.01f)));
-//					Debug.Log(s.wheelThrottle + Mathf.Clamp(act, -0.01f, 0.01f));
+#if DEBUG
+					Log.dbg("Wheel Throttle {0}", s.wheelThrottle + Mathf.Clamp(act, -0.01f, 0.01f));
+#endif
 					if (curSpeed < 0 & s.wheelThrottle < 0) { s.wheelThrottle = 0; } // don't go backwards
 					if (Mathf.Sign(act) + Mathf.Sign(s.wheelThrottle) == 0) { s.wheelThrottle = Mathf.Clamp(act, -1f, 1f); }
 					if (speedErr < -1 && StabilityControl && Mathf.Sign(s.wheelThrottle) + Math.Sign(curSpeed) == 0) { // StabilityControl && traction > 50 &&

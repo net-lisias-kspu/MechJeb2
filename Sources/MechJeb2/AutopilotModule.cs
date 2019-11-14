@@ -1,6 +1,8 @@
 using System;
 using UnityEngine;
 
+using Log = MechJeb2.Log;
+
 namespace MuMech
 {
     public class AutopilotModule : ComputerModule
@@ -21,7 +23,7 @@ namespace MuMech
                 }
                 catch (Exception ex)
                 {
-                    Debug.LogException(ex);
+                    Log.err(ex, this);
                 }
             }
         }
@@ -36,7 +38,7 @@ namespace MuMech
                 }
                 catch (Exception ex)
                 {
-                    Debug.LogException(ex);
+                    Log.err(ex, this);
                 }
             }
         }

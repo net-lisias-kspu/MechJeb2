@@ -2,6 +2,8 @@ using System;
 using ModuleWheels;
 using UnityEngine;
 
+using Log = MechJeb2.Log;
+
 namespace MuMech
 {
     public class MechJebModuleLandingAutopilot : AutopilotModule
@@ -387,7 +389,7 @@ namespace MuMech
                         ASLDeployAltitude > vesselState.altitudeASL && p.deploymentSafeState == ModuleParachute.deploymentSafeStates.SAFE)
                     {
                         p.Deploy();
-                        //Debug.Log("Deploying parachute " + p.name + " at " + ASLDeployAltitude + ". (" + LandingSiteASL + " + " + ParachuteDeployAboveGroundAtLandingSite +")");
+                        Log.dbg("Deploying parachute {0} at {1}. ({2} + {3})", p.name, ASLDeployAltitude, LandingSiteASL, ParachuteDeployAboveGroundAtLandingSite);
                     }
                 }
             }
@@ -458,15 +460,17 @@ namespace MuMech
 #warning Drag Length is quite large now without parachutes, check this better
                 double landingSiteDragLength = mainBody.DragLength(LandingAltitude, vesselAverageDrag + ParachuteAddedDragCoef(), vesselState.mass);
 
-                //MechJebCore.print("DecelerationEndAltitude Atmo " + (2 * landingSiteDragLength + LandingAltitude).ToString("F2"));
-                return 1.1 * landingSiteDragLength + LandingAltitude;
+                double r = 1.1 * landingSiteDragLength + LandingAltitude; // It was 2 some time ago!
+                Log.dbg("DecelerationEndAltitude Atmo {0:0.00}", r);
+                return r;
             }
             else
             {
                 //if the atmosphere is thin, the deceleration burn should end
                 //500 meters above the landing site to allow for a controlled final descent
-                //MechJebCore.print("DecelerationEndAltitude Vacum " + (500 + LandingAltitude).ToString("F2"));
-                return 500 + LandingAltitude;
+                double r = 500 + LandingAltitude;
+                Log.dbg("DecelerationEndAltitude Vacum {0:0.00}", r);
+                return r;
             }
         }
 
@@ -629,7 +633,7 @@ namespace MuMech
             double vSpeed = Vector3d.Dot(vel, pos.normalized);
             double ToF = (vSpeed + Math.Sqrt(vSpeed * vSpeed + 2 * g * (pos.magnitude - terrainRadius))) / g;
 
-            //MechJebCore.print("ToF = " + ToF.ToString("F2"));
+            Log.dbg("ToF = {0:0.00}", ToF);
             return 0.8 * (thrust - g) * ToF;
         }
     }
@@ -748,7 +752,7 @@ namespace MuMech
             // What was the overshoot for this new result?
             double overshoot = newResult.GetOvershoot(this.autoPilot.core.target.targetLatitude, this.autoPilot.core.target.targetLongitude);
 
-            //Debug.Log("overshoot: " + overshoot.ToString("F2") + " multiplier: " + newResult.parachuteMultiplier.ToString("F4") + " hasError:" + newResult.multiplierHasError);
+            Log.dbg("overshoot: {0:0.00} multiplier: {1:0.0000} hasError:{2}", overshoot, newResult.parachuteMultiplier, newResult.multiplierHasError);
 
             // Add the new result to the linear regression
             regression.Add(overshoot, newResult.parachuteMultiplier);
@@ -761,11 +765,11 @@ namespace MuMech
                 if (correlation > 0 && this.regression.dataSetSize > 5)
                 {
                     ClearData();
-                    // Debug.Log("Giving up control of the parachutes as the data does not correlate: " + correlation);
+                    Log.dbg("Giving up control of the parachutes as the data does not correlate: {0}", correlation);
                 }
                 else
                 {
-                    // Debug.Log("Ignoring the simulation dataset because the correlation is not significant enough: " + correlation);
+                    Log.dbg("Ignoring the simulation dataset because the correlation is not significant enough: {0}", correlation);
                 }
             }
             else

@@ -2,6 +2,8 @@ using System;
 using KSP.UI.Screens;
 using UnityEngine;
 
+using Log = MechJeb2.Log;
+
 namespace MuMech
 {
     public enum ascentType { CLASSIC, GRAVITYTURN, PVG };
@@ -136,7 +138,7 @@ namespace MuMech
         public void OnLaunch(EventReport report)
         {
             launchStarted = vesselState.time;
-            Debug.Log("[MechJebModuleAscentAutopilot] LaunchStarted = " + launchStarted);
+            Log.dbg("[MechJebModuleAscentAutopilot] LaunchStarted = {0}", launchStarted);
         }
 
         // wiring for launchStarted
@@ -274,7 +276,7 @@ namespace MuMech
             }
 
             if (autoThrottle) {
-                Debug.Log("prelaunch killing throttle");
+                Log.dbg("prelaunch killing throttle");
                 core.thrust.ThrustOff();
             }
 
@@ -290,7 +292,7 @@ namespace MuMech
             {
                 core.solarpanel.RetractAll();
                 if (core.solarpanel.AllRetracted()) {
-                    Debug.Log("Prelaunch -> Ascend");
+                    Log.dbg("Prelaunch -> Ascend");
                     mode = AscentMode.ASCEND;
                 }
                 else
@@ -306,7 +308,7 @@ namespace MuMech
         {
             if (timedLaunch)
             {
-                Debug.Log("Awaiting Liftoff");
+                Log.dbg("Awaiting Liftoff");
                 status = "Awaiting liftoff";
                 // kill the optimizer if it is running.
                 core.guidance.enabled = false;
@@ -318,10 +320,10 @@ namespace MuMech
             DriveDeployableComponents(s);
 
             if ( ascentPath.DriveAscent(s) ) {
-                if (GameSettings.VERBOSE_DEBUG_LOG) { Debug.Log("Remaining in Ascent"); }
+                Log.detail("Remaining in Ascent");
                 status = ascentPath.status;
             } else {
-                if (GameSettings.VERBOSE_DEBUG_LOG) { Debug.Log("Ascend -> Circularize"); }
+                Log.detail("Ascend -> Circularize");
                 mode = AscentMode.CIRCULARIZE;
             }
         }

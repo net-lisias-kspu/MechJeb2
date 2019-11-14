@@ -1,4 +1,6 @@
-﻿namespace MuMech
+﻿using Log = MechJeb2.Log;
+
+namespace MuMech
 {
 
     // This file is to show how to use the callback in VesselState (and the other module who will have them soon)
@@ -20,7 +22,7 @@
         
         public override void OnStart(PartModule.StartState state)
         {
-            //print("ModExtensionTest adding MJ2 callback");
+            Log.dbg("ModExtensionTest adding MJ2 callback");
             //vesselState.vesselStatePartExtensions.Add(partUpdate);
             //vesselState.vesselStatePartModuleExtensions.Add(partModuleUpdate);
         }

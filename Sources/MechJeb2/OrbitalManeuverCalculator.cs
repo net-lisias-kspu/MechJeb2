@@ -1,6 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
+using Log = MechJeb2.Log;
 
 namespace MuMech
 {
@@ -693,9 +694,9 @@ namespace MuMech
             alglib.minlmoptimize(state, LambertCost, null, prob);
             alglib.minlmresultsbuf(state, ref x, rep);
             if ( rep.terminationtype != 2 )
-                Debug.Log("MechJeb Lambert Transfer minlmoptimize termination code: " + rep.terminationtype);
+                Log.info("Lambert Transfer minlmoptimize termination code: {0}", rep.terminationtype);
 
-            Debug.Log("DeltaVAndTimeForBiImpulsiveTransfer: x[0] = " + x[0] + " x[1] = " + x[1]);
+            Log.info("DeltaVAndTimeForBiImpulsiveTransfer: x[0] = {0} x[1] = {1}", x[0], x[1]);
 
             burnUT = UT + x[0];
 
@@ -746,11 +747,11 @@ namespace MuMech
             double a = ( Math.Abs(o.semiMajorAxis) + Math.Abs(target.semiMajorAxis) ) / 2;
             double maxTT = Math.PI * Math.Sqrt( a * a * a / o.referenceBody.gravParameter );   // FIXME: allow tweaking
 
-            Debug.Log("[MechJeb] DeltaVAndTimeForBiImpulsiveAnnealed Check1: minUT = " + minUT + " maxUT = " + maxUT + " maxTT = " + maxTT + " maxUTplusT = " + maxUTplusT);
+            Log.info("DeltaVAndTimeForBiImpulsiveAnnealed Check1: minUT = {0} maxUT = {1} maxTT = {2} maxUTplusT = {3}", minUT, maxUT, maxTT, maxUTplusT);
 
             if (target.patchEndTransition != Orbit.PatchTransitionType.FINAL && target.patchEndTransition != Orbit.PatchTransitionType.INITIAL)
             {
-                Debug.Log("[MechJeb] DeltaVAndTimeForBiImpulsiveAnnealed target.patchEndTransition = " + target.patchEndTransition);
+                Log.info("DeltaVAndTimeForBiImpulsiveAnnealed target.patchEndTransition = {0}", target.patchEndTransition);
                 // reset the guess to search for start times out to the end of the target orbit
                 maxUT = target.EndUT - UT;
                 // longest possible transfer time would leave now and arrive at the target patch end
@@ -762,7 +763,7 @@ namespace MuMech
             // if our orbit ends, search for start times all the way to the end, but don't violate maxUTplusT if its set
             if (o.patchEndTransition != Orbit.PatchTransitionType.FINAL && o.patchEndTransition != Orbit.PatchTransitionType.INITIAL)
             {
-                Debug.Log("[MechJeb] DeltaVAndTimeForBiImpulsiveAnnealed o.patchEndTransition = " + o.patchEndTransition);
+                Log.info("DeltaVAndTimeForBiImpulsiveAnnealed o.patchEndTransition = {0}", o.patchEndTransition);
                 maxUT = Math.Min(o.EndUT - UT, maxUTplusT);
             }
 
@@ -773,7 +774,7 @@ namespace MuMech
                 minUT = 0;
             }
 
-            Debug.Log("[MechJeb] DeltaVAndTimeForBiImpulsiveAnnealed Check2: minUT = " + minUT + " maxUT = " + maxUT + " maxTT = " + maxTT + " maxUTplusT = " + maxUTplusT);
+            Log.info("DeltaVAndTimeForBiImpulsiveAnnealed Check2: minUT = {0} maxUT = {1} maxTT = {2} maxUTplusT = {3}", minUT, maxUT, maxTT, maxUTplusT);
 
             double currentUT = maxUT / 2;
             double currentTT = maxTT / 2;
@@ -822,11 +823,11 @@ namespace MuMech
             }
             stopwatch.Stop();
 
-            Debug.Log("MechJeb DeltaVAndTimeForBiImpulsiveAnnealed N = " + n + " time = " + stopwatch.Elapsed);
+            Log.info("DeltaVAndTimeForBiImpulsiveAnnealed N = {0} time = {1}", n, stopwatch.Elapsed);
 
             burnUT = UT + bestUT;
 
-            Debug.Log("Annealing results burnUT = " + burnUT + " zero'd burnUT = " + bestUT + " TT = " + bestTT + " Cost = " + bestCost);
+            Log.info("Annealing results burnUT = {0} zero'd burnUT = {1} TT = {2} Cost = {3}", burnUT, bestUT, bestTT, bestCost);
 
             //return DeltaVToInterceptAtTime(o, UT + bestUT, target, UT + bestUT + bestTT, shortway: bestshortway);
 
@@ -847,7 +848,7 @@ namespace MuMech
             if (hohmannOrbit.semiMajorAxis > o.semiMajorAxis) apsisTime = hohmannOrbit.NextApoapsisTime(burnUT);
             else apsisTime = hohmannOrbit.NextPeriapsisTime(burnUT);
 
-            Debug.Log("hohmannDV = " + (Vector3)hohmannDV + ", apsisTime = " + apsisTime);
+            Log.info("hohmannDV = {0}, apsisTime = {1}", (Vector3)hohmannDV, apsisTime);
 
             Vector3d dV = Vector3d.zero;
             double minCost = 999999;
@@ -859,12 +860,12 @@ namespace MuMech
             {
                 double interceptUT = minInterceptTime + i * (maxInterceptTime - minInterceptTime) / subdivisions;
 
-                Debug.Log("i + " + i + ", trying for intercept at UT = " + interceptUT);
+                Log.detail("i + {0}, trying for intercept at UT = {1}", i, interceptUT);
 
                 //Try both short and long way
                 Vector3d interceptBurn = DeltaVToInterceptAtTime(o, burnUT, target, interceptUT, 0, true);
                 double cost = (interceptBurn - subtractedProgradeDV).magnitude;
-                Debug.Log("short way dV = " + interceptBurn.magnitude + "; subtracted cost = " + cost);
+                Log.detail("short way dV = {0}; subtracted cost = {1}", interceptBurn.magnitude, cost);
                 if (cost < minCost)
                 {
                     dV = interceptBurn;
@@ -873,7 +874,7 @@ namespace MuMech
 
                 interceptBurn = DeltaVToInterceptAtTime(o, burnUT, target, interceptUT, 0, false);
                 cost = (interceptBurn - subtractedProgradeDV).magnitude;
-                Debug.Log("long way dV = " + interceptBurn.magnitude + "; subtracted cost = " + cost);
+                Log.detail("long way dV = {0}; subtracted cost = {1}", interceptBurn.magnitude, cost);
                 if (cost < minCost)
                 {
                     dV = interceptBurn;
@@ -905,7 +906,7 @@ namespace MuMech
             double vesselOrbitVelocity = OrbitalManeuverCalculator.CircularOrbitSpeed(o.referenceBody, o.semiMajorAxis);
             idealDeltaV = DeltaVAndTimeForHohmannLambertTransfer(planetOrbit, target, UT, out idealBurnUT, vesselOrbitVelocity);
 
-            Debug.Log("idealBurnUT = " + idealBurnUT + ", idealDeltaV = " + idealDeltaV);
+            Log.info("idealBurnUT = {0}, idealDeltaV = {1}", idealBurnUT, idealDeltaV);
 
             //Compute the actual transfer orbit this ideal burn would lead to.
             Orbit transferOrbit = planetOrbit.PerturbedOrbit(idealBurnUT, idealDeltaV);
@@ -919,18 +920,18 @@ namespace MuMech
             //just add in (1/2)(sun gravity)*(time to exit soi)^2 ? But how to compute time to exit soi? Or maybe once we
             //have the ejection orbit we should just move the ejection burn back by the time to exit the soi?
             Vector3d soiExitVelocity = idealDeltaV;
-            Debug.Log("soiExitVelocity = " + (Vector3)soiExitVelocity);
+            Log.info("soiExitVelocity = {0}", (Vector3)soiExitVelocity);
 
             //compute the angle by which the trajectory turns between periapsis (where we do the ejection burn)
             //and SOI exit (approximated as radius = infinity)
             double soiExitEnergy = 0.5 * soiExitVelocity.sqrMagnitude - o.referenceBody.gravParameter / o.referenceBody.sphereOfInfluence;
             double ejectionRadius = o.semiMajorAxis; //a guess, good for nearly circular orbits
-            Debug.Log("soiExitEnergy = " + soiExitEnergy);
-            Debug.Log("ejectionRadius = " + ejectionRadius);
+            Log.info("soiExitEnergy = {0}", soiExitEnergy);
+            Log.info("ejectionRadius = {0}", ejectionRadius);
 
             double ejectionKineticEnergy = soiExitEnergy + o.referenceBody.gravParameter / ejectionRadius;
             double ejectionSpeed = Math.Sqrt(2 * ejectionKineticEnergy);
-            Debug.Log("ejectionSpeed = " + ejectionSpeed);
+            Log.info("ejectionSpeed = {0}", ejectionSpeed);
 
             //construct a sample ejection orbit
             Vector3d ejectionOrbitInitialVelocity = ejectionSpeed * (Vector3d)o.referenceBody.transform.right;
@@ -940,14 +941,14 @@ namespace MuMech
             Vector3d ejectionOrbitFinalVelocity = sampleEjectionOrbit.SwappedOrbitalVelocityAtUT(ejectionOrbitDuration);
 
             double turningAngle = Vector3d.Angle(ejectionOrbitInitialVelocity, ejectionOrbitFinalVelocity);
-            Debug.Log("turningAngle = " + turningAngle);
+            Log.info("turningAngle = {0}", turningAngle);
 
             //sine of the angle between the vessel orbit and the desired SOI exit velocity
             double outOfPlaneAngle = (UtilMath.Deg2Rad) * (90 - Vector3d.Angle(soiExitVelocity, o.SwappedOrbitNormal()));
-            Debug.Log("outOfPlaneAngle (rad) = " + outOfPlaneAngle);
+            Log.info("outOfPlaneAngle (rad) = {0}", outOfPlaneAngle);
 
             double coneAngle = Math.PI / 2 - (UtilMath.Deg2Rad) * turningAngle;
-            Debug.Log("coneAngle (rad) = " + coneAngle);
+            Log.info("coneAngle (rad) = {0}", coneAngle);
 
             Vector3d exitNormal = Vector3d.Cross(-soiExitVelocity, o.SwappedOrbitNormal()).normalized;
             Vector3d normal2 = Vector3d.Cross(exitNormal, -soiExitVelocity).normalized;
@@ -958,11 +959,11 @@ namespace MuMech
                 + Math.Cos(coneAngle) * Math.Tan(outOfPlaneAngle) * normal2
                 - Math.Sqrt(Math.Pow(Math.Sin(coneAngle), 2) - Math.Pow(Math.Cos(coneAngle) * Math.Tan(outOfPlaneAngle), 2)) * exitNormal;
 
-            Debug.Log("soiExitVelocity = " + (Vector3)soiExitVelocity);
-            Debug.Log("vessel orbit normal = " + (Vector3)(1000 * o.SwappedOrbitNormal()));
-            Debug.Log("exitNormal = " + (Vector3)(1000 * exitNormal));
-            Debug.Log("normal2 = " + (Vector3)(1000 * normal2));
-            Debug.Log("ejectionPointDirection = " + ejectionPointDirection);
+            Log.info("soiExitVelocity = {0}", (Vector3)soiExitVelocity);
+            Log.info("vessel orbit normal = {0}", (Vector3)(1000 * o.SwappedOrbitNormal()));
+            Log.info("exitNormal = {0}", (Vector3)(1000 * exitNormal));
+            Log.info("normal2 = {0}", (Vector3)(1000 * normal2));
+            Log.info("ejectionPointDirection = {0}", ejectionPointDirection);
 
 
             double ejectionTrueAnomaly = o.TrueAnomalyFromVector(ejectionPointDirection);
@@ -974,9 +975,9 @@ namespace MuMech
             }
 
             Vector3d ejectionOrbitNormal = Vector3d.Cross(ejectionPointDirection, soiExitVelocity).normalized;
-            Debug.Log("ejectionOrbitNormal = " + ejectionOrbitNormal);
+            Log.info("ejectionOrbitNormal = {0}", ejectionOrbitNormal);
             Vector3d ejectionBurnDirection = Quaternion.AngleAxis(-(float)(turningAngle), ejectionOrbitNormal) * soiExitVelocity.normalized;
-            Debug.Log("ejectionBurnDirection = " + ejectionBurnDirection);
+            Log.info("ejectionBurnDirection = {0}", ejectionBurnDirection);
             Vector3d ejectionVelocity = ejectionSpeed * ejectionBurnDirection;
 
             Vector3d preEjectionVelocity = o.SwappedOrbitalVelocityAtUT(burnUT);
@@ -1124,14 +1125,15 @@ namespace MuMech
                 //when lowering the SMA, we burn horizontally, and max possible deltaV is the deltaV required to kill all horizontal velocity
                 maxDeltaV = Math.Abs(Vector3d.Dot(o.SwappedOrbitalVelocityAtUT(UT), burnDirection));
             }
-            // Debug.Log (String.Format ("We are {0} SMA to {1}", raising ? "raising" : "lowering", newSMA));
-            // Debug.Log (String.Format ("Starting SMA iteration with maxDeltaV of {0}", maxDeltaV));
+            Log.dbg("We are {0} SMA to {1}", (raising ? "raising" : "lowering"), newSMA);
+            Log.dbg("Starting SMA iteration with maxDeltaV of {0}", maxDeltaV);
+
             //now do a binary search to find the needed delta-v
             while (maxDeltaV - minDeltaV > 0.01)
             {
                 double testDeltaV = (maxDeltaV + minDeltaV) / 2.0;
                 double testSMA = o.PerturbedOrbit(UT, testDeltaV * burnDirection).semiMajorAxis;
-                // Debug.Log (String.Format ("Testing dV of {0} gave an SMA of {1}", testDeltaV, testSMA));
+                Log.dbg("Testing dV of {0} gave an SMA of {1}", testDeltaV, testSMA);
 
                 if ((testSMA < 0) || (testSMA > newSMA && raising) || (testSMA < newSMA && !raising))
                 {

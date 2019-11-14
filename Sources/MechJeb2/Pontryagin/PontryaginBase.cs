@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
 
+using Log = MechJeb2.Log;
+
 namespace MuMech {
     public abstract class PontryaginBase {
         const double MAX_COAST_TAU = 1.5;
@@ -433,7 +435,9 @@ namespace MuMech {
             QuaternionD rot = Quaternion.Inverse(Planetarium.fetch.rotation);
             r0 = rot * r0;
             v0 = rot * v0;
-            //Debug.Log("LAN1 = " + LAN(r0, v0) + " r = " + r0 + " v = " + v0);
+#if DEBUG
+            Log.dbg("LAN1 = {0} r = {1} v = {2}", LAN(r0, v0), r0, v0);
+#endif
             pv0 = rot * pv0;
             pr0 = rot * pr0;
             this.r0 = r0;
@@ -449,7 +453,9 @@ namespace MuMech {
             t_scale = Math.Sqrt( r0m / g_bar );
             r0_bar = this.r0 / r_scale;
             v0_bar = this.v0 / v_scale;
-            //Debug.Log("LAN1 = " + LAN(r0_bar, v0_bar) + " r = " + r0_bar + " v = " + v0_bar);
+#if DEBUG
+            Log.dbg("LAN1 = {0} r = {1} v = {2}", LAN(r0_bar, v0_bar), r0_bar, v0_bar);
+#endif
             dV_bar = dV / v_scale;
             fixed_final_time = false;
         }
@@ -461,7 +467,7 @@ namespace MuMech {
             if (thread != null && thread.IsAlive)
                 return;
 
-            //Debug.Log("r0m = " + r0.magnitude + " v0m = " + v0.magnitude);
+            Log.dbg("r0m = {0} v0m = {1}", r0.magnitude, v0.magnitude);
 
             QuaternionD rot = Quaternion.Inverse(Planetarium.fetch.rotation);
             r0 = rot * r0;
@@ -601,10 +607,11 @@ namespace MuMech {
 
             if (sol != null)
             {
-                //Debug.Log("--------------");
-                //for(int i = 0; i < count; i++)
-                //    Debug.Log(x[i]);
-                //Debug.Log("ylist.Count = " + ode.ylist.Count);
+#if DEBUG
+                for (int i = 0;i < count;i++)
+                    Log.dbg("x[{0}] = {1}", i, x[i]);
+                Log.dbg("ylist.Count = ", ode.ylist.Count);
+#endif
                 sol.AddSegment(ode.xlist, ode.ylist, e);
             }
 
@@ -628,7 +635,9 @@ namespace MuMech {
         public void multipleIntegrate(double[] y0, Solution sol, List<Arc> arcs, int count)
         {
             multipleIntegrate(y0, null, sol, arcs, count: count);
-            //Debug.Log("DONE: rf = " + sol.rf().xzy.magnitude + "; vf = " + sol.vf().xzy.magnitude + " tmin = " + sol.tmin() + " tmax = " + sol.tmax() + " v_barf = " + sol.v_bar(sol.tmax()).xzy.magnitude + "; r_barf = " + sol.r_bar(sol.tmax()).xzy.magnitude + " vf2 = " + sol.v_bar(sol.tmax()).xzy.magnitude * v_scale + "; rf2 = " + sol.r_bar(sol.tmax()).xzy.magnitude * r_scale );
+#if DEBUG
+            Log.dbg("DONE: rf = {0}; vf = {1} tmin = {2} tmax = {3} v_barf = {4}; r_barf = {5} vf2 = {6}; rf2 = {7}", (sol.rf().xzy.magnitude), (sol.vf().xzy.magnitude), sol.tmin(), sol.tmax(), (sol.v_bar(sol.tmax()).xzy.magnitude), (sol.r_bar(sol.tmax()).xzy.magnitude), (sol.v_bar(sol.tmax()).xzy.magnitude * v_scale), (sol.r_bar(sol.tmax()).xzy.magnitude * r_scale) );
+#endif
         }
 
         // copy the nth
@@ -666,9 +675,10 @@ namespace MuMech {
                     else
                         coast_time = y0[arcIndex(arcs, i, parameters: true)];
 
-                    //if (sol != null)
-                    //    Debug.Log("coast_time = " + coast_time + " t = " + t);
-
+#if DEBUG
+                    if (sol != null)
+                        Log.dbg("coast_time = {0} t = {1}", coast_time, t);
+#endif
                     if (yf != null) {
                         // normal integration with no midpoints
                         singleIntegrate(y0, yf, i, ref t, coast_time, arcs, ref dV);
@@ -987,13 +997,13 @@ namespace MuMech {
                     total_bt_bar += arcs[i].max_bt_bar;
             }
 
+#if false
             /* construct sum of the squares of the residuals for levenberg marquardt */
-            /*
             for(int i = 0; i < z.Length; i++)
                 //z[i] = z[i] * z[i];
                 z[i] = Math.Abs(z[i]);
-                */
-        }
+#endif
+            }
 
         // NOTE TO SELF:  STOP FUCKING WITH THESE NUMBERS
         double lmEpsx = 0; // 1e-8;  // going to 1e-10 seems to cause the optimizer to flail with 1e-15 or less differences produced in the zero value
@@ -1003,15 +1013,17 @@ namespace MuMech {
 
         public bool runOptimizer(List<Arc> arcs)
         {
-            //Debug.Log("arcs in runOptimizer:");
-            //for(int i = 0; i < arcs.Count; i++)
-            //   Debug.Log(arcs[i]);
+#if DEBUG
+            Log.dbg("arcs in runOptimizer:");
+            for (int i = 0;i < arcs.Count;i++)
+                Log.dbg("arcs[{0}] = {1}", i, arcs[i]);
 
-            //for(int i = 0; i < stages.Count; i++)
-            //    Debug.Log(stages[i]);
+            for (int i = 0;i < stages.Count;i++)
+                Log.dbg("stages[{0}] = {1}", i, stages[i]);
 
-            //for(int i = 0; i < y0.Length; i++)
-            //    Debug.Log("runOptimizer before - y0[" + i + "] = " + y0[i]);
+            for (int i = 0;i < y0.Length;i++)
+                Log.dbg("runOptimizer before - y0[{0}] = {1}", i, y0[i]);
+#endif
 
             double[] z = new double[arcIndex(arcs,arcs.Count)];
             optimizationFunction(y0, z, arcs);
@@ -1021,14 +1033,15 @@ namespace MuMech {
             for(int i = 0; i < z.Length; i++)
             {
                 znorm += z[i] * z[i];
-                //Debug.Log("zbefore[" + i + "] = " + z[i]);
+                Log.dbg("zbefore[{0}] = {1}", i, z[i]);
             }
 
             znorm = Math.Sqrt(znorm);
-            //Debug.Log("znorm = " + znorm);
+            Log.dbg("znorm = {0}", znorm);
 
-            //Debug.Log("length = " + arcIndex(arcs,arcs.Count));
-            //Debug.Log("y0 length = " + y0.Length);
+#if DEBUG
+            Log.dbg("length = {0} y0 length = {1}", arcIndex(arcs, arcs.Count), y0.Length);
+#endif
 
             double[] bndl = new double[arcIndex(arcs,arcs.Count)];
             double[] bndu = new double[arcIndex(arcs,arcs.Count)];
@@ -1075,15 +1088,15 @@ namespace MuMech {
                 if (z[i] > max_z)
                     max_z = z[i];
                 znorm += z[i] * z[i];
-                //Debug.Log("z[" + i + "] = " + z[i]);
+                Log.dbg("z[{0}] = {1}", i, z[i]);
             }
 
             last_znorm = Math.Sqrt(znorm);
 
-            //Debug.Log("znorm = " + znorm);
+            Log.dbg("znorm = " + znorm);
 
-            //for(int i = 0; i < y0.Length; i++)
-            //    Debug.Log("y0[" + i + "] = " + y0[i]);
+            for (int i = 0;i < y0.Length;i++)
+                Log.dbg("y0[{0}] = {1}", i, y0[i]);
 
             // this comes first because after max-iterations we may still have an acceptable solution.
             // we check the largest z-value rather than znorm because for a lot of dimensions several slightly
@@ -1094,8 +1107,9 @@ namespace MuMech {
                 return true;
             }
 
-            //Debug.Log("runoptimizer failed!");
+            Log.dbg("runoptimizer failed!");
 
+            // I think the following lines are pretty useless.... Lisias
             // lol
             if ( (rep.terminationtype != 2) && (rep.terminationtype != 7) )
                 return false;
@@ -1134,7 +1148,9 @@ namespace MuMech {
 
             if (solution != null)
             {
-                //Debug.Log("tburn_bar = " + solution.tburn_bar(0));
+#if DEBUG
+                Log.dbg("tburn_bar = {0}", solution.tburn_bar(0));
+#endif
                 y0[0] = solution.tburn_bar(0); // FIXME: need to pass actual t0 here
             }
             else
@@ -1231,13 +1247,15 @@ namespace MuMech {
             }
 
             try {
-                //Debug.Log("starting optimize");
+                Log.dbg("starting optimize");
+#if DEBUG
                 if (stages != null)
                 {
-                    //Debug.Log("stages: ");
-                    //for(int i = 0; i < stages.Count; i++)
-                    //    Debug.Log(stages[i]);
+                    Log.dbg("stages: ");
+                    for (int i = 0;i < stages.Count;i++)
+                        Log.dbg("stages[{0}] = {1}", i, stages[i]);
                 }
+#endif
                 if (last_arcs != null)
                 {
                     // since we shift the zero of tbar forwards on every re-optimize we have to do this here
@@ -1248,9 +1266,11 @@ namespace MuMech {
                             last_arcs[i].fixed_tbar = ( last_arcs[i].fixed_time - t0 ) / t_scale;
                         }
                     }
-                    //Debug.Log("arcs: ");
-                    //for(int i = 0; i < last_arcs.Count; i++)
-                    //    Debug.Log(last_arcs[i]);
+#if DEBUG
+                    Log.dbg("arcs: ");
+                    for (int i = 0;i < last_arcs.Count;i++)
+                        Log.dbg("last_arcs[{0}] = {1}", i, last_arcs[i]);
+#endif
                 }
 
                 if (y0 == null)
@@ -1323,8 +1343,10 @@ namespace MuMech {
 
                     Solution sol = new Solution(t_scale, v_scale, r_scale, t0);
 
-                    //for(int i = 0; i < y0.Length; i++)
-                    //    Debug.Log("y0[" + i + "] = " + y0[i]);
+#if DEBUG
+                    for (int i = 0;i < y0.Length;i++)
+                        Log.dbg("y0[{0}] = {1}", i, y0[i]);
+#endif
 
                     multipleIntegrate(y0, sol, last_arcs, 10);
 
@@ -1336,30 +1358,41 @@ namespace MuMech {
                     successful_converges += 1;
                     last_success_time = Planetarium.GetUniversalTime();
 
-                    //for(int i = 0; i < yf.Length; i++)
-                    //    Debug.Log("yf[" + i + "] = " + yf[i]);
+#if DEBUG
+                    for (int i = 0;i < yf.Length;i++)
+                        Log.dbg("yf[{0}] = ", i, yf[i]);
+#endif
 
-                    //Debug.Log("r_scale = " + r_scale + " v_scale = " + v_scale);
+                    Log.dbg("r_scale = " + r_scale + " v_scale = " + v_scale);
 
-
-                    //Debug.Log("Optimize done");
-
+                    Log.dbg("Optimize done");
                 }
             }
             catch (alglib.alglibexception e)
             {
+#if USE_EXCEPTION_JANITOR
                 last_alglib_exception = e;
+#else
+                Log.err(e, this);
+#endif
                 Fatal("Uncaught Alglib Exception (" + e.GetType().Name + "): " + e.Message + "; " + e.msg);
             }
             catch (Exception e)
             {
+#if USE_EXCEPTION_JANITOR
                 last_exception = e;
+#else
+                Log.err(e, this);
+#endif
                 Fatal("Uncaught Exception (" + e.GetType().Name + "): " + e.Message);
             }
         }
 
+
+#if USE_EXCEPTION_JANITOR
         public alglib.alglibexception last_alglib_exception = null;
         public Exception last_exception = null;
+#endif
 
         public Solution solution;
 
@@ -1391,6 +1424,8 @@ namespace MuMech {
             }
         }
 
+        // all of this is not needed anymore, as KSPe Logging utilities are thread safe!
+#if USE_EXCEPTION_JANITOR
         // need to call this every tick or so in order to dump exceptions to the log from
         // the main thread since Debug.Log is not threadsafe in Unity.  (this must also
         // obviously be kept safe to call every tick and must not update any inputs from
@@ -1400,22 +1435,17 @@ namespace MuMech {
         {
             if ( last_alglib_exception != null )
             {
-                alglib.alglibexception e = last_alglib_exception;
-                Debug.Log("An exception occurred: " + e.GetType().Name);
-                Debug.Log("Message: " + e.Message);
-                Debug.Log("MSG: " + e.msg);
-                Debug.Log("Stack Trace:\n" + e.StackTrace);
+                Log.err(last_alglib_exception, this);
                 last_alglib_exception = null;
             }
             if ( last_exception != null )
             {
-                Exception e = last_exception;
-                Debug.Log("An exception occurred: " + e.GetType().Name);
-                Debug.Log("Message: " + e.Message);
-                Debug.Log("Stack Trace:\n" + e.StackTrace);
+                Log.err(last_exception, this);
                 last_exception = null;
             }
         }
+
+#endif
 
         public void KillThread()
         {

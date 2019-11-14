@@ -1,8 +1,8 @@
-﻿// #define DEBUG
-
-using System;
+﻿using System;
 using System.Threading;
 using UnityEngine;
+
+using Log = MechJeb2.Log;
 
 namespace MuMech
 {
@@ -484,23 +484,23 @@ namespace MuMech
                 alglib.minlmoptimize(state, DistanceToTarget, null, data);
                 alglib.minlmresults(state, out x, out rep);
 
-                Debug.Log("Transfer calculator: termination type=" + rep.terminationtype);
-                Debug.Log("Transfer calculator: iteration count=" + rep.iterationscount);
+                Log.info("Transfer calculator: termination type = {0}", rep.terminationtype);
+                Log.info("Transfer calculator: iteration count = {0}", rep.iterationscount);
 
                 // try again if we failed to intersect the target orbit
                 if ( data.failed )
                 {
-                    Debug.Log("Failed to intersect target orbit");
+                    Log.info("Failed to intersect target orbit");
                     N++;
                 }
                 // try again in one orbit if the maneuver node is in the past
                 else if (x[3] < earliest_UT || data.failed)
                 {
-                    Debug.Log("Transfer calculator: maneuver is " + (earliest_UT - x[3]) + " s too early, trying again in " + initial_orbit.period + " s");
+                    Log.info("Transfer calculator: maneuver is {0} s too early, trying again in {1} s", (earliest_UT - x[3]), initial_orbit.period);
                     N++;
                 }
                 else {
-                    Debug.Log("from optimizer DV = " + new Vector3d(x[0], x[1], x[2]) + " t = " + x[3] + " original arrival = " + UT_arrival);
+                    Log.info("from optimizer DV = {0} t = {1} original arrival = {2}", new Vector3d(x[0], x[1], x[2]), x[3], UT_arrival);
                     return new ManeuverParameters(new Vector3d(x[0], x[1], x[2]), x[3]);
                 }
                 if (N > 10)

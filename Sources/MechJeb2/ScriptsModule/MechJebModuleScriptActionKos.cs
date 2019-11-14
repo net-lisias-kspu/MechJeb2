@@ -1,7 +1,8 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
+using Log = MechJeb2.Log;
 
 namespace MuMech
 {
@@ -76,13 +77,13 @@ namespace MuMech
 					}
 					else
 					{
-						Debug.LogError("---- NO Interpreter OBJECT ----");
+						Log.err("---- NO Interpreter OBJECT ----");
 						this.endAction();
 					}
 				}
 				else
 				{
-					Debug.LogError("---- NO SHARED OBJECT ----");
+					Log.err("---- NO SHARED OBJECT ----");
 					this.endAction();
 				}
 			}

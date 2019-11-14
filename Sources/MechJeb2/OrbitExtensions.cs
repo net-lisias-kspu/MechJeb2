@@ -1,6 +1,8 @@
 ﻿using System;
 using UnityEngine;
 
+using Log = MechJeb2.Log;
+
 namespace MuMech
 {
     public static class OrbitExtensions
@@ -348,11 +350,11 @@ namespace MuMech
             Vector3d ret = -o.ApR * vectorToPe;
             if (double.IsNaN(ret.x))
             {
-                Debug.LogError("OrbitExtensions.SwappedRelativePositionAtApoapsis got a NaN result!");
-                Debug.LogError("o.LAN = " + o.LAN);
-                Debug.LogError("o.inclination = " + o.inclination);
-                Debug.LogError("o.argumentOfPeriapsis = " + o.argumentOfPeriapsis);
-                Debug.LogError("o.SwappedOrbitNormal() = " + o.SwappedOrbitNormal());
+                Log.err("OrbitExtensions.SwappedRelativePositionAtApoapsis got a NaN result!");
+                Log.err("o.LAN = {0}", o.LAN);
+                Log.err("o.inclination = {0}", o.inclination);
+                Log.err("o.argumentOfPeriapsis = {0}", o.argumentOfPeriapsis);
+                Log.err("o.SwappedOrbitNormal() = {0}", o.SwappedOrbitNormal());
             }
             return ret;
         }

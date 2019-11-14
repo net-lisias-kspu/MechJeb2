@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
+using Log = MechJeb2.Log;
+
 namespace MuMech
 {
     public class MechJebModuleLandingGuidance : DisplayModule
@@ -238,14 +240,14 @@ namespace MuMech
             {
                 foreach (ConfigNode site in mjConf.config.GetNode("LandingSites").GetNodes("Site"))
                 {
-                    print("site " + site);
+                    Log.info("site {0}", site);
                     string launchSiteName = site.GetValue("name");
                     string lat = site.GetValue("latitude");
                     string lon = site.GetValue("longitude");
 
                     if (launchSiteName == null || lat == null || lon == null)
                     {
-                        print("Ignore langing site with null value");
+                        Log.info("Ignore langing site with null value");
                         continue;
                     }
 
@@ -258,7 +260,7 @@ namespace MuMech
 
                     if (!landingSites.Any(p => p.name == launchSiteName))
                     {
-                        print("Adding " + launchSiteName);
+                        Log.info("Adding {0}",  launchSiteName);
                         landingSites.Add(new LandingSite()
                         {
                             name = launchSiteName,

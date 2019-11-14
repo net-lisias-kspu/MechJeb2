@@ -6,6 +6,8 @@ using System.Text.RegularExpressions;
 using KSP.UI.Screens;
 using UnityEngine;
 
+using Log = MechJeb2.Log;
+
 namespace MuMech
 {
     public class MechJebModuleMenu : DisplayModule
@@ -254,7 +256,7 @@ namespace MuMech
                 Button button;
                 if (!toolbarButtons.ContainsKey(module))
                 {
-                    Debug.Log("Create button for module " + module.GetName());
+                    Log.detail("Create button for module {0}", module.GetName());
 
                     String name = GetCleanName(module.GetName());
 
@@ -267,7 +269,7 @@ namespace MuMech
                     if (GameDatabase.Instance.GetTexture(TexturePath, false) == null)
                     {
                         button.texturePath = Qmark;
-                        print("No icon for " + name);
+                        Log.info("No icon for {0}", name);
                     }
                     else
                     {
@@ -277,7 +279,7 @@ namespace MuMech
                     if (GameDatabase.Instance.GetTexture(TexturePathActive, false) == null)
                     {
                         button.texturePathActive = TexturePath;
-                        //print("No icon for " + name + "_active");
+                        Log.dbg("No icon for {0}_active", name);
                     }
                     else
                     {

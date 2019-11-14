@@ -1,8 +1,9 @@
 ﻿using System;
 using UnityEngine;
-using KSP.UI.Screens;
 using System.Collections.Generic;
 using System.Reflection;
+
+using Log = MechJeb2.Log;
 
 namespace MuMech
 {
@@ -104,12 +105,12 @@ namespace MuMech
 
             if ( isLoadedPrincipia )
             {
-                // Debug.Log("FOUND PRINCIPIA!!!");
+                Log.dbg("FOUND PRINCIPIA!!!");
             }
 
             if ( !HighLogic.LoadedSceneIsFlight )
             {
-                Debug.Log("MechJebModuleGuidanceController [BUG]: PVG enabled in non-flight mode.  How does this happen?");
+                Log.dbg("MechJebModuleGuidanceController [BUG]: PVG enabled in non-flight mode.  How does this happen?");
                 Done();
             }
 
@@ -127,8 +128,10 @@ namespace MuMech
 
             if (p != null)
             {
+#if USE_EXCEPTION_JANITOR
                 // propagate exceptions and debug information out of the solver thread
                 p.Janitorial();
+#endif
 
                 // update the position (safe to call on every tick, will not update if a thread is running)
                 p.UpdatePosition(vesselState.orbitalPosition, vesselState.orbitalVelocity, lambda, lambdaDot, tgo, vgo);
@@ -224,15 +227,7 @@ namespace MuMech
 
             v0m = Math.Sqrt( mainBody.gravParameter * ( 2 / PeR - 1 / sma ) );
 
-            /* Debug.Log("mainBody.gravParameter = " + mainBody.gravParameter);
-            Debug.Log("mainBody.Radius = " + mainBody.Radius);
-            Debug.Log("PeA = " + PeA);
-            Debug.Log("ApA = " + ApA);
-            Debug.Log("PeR = " + PeR);
-            Debug.Log("ApR = " + ApR);
-            Debug.Log("SMA = " + sma);
-            Debug.Log("v0m = " + v0m);
-            Debug.Log("r0m = " + r0m); */
+            Log.dbg("mainBody.gravParameter = {0} mainBody.Radius = {1} PeA = {2} ApA = {3} PeR = {4} ApR = {5} SMA = {6} v0m = {7} r0m = {8}", mainBody.gravParameter, mainBody.Radius, PeA, ApA, PeR, ApR, sma, v0m, r0m);
         }
 
         double old_v0m;
@@ -271,7 +266,7 @@ namespace MuMech
                 double hTm = v0m * r0m; // FIXME: gamma
                 solver.flightangle5constraint(r0m, v0m, 0, h.normalized * hTm);
                 p = solver;
-                Debug.Log("created TargetPeInsertMatchOrbitPlane solver");
+                Log.detail("created TargetPeInsertMatchOrbitPlane solver");
             }
 
             old_v0m = v0m;
@@ -291,7 +286,7 @@ namespace MuMech
 
             if (r0m != old_r0m || v0m != old_v0m || inc != old_inc)
             {
-                //Debug.Log("old settings changed");
+                Log.dbg("old settings changed");
                 doupdate = true;
             }
 
@@ -299,12 +294,12 @@ namespace MuMech
             {
                 if (p != null)
                 {
-                    //Debug.Log("killing a thread if its there to kill");
+                    Log.dbg("killing a thread if its there to kill");
                     p.KillThread();
                 }
 
-                //Debug.Log("mainbody.Radius = " + mainBody.Radius);
-                //Debug.Log("mainbody.gravParameter = " + mainBody.gravParameter);
+                Log.dbg("mainbody.Radius = {0}", mainBody.Radius);
+                Log.dbg("mainbody.gravParameter = {0}", mainBody.gravParameter);
                 lambdaDot = Vector3d.zero;
                 double desiredHeading = OrbitalManeuverCalculator.HeadingForInclination(inc, vesselState.latitude);
                 Vector3d desiredHeadingVector = Math.Sin(desiredHeading * UtilMath.Deg2Rad) * vesselState.east + Math.Cos(desiredHeading * UtilMath.Deg2Rad) * vesselState.north;
@@ -396,8 +391,10 @@ namespace MuMech
                 return;
 
             p.threadStart(vesselState.time);
-            //if ( p.threadStart(vesselState.time) )
-                //Debug.Log("MechJeb: started optimizer thread");
+#if DEBUG
+            if (p.threadStart(vesselState.time))
+                Log.dbg("MechJeb: started optimizer thread");
+#endif
 
             if (status == PVGStatus.INITIALIZING && p.solution != null)
                 status = PVGStatus.CONVERGED;
@@ -539,7 +536,7 @@ namespace MuMech
         public void Reset()
         {
             // lambda and lambdaDot are deliberately not cleared here
-            //Debug.Log("call stack: + " + Environment.StackTrace);
+            Log.dbg("call stack: + {0}", Environment.StackTrace);
             if (p != null)
             {
                 p.KillThread();
@@ -565,7 +562,7 @@ namespace MuMech
                 principiaEGNPCDOF = ReflectionUtils.getMethodByReflection("ksp_plugin_adapter", "principia.ksp_plugin_adapter.Interface", "ExternalGetNearestPlannedCoastDegreesOfFreedom", BindingFlags.NonPublic | BindingFlags.Static);
                 if (principiaEGNPCDOF == null)
                 {
-                    // Debug.Log("failed to find ExternalGetNearestPlannedCoastDegreesOfFreedom");
+                    Log.dbg("failed to find ExternalGetNearestPlannedCoastDegreesOfFreedom");
                     isLoadedPrincipia = false;
                     return;
                 }

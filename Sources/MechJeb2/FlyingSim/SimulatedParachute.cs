@@ -2,6 +2,8 @@
 using Smooth.Pools;
 using UnityEngine;
 
+using Log = MechJeb2.Log;
+
 namespace MuMech
 {
     public class SimulatedParachute : SimulatedPart
@@ -100,10 +102,12 @@ namespace MuMech
 
             this.openningTime = startTime - timeSinceDeployment;
 
-            //Debug.Log("Parachute " + para.name + " parachuteDrag:" + this.parachuteDrag + " stowedDrag:" + para.stowedDrag + " semiDeployedDrag:" + para.semiDeployedDrag + " fullyDeployedDrag:" + para.fullyDeployedDrag + " part.maximum_drag:" + para.part.maximum_drag + " part.minimum_drag:" + para.part.minimum_drag + " semiDeploymentSpeed:" + para.semiDeploymentSpeed + " deploymentSpeed:" + para.deploymentSpeed + " deploymentState:" + para.deploymentState + " timeSinceDeployment:" + timeSinceDeployment);
-            // Keep that test code until they fix the bug in the new parachute module
-            //if ((realDrag / parachuteDrag) > 1.01d || (realDrag / parachuteDrag) < 0.99d)
-            //    Debug.Log("Parachute " + para.name + " parachuteDrag:" + this.parachuteDrag.ToString("F3") + " RealDrag:" + realDrag.ToString("F3") + " MinDrag:" + para.part.minimum_drag.ToString("F3") + " MaxDrag:" + para.part.maximum_drag.ToString("F3"));
+#if false
+            Log.dbg("Parachute {0} parachuteDrag:{1} stowedDrag:{2} semiDeployedDrag:{3} fullyDeployedDrag:{4} part.maximum_drag:{5} part.minimum_drag:{6} semiDeploymentSpeed:{7} deploymentSpeed:{8} deploymentState:{9} timeSinceDeployment:{10}", para.name, this.parachuteDrag, para.stowedDrag, para.semiDeployedDrag, para.fullyDeployedDrag, para.part.maximum_drag, para.part.minimum_drag, para.semiDeploymentSpeed, para.deploymentSpeed, para.deploymentState, timeSinceDeployment);
+            //Keep that test code until they fix the bug in the new parachute module
+            if ((realDrag / parachuteDrag) > 1.01d || (realDrag / parachuteDrag) < 0.99d)
+                Log.dbg("Parachute {0} parachuteDrag:{1:0.000} RealDrag:{2:0.000} MinDrag:{3:0.000} MaxDrag:{4:0.000}", para.name, this.parachuteDrag, realDrag, para.part.minimum_drag, para.part.maximum_drag);
+#endif
         }
 
 

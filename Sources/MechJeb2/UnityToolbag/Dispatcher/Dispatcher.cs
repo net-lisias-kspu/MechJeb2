@@ -3,6 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 
+using Log = MechJeb2.Log;
+
 namespace UnityToolbag
 {
     /// <summary>
@@ -39,7 +41,7 @@ namespace UnityToolbag
         public static void InvokeAsync(Action action)
         {
             if (!_instanceExists) {
-                Debug.LogError("No Dispatcher exists in the scene. Actions will not be invoked!");
+                Log.err("No Dispatcher exists in the scene. Actions will not be invoked!");
                 return;
             }
 
@@ -62,7 +64,7 @@ namespace UnityToolbag
         public static void Invoke(Action action)
         {
             if (!_instanceExists) {
-                Debug.LogError("No Dispatcher exists in the scene. Actions will not be invoked!");
+                Log.err("No Dispatcher exists in the scene. Actions will not be invoked!");
                 return;
             }
 
@@ -114,7 +116,7 @@ namespace UnityToolbag
         {
             if (_instanceExists)
                 return;
-            Debug.Log("[MechJeb2] Starting the Dispatcher");
+            Log.info("Starting the Dispatcher");
             new GameObject(typeof(Dispatcher).Name).AddComponent<Dispatcher>();
         }
     }

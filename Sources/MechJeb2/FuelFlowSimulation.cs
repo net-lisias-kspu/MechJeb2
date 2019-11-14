@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using KSP.UI.Screens;
 using Smooth.Algebraics;
 using Smooth.Dispose;
 using Smooth.Pools;
 using Smooth.Slinq;
-using UnityEngine;
-using UnityToolbag;
+
+using Log = MechJeb2.Log;
 
 namespace MuMech
 {
@@ -22,8 +23,7 @@ namespace MuMech
         //Takes a list of parts so that the simulation can be run in the editor as well as the flight scene
         public void Init(List<Part> parts, bool dVLinearThrust)
         {
-            //print("==================================================");
-            //print("Init Start");
+            Log.adbg("Init Start");
             KpaToAtmospheres = PhysicsGlobals.KpaToAtmospheres;
 
             // Create FuelNodes corresponding to each Part
@@ -60,7 +60,7 @@ namespace MuMech
             // some engine were activated manually
             if (StageManager.CurrentStage > StageManager.LastStage)
                 simStage++;
-            //print("Init End");
+            Log.dbg("Init End");
         }
 
         //Simulate the activation and execution of each stage of the rocket,
@@ -73,31 +73,25 @@ namespace MuMech
 
             double staticPressure = staticPressureKpa * KpaToAtmospheres;
 
-            //print("**************************************************");
-            //print("SimulateAllStages starting from stage " + simStage + " throttle=" + throttle + " staticPressureKpa=" + staticPressureKpa + " atmDensity=" + atmDensity + " machNumber=" + machNumber);
+            Log.dbg("SimulateAllStages starting from stage " + simStage + " throttle=" + throttle + " staticPressureKpa=" + staticPressureKpa + " atmDensity=" + atmDensity + " machNumber=" + machNumber);
 
             while (simStage >= 0)
             {
-                //print("Simulating stage " + simStage + "(vessel mass = " + VesselMass(simStage) + ")");
+                Log.dbg("Simulating stage {0} (vessel mass = {1})", simStage, VesselMass(simStage));
                 stages[simStage] = SimulateStage(throttle, staticPressure, atmDensity, machNumber);
                 if (simStage + 1 < stages.Length)
                     stages[simStage].stagedMass = stages[simStage + 1].endMass - stages[simStage].startMass;
-                //print("Staging at t = " + t);
+                //Log.dbg("Staging at t = {0}", t);
                 SimulateStageActivation();
             }
 
-            //print("SimulateAllStages ended");
+            Log.dbg("SimulateAllStages ended");
 
             for (int i = 0; i < nodes.Count; i++)
             {
                 nodes[i].Release();
             }
             return stages;
-        }
-
-        public static void print(object message)
-        {
-            Dispatcher.InvokeAsync(() => MonoBehaviour.print("[MechJeb2] " + message));
         }
 
         //Simulate (the rest of) the current stage of the simulated rocket,
@@ -131,23 +125,23 @@ namespace MuMech
             int step;
             for (step = 0; step < maxSteps; step++)
             {
-                //print("Stage " + simStage + " step " + step + " endMass " + stats.endMass.ToString("F3"));
+                Log.dbg("Stage {0} step {1} endMass {2}:0.000" + simStage, step, stats.endMass);
                 if (AllowedToStage()) break;
                 double dt;
                 stats = stats.Append(SimulateTimeStep(double.MaxValue, throttle, staticPressure, atmDensity, machNumber, out dt));
-                //print("Stage " + simStage + " step " + step + " dt " + dt);
+                Log.dbg("Stage {0} step {1} dt {2}", simStage, step, dt);
                 // BS engine detected. Bail out.
                 if (dt == double.MaxValue || double.IsInfinity(dt))
                 {
-                    //print("BS engine detected. Bail out.");
+                    Log.dbg("BS engine detected. Bail out.");
                     break;
                 }
             }
 
-            //print("Finished stage " + simStage + " after " + step + " steps");
+            Log.dbg("Finished stage {0} after {1} steps", simStage, step);
             if (step == maxSteps) throw new Exception("FuelFlowSimulation.SimulateStage reached max step count of " + maxSteps);
 
-            //Debug.Log("thrust = " + stats.startThrust + " ISP = " + stats.isp + " FuelFlow = " + ( stats.startMass - stats.endMass ) / stats.deltaTime * 1000 + " num = " + FindActiveEngines(true).value.Count );
+            //Log.dbg("thrust = {0} ISP = {1} FuelFlow = {2} num = {3}", stats.startThrust, stats.isp, ( stats.startMass - stats.endMass ) / stats.deltaTime * 1000, FindActiveEngines(true).value.Count );
 
             return stats;
         }
@@ -179,17 +173,22 @@ namespace MuMech
                     {
                         engines.value[i].AssignResourceDrainRates(nodes);
                     }
-                    //foreach (FuelNode n in nodes) n.DebugDrainRates();
+
+#if DEBUG
+                    foreach (FuelNode n in nodes) n.DebugDrainRates();
+#endif
 
                     double maxDt = nodes.Slinq().Select(n => n.MaxTimeStep()).Min();
                     dt = Math.Min(desiredDt, maxDt);
 
-                    //print("Simulating time step of " + dt);
+                    Log.dbg("Simulating time step of {0}", dt);
 
                     for (int i = 0; i < nodes.Count; i++)
                     {
                         nodes[i].DrainResources(dt);
-                        //nodes[i].DebugResources();
+#if DEBUG
+                        nodes[i].DebugResources();
+#endif
                     }
                 }
                 else
@@ -221,7 +220,7 @@ namespace MuMech
                 {
                     FuelNode decoupledNode = decoupledNodes.value[i];
                     nodes.Remove(decoupledNode); //remove the decoupled nodes from the simulated ship
-                    //print("Decoupling: " + decoupledNode.partName + " decoupledInStage=" + decoupledNode.decoupledInStage);
+                    Log.dbg("Decoupling: {0} decoupledInStage={1}", decoupledNode.partName, decoupledNode.decoupledInStage);
                 }
 
                 for (int i = 0; i < nodes.Count; i++)
@@ -242,17 +241,17 @@ namespace MuMech
         //Whether we've used up the current stage
         private bool AllowedToStage()
         {
-            //print("Checking whether allowed to stage at t = " + t);
-            //print("Checking whether allowed to stage");
+            //Log.dbg("Checking whether allowed to stage at t = {0}", t);
+            Log.dbg("Checking whether allowed to stage");
 
             using (var activeEngines = FindActiveEngines())
             {
-                //print("  activeEngines.Count = " + activeEngines.value.Count);
+                Log.dbg("  activeEngines.Count = {0}", activeEngines.value.Count);
 
                 //if no engines are active, we can always stage
                 if (activeEngines.value.Count == 0)
                 {
-                    //print("Allowed to stage because no active engines");
+                    Log.dbg("Allowed to stage because no active engines");
                     return true;
                 }
 
@@ -264,13 +263,15 @@ namespace MuMech
                     for (int i = 0; i < nodes.Count; i++)
                     {
                         FuelNode n = nodes[i];
-                        //print(n.partName + " is sepratron? " + n.isSepratron);
+                        Log.dbg("{0} is sepratron? {1}", n.partName, n.isSepratron);
                         if (n.decoupledInStage == (simStage - 1) && !n.isSepratron)
                         {
                             if (activeEngines.value.Contains(n))
                             {
-                                //print("Not allowed to stage because " + n.partName + " is an active engine (" + activeEngines.value.Contains(n) +")");
-                                //n.DebugResources();
+#if DEBUG
+                                Log.dbg("Not allowed to stage because {0} is an active engine ({2})",  n.partName, activeEngines.value.Contains(n));
+                                n.DebugResources();
+#endif
                                 return false;
                             }
 
@@ -282,8 +283,10 @@ namespace MuMech
                                     FuelNode engine = activeEngines.value[j];
                                     if ( engine.CanDrawFrom(n))
                                     {
-                                        //print("Not allowed to stage because " + n.partName + " contains resources (" + n.ContainsResources(burnedResources.value) + ") reachable by an active engine");
-                                        //n.DebugResources();
+#if DEBUG
+                                        Log.dbg("Not allowed to stage because {0} contains resources ({1}) reachable by an active engine", n.partName, n.ContainsResources(burnedResources.value));
+                                        n.DebugResources();
+#endif
                                         return false;
                                     }
                                 }
@@ -304,21 +307,21 @@ namespace MuMech
                         {
                             if (n.CanDrawNeededResources(nodes))
                             {
-                                //print("Part " + n.partName + " is an active engine that still has resources to draw on.");
+                                Log.dbg("Part {0} is an active engine that still has resources to draw on.", n.partName);
                                 activeEnginesWorking = true;
                             }
                         }
 
                         if (n.decoupledInStage == (simStage - 1))
                         {
-                            //print("Part " + n.partName + " is decoupled in the next stage.");
+                            Log.dbg("Part {0} is decoupled in the next stage.", n.partName);
                             partDecoupledInNextStage = true;
                         }
                     }
 
                     if (!partDecoupledInNextStage && activeEnginesWorking)
                     {
-                        //print("Not allowed to stage because nothing is decoupled in the next stage, and there are already other engines active.");
+                        Log.dbg("Not allowed to stage because nothing is decoupled in the next stage, and there are already other engines active.");
                         return false;
                     }
                 }
@@ -327,11 +330,11 @@ namespace MuMech
             //if this isn't the last stage, we're allowed to stage because doing so wouldn't drop anything important
             if (simStage > 0)
             {
-                //print("Allowed to stage because this isn't the last stage");
+                Log.dbg("Allowed to stage because this isn't the last stage");
                 return true;
             }
 
-            //print("Not allowed to stage because there are active engines and this is the last stage");
+            Log.dbg("Not allowed to stage because there are active engines and this is the last stage");
 
             //if this is the last stage, we're not allowed to stage while there are still active engines
             return false;
@@ -380,11 +383,13 @@ namespace MuMech
         {
             var param = new Tuple<int, List<FuelNode>>(simStage, nodes);
             var activeEngines = ListPool<FuelNode>.Instance.BorrowDisposable();
-            //print("Finding engines in " + nodes.Count + " parts, there are " + nodes.Slinq().Where(n => n.isEngine).Count());
-            //nodes.Slinq().Where(n => n.isEngine).ForEach(node => print("  (" + node.partName + " " + node.inverseStage + ">=" + simStage + " " + (node.inverseStage >= simStage) + ")"));
-            //print("Finding active engines: excluding resource considerations, there are " + nodes.Slinq().Where(n => n.isEngine && n.inverseStage >= simStage).Count());
+#if DEBUG
+            Log.dbg("Finding engines in {0} parts, there are {1}", nodes.Count, nodes.Slinq().Where(n => n.isEngine).Count());
+            nodes.Slinq().Where(n => n.isEngine).ForEach(node => Log.dbg("  ({0} {1}>={2} {3})", node.partName, node.inverseStage, simStage, (node.inverseStage >= simStage)));
+            Log.dbg("Finding active engines: excluding resource considerations, there are {0}", nodes.Slinq().Where(n => n.isEngine && n.inverseStage >= simStage).Count());
+#endif
             nodes.Slinq().Where((n, p) => n.isEngine && n.inverseStage >= p.Item1 && n.isDrawingResources && n.CanDrawNeededResources(p.Item2), param).AddTo(activeEngines.value);
-            //print("Finding active engines: including resource considerations, there are " + activeEngines.value.Count);
+            Log.dbg("Finding active engines: including resource considerations, there are {0}", activeEngines.value.Count);
             return activeEngines;
         }
 
@@ -543,7 +548,7 @@ namespace MuMech
                     modulesUnstagedMass = modulesStagedMass;
                 }
 
-                //print(part.partInfo.name.PadRight(25) + " " + part.mass.ToString("F4") + " " + part.GetPhysicslessChildMass().ToString("F4") + " " + modulesUnstagedMass.ToString("F4") + " " + modulesStagedMass.ToString("F4"));
+                Log.dbg("{0,25} {1:0.0000} {2:0.0000} {3:0.0000} {4:0.0000}", part.partInfo.name, part.mass, part.GetPhysicslessChildMass(), modulesUnstagedMass, modulesStagedMass);
             }
 
             inverseStage = part.inverseStage;
@@ -607,7 +612,7 @@ namespace MuMech
             if (decoupledInStage != int.MinValue)
                 return;
 
-            //print(partName + " AssignDecoupledInStage");
+            Log.dbg("{0} AssignDecoupledInStage", partName);
 
             bool isDecoupler = false;
             decoupledInStage = parentDecoupledInStage;
@@ -664,7 +669,7 @@ namespace MuMech
                                     // We are decoupling our parent
                                     // The part and its children are not part of the ship when we decouple
                                     decoupledInStage = p.inverseStage;
-                                    //print("AssignDecoupledInStage ModuleDecouple          " + p.partInfo.name + "(" + p.inverseStage + ") decoupling " + attach.attachedPart + "(" + attach.attachedPart.inverseStage + "). parent " + decoupledInStage);
+                                    Log.dbg("AssignDecoupledInStage ModuleDecouple          {0}({1}) decoupling {2} ({3}). parent {4}", p.partInfo.name, p.inverseStage, attach.attachedPart, attach.attachedPart.inverseStage, decoupledInStage);
 
                                     // The parent should already have its info assigned at this point
                                     //nodeLookup[p.parent].AssignDecoupledInStage(p.parent, nodeLookup, p.inverseStage);
@@ -676,7 +681,7 @@ namespace MuMech
                                     // The part and it's children are dropped when the parent is
                                     decoupledInStage = parentDecoupledInStage;
 
-                                    //print("AssignDecoupledInStage ModuleDecouple          " + p.partInfo.name + "(" + p.inverseStage + ") decoupling " + attach.attachedPart + "(" + attach.attachedPart.inverseStage + "). not the parent " + decoupledInStage);
+                                    Log.dbg("AssignDecoupledInStage ModuleDecouple          {0}({1}) decoupling {2}({3}). not the parent {4}", p.partInfo.name, p.inverseStage, attach.attachedPart, attach.attachedPart.inverseStage, decoupledInStage);
                                     // The part we decouple is dropped when we decouple
                                     nodeLookup[attach.attachedPart].AssignDecoupledInStage(attach.attachedPart, nodeLookup, p.inverseStage);
 
@@ -716,7 +721,7 @@ namespace MuMech
                                 // We are decoupling our parent
                                 // The part and its children are not part of the ship when we decouple
                                 decoupledInStage = p.inverseStage;
-                                //print("AssignDecoupledInStage ModuleAnchoredDecoupler " + p.partInfo.name + "(" + p.inverseStage + ") decoupling " + attach.attachedPart + "(" + attach.attachedPart.inverseStage + "). parent " + decoupledInStage);
+                                Log.dbg("AssignDecoupledInStage ModuleAnchoredDecoupler {0}({1}) decoupling {2}({3}). parent {4}", p.partInfo.name, p.inverseStage, attach.attachedPart, attach.attachedPart.inverseStage, decoupledInStage);
 
                                 // The parent should already have its info assigned at this point
                                 //nodeLookup[p.parent].AssignDecoupledInStage(p.parent, nodeLookup, p.inverseStage);
@@ -728,7 +733,7 @@ namespace MuMech
                                 // The part and it's children are dropped when the parent is
                                 decoupledInStage = parentDecoupledInStage;
 
-                                //print("AssignDecoupledInStage ModuleAnchoredDecoupler " + p.partInfo.name + "(" + p.inverseStage + ") decoupling " + attach.attachedPart + "(" + attach.attachedPart.inverseStage + "). not the parent " + decoupledInStage);
+                                Log.dbg("AssignDecoupledInStage ModuleAnchoredDecoupler {0}({1}) decoupling {2}({3}). not the parent {4}", p.partInfo.name, p.inverseStage, attach.attachedPart, attach.attachedPart.inverseStage, decoupledInStage);
                                 // The part we decouple is dropped when we decouple
                                 nodeLookup[attach.attachedPart].AssignDecoupledInStage(attach.attachedPart, nodeLookup, p.inverseStage);
                             }
@@ -783,28 +788,23 @@ namespace MuMech
             if (isLaunchClamp)
             {
                 decoupledInStage = p.inverseStage > parentDecoupledInStage ? p.inverseStage : parentDecoupledInStage;
-                //print("AssignDecoupledInStage D " + p.partInfo.name + " " + parentDecoupledInStage);
+                Log.dbg("AssignDecoupledInStage D {0} {1}", p.partInfo.name, parentDecoupledInStage);
 
             }
             else if (!isDecoupler)
             {
                 decoupledInStage = parentDecoupledInStage;
-                //print("AssignDecoupledInStage                         " + p.partInfo.name + "(" + p.inverseStage + ")" + decoupledInStage);
+                Log.dbg("AssignDecoupledInStage                         {0} ({1}) {2}", p.partInfo.name, p.inverseStage, decoupledInStage);
             }
 
             isSepratron = isEngine && isthrottleLocked && activatesEvenIfDisconnected && (inverseStage == decoupledInStage);
-            //print(partName + " decoupledInStage=" + decoupledInStage + " isSepratron=" + isSepratron);
+            Log.dbg("{0} decoupledInStage={1} isSepratron={2}", partName, decoupledInStage, isSepratron);
 
             for (int i = 0; i < p.children.Count; i++)
             {
                 Part child = p.children[i];
                 nodeLookup[child].AssignDecoupledInStage(child, nodeLookup, decoupledInStage);
             }
-        }
-
-        public static void print(object message)
-        {
-            Dispatcher.InvokeAsync(() => MonoBehaviour.print("[MechJeb2] " + message));
         }
 
         public double partThrust;
@@ -875,7 +875,7 @@ namespace MuMech
                         }
                     }
                 }
-                //Debug.Log("done with " + partName);
+                Log.dbg("done with {0}", partName);
             }
         }
 
@@ -902,13 +902,14 @@ namespace MuMech
         //because the simulated node may have lost resources, and thus mass, during the simulation.
         public double Mass(int simStage)
         {
-            //print("\n(" + simStage + ") " + partName.PadRight(25) + " dryMass " + dryMass.ToString("F3")
-            //          + " ResMass " + (resources.Keys.Sum(id => resources[id] * MuUtils.ResourceDensity(id))).ToString("F3")
-            //          + " Fairing Mass " + (inverseStage < simStage ? fairingMass : 0).ToString("F3")
-            //          + " (" + fairingMass.ToString("F3") + ")"
-            //          + " ModuleMass " + moduleMass.ToString("F3")
-            //          );
-
+#if DEBUG && false
+            Log.adbg("\n(" + simStage + ") " + partName.PadRight(25) + " dryMass " + dryMass.ToString("F3")
+                      + " ResMass " + (resources.Keys.Sum(id => resources[id] * MuUtils.ResourceDensity(id))).ToString("F3")
+                      + " Fairing Mass " + (inverseStage < simStage ? fairingMass : 0).ToString("F3")
+                      + " (" + fairingMass.ToString("F3") + ")"
+                      + " ModuleMass " + moduleMass.ToString("F3")
+                      );
+#endif
             //return dryMass + resources.Keys.Sum(id => resources[id] * MuUtils.ResourceDensity(id)) +
             double resMass = resources.KeysList.Slinq().Select((r, rs) => rs[r] * MuUtils.ResourceDensity(r), resources).Sum();
             return dryMass + resMass +
@@ -928,17 +929,19 @@ namespace MuMech
         }
 
 
+        [ConditionalAttribute("DEBUG")]
         public void DebugResources()
         {
             foreach (KeyValuePair<int, double> type in resources)
-                print(partName + " " + PartResourceLibrary.Instance.GetDefinition(type.Key).name + " is " + type.Value);
+                Log.detail("{0} {1} is {2}", partName, PartResourceLibrary.Instance.GetDefinition(type.Key).name, type.Value);
         }
 
+        [ConditionalAttribute("DEBUG")]
         public void DebugDrainRates()
         {
             foreach (int type in resourceDrains.Keys)
             {
-                print(partName + "'s drain rate of " + PartResourceLibrary.Instance.GetDefinition(type).name + "(" + type  + ") is " + resourceDrains[type] + " free=" + freeResources[type]);
+                Log.detail("{0}'s drain rate of {1}({2}) is {3} free={4}", partName, PartResourceLibrary.Instance.GetDefinition(type).name, type, resourceDrains[type], freeResources[type]);
             }
         }
 
@@ -1058,7 +1061,7 @@ namespace MuMech
             using (var dispoSources = ListPool<FuelNode>.Instance.BorrowDisposable())
             {
                 var sources = dispoSources.value;
-                //print("AssignFuelDrainRateStagePriorityFlow for " + partName + " searching for " + amount + " of " + PartResourceLibrary.Instance.GetDefinition(type).name + " in " + vessel.Count + " parts ");
+                Log.dbg("AssignFuelDrainRateStagePriorityFlow for {0} searching for {1} of {2} in {3} parts", partName, amount, PartResourceLibrary.Instance.GetDefinition(type).name, vessel.Count);
                 for (int i = 0; i < vessel.Count; i++)
                 {
                     FuelNode n = vessel[i];
@@ -1083,7 +1086,8 @@ namespace MuMech
                         }
                     }
                 }
-                //print(partName + " drains resource from " + sources.Count + " parts ");
+
+                Log.dbg("{0} drains resource from {1} parts", partName, sources.Count);
                 for (int i = 0; i < sources.Count; i++)
                 {
                     if (!freeResources[type])

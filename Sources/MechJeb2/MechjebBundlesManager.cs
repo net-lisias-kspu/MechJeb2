@@ -30,9 +30,9 @@ namespace MuMech
         {
             // We do this in MainMenu because something is going on in that scene that kills anything loaded with a bundle
             if (diffuseAmbient)
-                MechJebCore.print("Shaders already loaded");
+                Log.info("Shaders already loaded");
 
-            MechJebCore.print("Loading Shaders Bundles");
+            Log.info("Loading Shaders Bundles");
 
             // Load the font asset bundle
             AssetBundleCreateRequest bundleLoadRequest = AssetBundle.LoadFromFileAsync(shaderPath);
@@ -41,8 +41,8 @@ namespace MuMech
             AssetBundle assetBundle = bundleLoadRequest.assetBundle;
             if (assetBundle == null)
             {
-                MechJebCore.print("Failed to load AssetBundle " + shaderPath);
                 yield break;
+                Log.err("Failed to load AssetBundle {0}", shaderPath);
             }
 
             AssetBundleRequest assetLoadRequest = assetBundle.LoadAssetAsync<Shader>(diffuseAmbientName);
@@ -54,7 +54,7 @@ namespace MuMech
             diffuseAmbientIgnoreZ = assetLoadRequest.asset as Shader;
 
             assetBundle.Unload(false);
-            MechJebCore.print("Loaded Shaders Bundles");
+            Log.info("Loaded Shaders Bundles");
         }
     }
 }

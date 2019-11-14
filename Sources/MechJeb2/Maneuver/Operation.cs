@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
 
+using Log = MechJeb2.Log;
+
 namespace MuMech
 {
 
@@ -54,7 +56,7 @@ namespace MuMech
             }
             catch (Exception e)
             {
-                Debug.LogException(e);
+                Log.err(e, this);
                 errorMessage = "An error occurred while creating the node.";
                 return null;
             }
@@ -95,7 +97,7 @@ namespace MuMech
                         // can't load for reasons (missing deps most of the time)
                     }
                 }
-                Debug.Log("ManeuverPlanner initialization: found " + operations.Count + " maneuvers");
+                Log.info("ManeuverPlanner initialization: found {0} maneuvers", operations.Count);
             }
 
             var res = operations.ConvertAll(t => (Operation)t.GetConstructor(Type.EmptyTypes).Invoke(null));

@@ -1,6 +1,7 @@
 ﻿using System;
-using System.Linq;
 using UnityEngine;
+
+using Log = MechJeb2.Log;
 
 namespace MuMech
 {
@@ -53,7 +54,7 @@ namespace MuMech
                 if (!vessel.LandedOrSplashed && TimeWarp.WarpMode == TimeWarp.Modes.HIGH && TimeWarp.CurrentRateIndex == TimeWarp.fetch.GetMaxRateForAltitude(vessel.altitude, vessel.mainBody))
                     return;
 
-                //print("Warppause : lastAskedIndex=" + lastAskedIndex + " CurrentRateIndex=" + TimeWarp.CurrentRateIndex + " WarpMode=" + TimeWarp.WarpMode + " MaxCurrentRate=" + TimeWarp.fetch.GetMaxRateForAltitude(vessel.altitude, vessel.mainBody));
+                Log.dbg("Warppause : lastAskedIndex={0} CurrentRateIndex={1} WarpMode={2} MaxCurrentRate={3}", lastAskedIndex, TimeWarp.CurrentRateIndex , TimeWarp.WarpMode, TimeWarp.fetch.GetMaxRateForAltitude(vessel.altitude, vessel.mainBody));
                 WarpPaused = false;
                 //PauseWarp();
 

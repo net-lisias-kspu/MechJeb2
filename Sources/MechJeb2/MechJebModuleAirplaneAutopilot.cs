@@ -203,7 +203,7 @@ namespace MuMech
                 v_err = RealVertSpeedTarget - vertspd;
                 VertSpeedPIDController.intAccum = MuUtils.Clamp (VertSpeedPIDController.intAccum, -1 / (VerKi * VerPIDScale), 1 / (VerKi * VerPIDScale));
                 double p_act = VertSpeedPIDController.Compute (v_err);
-                //Debug.Log (p_act);
+                //Log.dbg(p_act);
                 if (double.IsNaN (p_act)) {
                     VertSpeedPIDController.Reset ();
                 } else {
