@@ -43,60 +43,23 @@
     <CodeAnalysisRuleSet>MechJeb2.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Assembly-CSharp">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>Assembly-CSharp.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Assembly-CSharp-firstpass">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>Assembly-CSharp-firstpass.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="System">
-      <SpecificVersion>False</SpecificVersion>
       <HintPath>System.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="Assembly-CSharp">
+      <HintPath>..\..\..\..\..\..\LIB\managed\1.4.1\Assembly-CSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="Assembly-CSharp-firstpass">
+      <HintPath>..\..\..\..\..\..\LIB\managed\1.4.1\Assembly-CSharp-firstpass.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>UnityEngine.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>..\..\..\..\..\..\LIB\managed\1.4.1\UnityEngine.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.UI">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>UnityEngine.UI.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>..\..\..\..\..\..\LIB\managed\1.4.1\UnityEngine.UI.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEngine.CoreModule">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>UnityEngine.CoreModule.dll</HintPath>
-      <Private>False</Private>
     </Reference>
-    <Reference Include="UnityEngine.IMGUIModule">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>UnityEngine.IMGUIModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.VehiclesModule">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>UnityEngine.VehiclesModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.PhysicsModule">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>UnityEngine.PhysicsModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.AnimationModule">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>UnityEngine.AnimationModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.TextRenderingModule">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>UnityEngine.TextRenderingModule.dll</HintPath>
-      <Private>False</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>
