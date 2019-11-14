@@ -59,7 +59,11 @@
     <Reference Include="UnityEngine.UI">
       <HintPath>..\..\..\..\..\..\LIB\managed\1.4.1\UnityEngine.UI.dll</HintPath>
     </Reference>
+    <Reference Include="KSPe">
+      <HintPath>..\..\..\..\..\..\LIB\plugins\KSPe.dll</HintPath>
     </Reference>
+    <Reference Include="KSPe.UI">
+      <HintPath>..\..\..\..\..\..\LIB\plugins\KSPe.UI.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -71,7 +75,6 @@
     <Compile Include="AttitudeControllers\TorquePI.cs" />
     <Compile Include="AutopilotModule.cs" />
     <Compile Include="CelestialBodyExtensions.cs" />
-    <Compile Include="CompatibilityChecker.cs" />
     <Compile Include="ComputerModule.cs" />
     <Compile Include="ConicStateUtils.cs" />
     <Compile Include="DisplayModule.cs" />
@@ -82,7 +85,6 @@
     <Compile Include="GLUtils.cs" />
     <Compile Include="GoodingSolver.cs" />
     <Compile Include="GuiUtils.cs" />
-    <Compile Include="InstallChecker.cs" />
     <Compile Include="LambertSolver.cs" />
     <Compile Include="LandingAutopilot\CoastToDeceleration.cs" />
     <Compile Include="LandingAutopilot\CourseCorrection.cs" />
@@ -248,6 +250,14 @@
     <Compile Include="alglib\specialfunctions.cs" />
     <Compile Include="alglib\statistics.cs" />
     <Compile Include="Shepperd.cs" />
+    <Compile Include="Log.cs" />
+    <Compile Include="Properties\Configuration.cs">
+      <DependentUpon>Configuration.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Version.cs">
+      <DependentUpon>Version.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx" />
