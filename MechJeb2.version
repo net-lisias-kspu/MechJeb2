@@ -1,0 +1,19 @@
+{
+	"NAME"		: "MechJeb2 /L Unofficial",
+	"URL"		: "https://raw.githubusercontent.com/net-lisias-kspu/MechJeb2/master/MechJeb2.version",
+	"DOWNLOAD"	: "https://github.com/net-lisias-kspu/MechJeb2/releases",
+	"CHANGE_LOG"	: "https://github.com/net-lisias-kspu/MechJeb2/blob/master/CHANGE_LOG.md",
+	"CHANGE_LOG_URL": "https://raw.githubusercontent.com/net-lisias-kspu/MechJeb2/master/CHANGES.md",
+
+	"VERSION":{
+		"MAJOR":2,
+		"MINOR":9,
+		"PATCH":0,
+		"BUILD":8
+		},
+	"KSP_VERSION_MIN":{
+		"MAJOR":1,
+		"MINOR":4,
+		"PATCH":1
+		}
+}
