@@ -6,6 +6,8 @@ using UnityEngine;
 using KSP.Localization;
 
 using Log = MechJeb2.Log;
+using Path = KSPe.IO.Simple.Path<MechJeb2.Startup>;
+using File = KSPe.IO.Simple.File<MechJeb2.Startup>;
 
 namespace MuMech
 {
@@ -308,11 +310,11 @@ namespace MuMech
 			base.OnLoad(local, type, global);
 
 			ConfigNode wps = new ConfigNode("Routes");
-			if (KSP.IO.File.Exists<MechJebCore>("mechjeb_routes.cfg"))
+			if (File.Exists("mechjeb_routes.cfg"))
 			{
 				try
 				{
-					wps = ConfigNode.Load(KSP.IO.IOUtils.GetFilePathFor(core.GetType(), "mechjeb_routes.cfg"));
+					wps = ConfigNode.Load(Path.Name("mechjeb_routes.cfg"));
 				}
 				catch (Exception e)
 				{
@@ -341,8 +343,7 @@ namespace MuMech
 					cn.AddNode(r.ToConfigNode());
 				}
 			}
-
-			cn.Save(KSP.IO.IOUtils.GetFilePathFor(core.GetType(), "mechjeb_routes.cfg"));
+			cn.Save(Path.Name("mechjeb_routes.cfg"));
 		}
 
 		public override string GetName()

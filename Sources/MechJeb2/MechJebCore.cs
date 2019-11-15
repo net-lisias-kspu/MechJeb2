@@ -1,17 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Reflection;
-using UnityEngine;
-using KSP.IO;
 using System.Diagnostics;
+
+using UnityEngine;
 using UnityEngine.Profiling;
 using UnityToolbag;
 
-using File = KSP.IO.File;
-
 using Log = MechJeb2.Log;
+using File = KSPe.IO.Simple.File<MechJeb2.Startup>;
+using Path = KSPe.IO.Simple.Path<MechJeb2.Startup>;
 
 namespace MuMech
 {
@@ -847,11 +846,11 @@ namespace MuMech
                 LoadComputerModules();
 
                 ConfigNode global = new ConfigNode("MechJebGlobalSettings");
-                if (File.Exists<MechJebCore>("mechjeb_settings_global.cfg"))
+                if (File.Exists("mechjeb_settings_global.cfg"))
                 {
                     try
                     {
-                        global = ConfigNode.Load(IOUtils.GetFilePathFor(this.GetType(), "mechjeb_settings_global.cfg"));
+                        global = ConfigNode.Load(Path.Name("mechjeb_settings_global.cfg"));
                     }
                     catch (Exception e)
                     {
@@ -865,16 +864,15 @@ namespace MuMech
                 }
 
                 ConfigNode type = new ConfigNode("MechJebTypeSettings");
-                string vesselName = vessel != null ? string.Join("_", vessel.vesselName.Split(System.IO.Path.GetInvalidFileNameChars())) : ""; // Strip illegal char from the filename
-                if ((vessel != null) && File.Exists<MechJebCore>("mechjeb_settings_type_" + vesselName + ".cfg"))
+                if ((vessel != null) && File.Exists("mechjeb_settings_type_{0}.cfg", vessel.vesselName))
                 {
                     try
                     {
-                        type = ConfigNode.Load(IOUtils.GetFilePathFor(this.GetType(), "mechjeb_settings_type_" + vesselName + ".cfg"));
+                        type = ConfigNode.Load(Path.Name("mechjeb_settings_type_{0}.cfg", vessel.vesselName));
                     }
                     catch (Exception e)
                     {
-                        Log.err(e, "MechJebCore.OnLoad caught an exception trying to load mechjeb_settings_type_{0}.cfg: {1}", vesselName, e);
+                        Log.err(e, "MechJebCore.OnLoad caught an exception trying to load mechjeb_settings_type_{0}.cfg: {1}", vessel.vesselName, e);
                     }
                 }
 
@@ -1008,14 +1006,13 @@ namespace MuMech
                 if (vessel != null || (HighLogic.LoadedSceneIsEditor && EditorLogic.fetch != null))
                 {
                     string vesselName = (HighLogic.LoadedSceneIsEditor && EditorLogic.fetch ? EditorLogic.fetch.shipNameField.text : vessel.vesselName);
-                    vesselName = string.Join("_", vesselName.Split(Path.GetInvalidFileNameChars())); // Strip illegal char from the filename
-                    type.Save(IOUtils.GetFilePathFor(this.GetType(), "mechjeb_settings_type_" + vesselName + ".cfg"));
+                    type.Save(Path.Name("mechjeb_settings_type_{0}.cfg", vesselName));
                 }
                 Profiler.EndSample();
                 Profiler.BeginSample("MechJebCore.OnSave.global");
                 if (lastFocus == vessel)
                 {
-                    global.Save(IOUtils.GetFilePathFor(this.GetType(), "mechjeb_settings_global.cfg"));
+                    global.Save(Path.Name("mechjeb_settings_global.cfg"));
                 }
                 Profiler.EndSample();
             }

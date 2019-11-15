@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using KSP.Localization;
 
+using File = KSPe.IO.Simple.File<MechJeb2.Startup>;
+
 namespace MuMech
 {
     public class MechJebModuleSettings : DisplayModule
@@ -53,9 +55,9 @@ namespace MuMech
 
             if (GUILayout.Button(Localizer.Format("#MechJeb_Settings_button1")))//"\nRestore factory default settings\n"
             {
-                KSP.IO.FileInfo.CreateForType<MechJebCore>("mechjeb_settings_global.cfg").Delete();
+                File.Delete("mechjeb_settings_global.cfg");
                 if (vessel != null && vessel.vesselName != null)
-                    KSP.IO.FileInfo.CreateForType<MechJebCore>("mechjeb_settings_type_" + vessel.vesselName + ".cfg").Delete();
+                    File.Delete("mechjeb_settings_type_{0}.cfg", vessel.vesselName);
                 core.ReloadAllComputerModules();
                 GuiUtils.SetGUIScale(1);
             }

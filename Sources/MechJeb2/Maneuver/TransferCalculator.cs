@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Threading;
-using UnityEngine;
 
 using Log = MechJeb2.Log;
+using Path = KSPe.IO.Simple.Path<MechJeb2.Startup>;
 
 namespace MuMech
 {
@@ -188,15 +188,14 @@ namespace MuMech
                 pendingJobs = -1;
 
 #if DEBUG
-                string dir = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
-                var f = System.IO.File.CreateText(dir + "/DeltaVWorking.csv");
-                f.WriteLine(originOrbit.referenceBody.referenceBody.gravParameter);
-                for (int date_index = 0; date_index < dateSamples; date_index++)
-                {
-                    int n = DurationSamplesForDate(date_index);
-                    for (int duration_index = 0; duration_index < n; duration_index++)
+                using (System.IO.StreamWriter f = System.IO.File.CreateText(Path.Name("DeltaVWorking.csv")))
+                { 
+                    f.WriteLine(originOrbit.referenceBody.referenceBody.gravParameter);
+                    for (int date_index = 0; date_index < dateSamples; date_index++)
                     {
-                        f.WriteLine(log[date_index, duration_index]);
+                        int n = DurationSamplesForDate(date_index);
+                        for (int duration_index = 0; duration_index < n; duration_index++)
+                            f.WriteLine(log[date_index, duration_index]);
                     }
                 }
 #endif

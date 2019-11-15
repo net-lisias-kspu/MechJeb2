@@ -1,11 +1,12 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using KSP.IO;
+
 using KSP.Localization;
 
 using Log = MechJeb2.Log;
+using Path = KSPe.IO.Simple.Path<MechJeb2.Startup>;
+using File = KSPe.IO.Simple.File<MechJeb2.Startup>;
 
 namespace MuMech
 {
@@ -128,7 +129,7 @@ namespace MuMech
 				{
 					//Try to have only one vessel name, whatever the new vessel name. We use the vessel name of the first time the system was instanciated
 					//Can cause problem with load/save...
-					vesselSaveName = vessel != null ? string.Join("_", vessel.vesselName.Split(System.IO.Path.GetInvalidFileNameChars())) : null; // Strip illegal char from the filename
+					vesselSaveName = vessel != null ? File.Name(vessel.vesselName) : null;
 				}
 
 				//MechJebCore instances
@@ -183,18 +184,18 @@ namespace MuMech
 		{
 			string slotName = this.getSaveSlotName(false);
 			ConfigNode node = ConfigNode.CreateConfigFromObject(this, (int)Pass.Type, null);
-			node.Save(IOUtils.GetFilePathFor(this.GetType(), "mechjeb_settings_script_" + slotName + "_conf.cfg"));
+			node.Save(Path.Name("mechjeb_settings_script_{0}_conf.cfg", slotName));
 		}
 
 		public void LoadScriptModuleConfig()
 		{
 			string slotName = this.getSaveSlotName(false);
-			if (File.Exists<MechJebCore>("mechjeb_settings_script_" + slotName + "_conf.cfg"))
+			if (File.Exists("mechjeb_settings_script_{0}_conf.cfg", slotName))
 			{
 				ConfigNode node = null;
 				try
 				{
-					node = ConfigNode.Load(IOUtils.GetFilePathFor(this.GetType(), "mechjeb_settings_script_" + slotName + "_conf.cfg"));
+					node = ConfigNode.Load(Path.Name("mechjeb_settings_script_{0}_conf.cfg", slotName));
 				}
 				catch (Exception e)
 				{
@@ -481,11 +482,11 @@ namespace MuMech
 			}
 			string slotName = this.getSaveSlotName(forceSlotName);
 			ConfigNode node = new ConfigNode("MechJebScriptSettings");
-			if (File.Exists<MechJebCore>("mechjeb_settings_script_" + slotName + "_" + slot + ".cfg"))
+			if (File.Exists("mechjeb_settings_script_{0}_{1}.cfg", slotName, slot))
 			{
 				try
 				{
-					node = ConfigNode.Load(IOUtils.GetFilePathFor(this.GetType(), "mechjeb_settings_script_" + slotName + "_" + slot + ".cfg"));
+					node = ConfigNode.Load(Path.Name("mechjeb_settings_script_{0}_{1}.cfg", slotName, slot));
 				}
 				catch (Exception e)
 				{
@@ -511,7 +512,7 @@ namespace MuMech
 			{
 				slotName = "G";
 			}
-			node.Save(IOUtils.GetFilePathFor(this.GetType(), "mechjeb_settings_script_" + slotName + "_" + slot + ".cfg"));
+			node.Save(Path.Name("mechjeb_settings_script_{0}_{1}.cfg", slotName, slot));
 			if (notify)
 			{
 				string message_label = Localizer.Format("#MechJeb_ScriptMod_label2");//"current vessel"
@@ -526,7 +527,7 @@ namespace MuMech
 		public void DeleteConfig(int slot, bool notify, bool forceSlotName)
 		{
 			string slotName = this.getSaveSlotName(forceSlotName);
-			File.Delete<MechJebCore>(IOUtils.GetFilePathFor(this.GetType(), "mechjeb_settings_script_" + slotName + "_" + slot + ".cfg"));
+			File.Delete("mechjeb_settings_script_{0}_{1}.cfg", slotName, slot);
 			if (notify)
 			{
 				this.setFlashMessage("Script deleted on slot " + (slot+1), 0);

@@ -4,7 +4,7 @@ namespace MechJeb2
 {
     [KSPAddon(KSPAddon.Startup.Instantly, true)]
     internal class Startup : MonoBehaviour
-	{
+    {
         private void Start()
         {
             Log.init();

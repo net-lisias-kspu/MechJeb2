@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Text.RegularExpressions;
 using KSP.UI.Screens;
 using UnityEngine;
 using KSP.Localization;
 
 using Log = MechJeb2.Log;
+using File = KSPe.IO.Simple.File<MechJeb2.Startup>;
 
 namespace MuMech
 {
@@ -263,7 +262,7 @@ namespace MuMech
                 {
                     Log.detail("Create button for module {0}", module.GetName());
 
-                    String name = GetCleanName(module.GetName());
+                    String name = File.Name(module.GetName());
 
                     String TexturePath = "MechJeb2/Icons/" + name;
                     String TexturePathActive = TexturePath + "_active";
@@ -432,15 +431,6 @@ namespace MuMech
             }
             menuButton.Visible = true;
         }
-
-
-        private string GetCleanName(string name)
-        {
-            string regexSearch = " .:" + new string(Path.GetInvalidFileNameChars()) + new string(Path.GetInvalidPathChars());
-            Regex r = new Regex(string.Format("[{0}]", Regex.Escape(regexSearch)));
-            return r.Replace(name, "_");
-        }
-
 
         public override void OnLoad(ConfigNode local, ConfigNode type, ConfigNode global)
         {

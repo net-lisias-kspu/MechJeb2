@@ -1,8 +1,9 @@
 ﻿using System;
-using System.IO;
-using KSP.UI.Screens;
+using SIO = System.IO;
 
 using Log = MechJeb2.Log;
+using Path = KSPe.IO.Simple.Path<MechJeb2.Startup>;
+using Directory = KSPe.IO.Simple.Directory<MechJeb2.Startup>;
 
 namespace MuMech
 {
@@ -331,13 +332,13 @@ namespace MuMech
             string exportPath = KSPUtil.ApplicationRootPath + "/GameData/MechJeb2/Export/";
 
             if (!Directory.Exists(exportPath))
-                Directory.CreateDirectory(exportPath);
+                Directory.Create(exportPath);
 
-            string vesselName = vessel != null ? string.Join("_", vessel.vesselName.Split(System.IO.Path.GetInvalidFileNameChars())) : "";
+            string vesselName = vessel != null ? Path.Name(vessel.vesselName) : "";
 
             string timestamp = DateTime.Now.ToString("yyyyMMddHHmmss");
 
-            using (StreamWriter writer = new StreamWriter(exportPath + vesselName + "_" + timestamp + ".csv"))
+            using ( SIO.StreamWriter writer = new SIO.StreamWriter(Path.Combine(exportPath, "{0}_{1}.csv", vesselName, timestamp)) )
             {
                 writer.WriteLine(string.Join(",", Enum.GetNames(typeof(recordType))));
 
@@ -354,13 +355,5 @@ namespace MuMech
                 }
             }
         }
-
-
-
-
-
-
-
-
     }
 }
