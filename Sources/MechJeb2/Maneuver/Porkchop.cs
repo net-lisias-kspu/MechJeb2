@@ -1,7 +1,7 @@
-// #define DEBUG
-
 using System;
 using UnityEngine;
+
+using Path = KSPe.IO.Simple.Path<MechJeb2.Startup>;
 
 namespace MuMech
 {
@@ -32,22 +32,22 @@ namespace MuMech
 
 			colours.SetKeys(colourKeys, alphaKeys);
 
-            int width = nodes.GetLength(0);
-            int height = nodes.GetLength(1);
+			int width = nodes.GetLength(0);
+			int height = nodes.GetLength(1);
 
-            double DVminsqr = double.MaxValue;
 			double DVmaxsqr = double.MinValue;
+			double DVminsqr = double.MaxValue;
 			for (int i = 0; i < width; i++)
 			{
 				for (int j = 0; j < height; j++)
 				{
-                    double DVsqr = nodes[i, j] * nodes[i, j];
-                    if (DVsqr < DVminsqr)
-                    {
-                        DVminsqr = DVsqr;
-                    }
+					double DVsqr = nodes[i, j] * nodes[i, j];
+					if (DVsqr < DVminsqr)
+					{
+						DVminsqr = DVsqr;
+					}
 
-                    DVmaxsqr = Math.Max(DVmaxsqr, nodes[i, j] * nodes[i, j]);
+					DVmaxsqr = Math.Max(DVmaxsqr, nodes[i, j] * nodes[i, j]);
 				}
 			}
 
@@ -58,16 +58,15 @@ namespace MuMech
 			{
 				for (int j = 0; j < height; j++)
 				{
-                    double lambda = (Math.Log(nodes[i, j] * nodes[i, j]) - logDVminsqr) / (logDVmaxsqr - logDVminsqr);
-                    texture.SetPixel(i, j, colours.Evaluate((float)lambda));
+					double lambda = (Math.Log(nodes[i, j] * nodes[i, j]) - logDVminsqr) / (logDVmaxsqr - logDVminsqr);
+					texture.SetPixel(i, j, colours.Evaluate((float)lambda));
 				}
 			}
 
 			texture.Apply();
 
-#if DEBUG
-			string dir = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
-			System.IO.File.WriteAllBytes(dir + "/Porkchop.png", texture.EncodeToPNG());
+#if DEBUG && false // Need to use KSPe to implement a Unity independent way to use EncodeToPNG this thing
+			System.IO.File.WriteAllBytes(Path.Name("Porkchop.png"), texture.EncodeToPNG());
 #endif
 		}
 	}

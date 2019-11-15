@@ -1,7 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
+// We can't import System now to avoid collission to Smooth.Algebarics.Tuple, and being it a Generics, can't be used on using wihout heavy changes on the code below.
+using Exception = System.Exception;
+using Math = System.Math;
+
 using KSP.UI.Screens;
+
 using Smooth.Algebraics;
 using Smooth.Dispose;
 using Smooth.Pools;
