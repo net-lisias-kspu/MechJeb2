@@ -936,7 +936,7 @@ namespace MuMech
             }
             catch (ReflectionTypeLoadException ex)
             {
-                Log.err("caught a ReflectionTypeLoadException. Those DLL are not built for this KSP version:");
+                Log.err("caught a ReflectionTypeLoadException. Those DLL meeds maintenance and can cause serious collateral effects on the system if not fixed:");
                 var brokenAssembly = ex.Types.Where(x => x != null).Select(x => x.Assembly).Distinct();
                 foreach (Assembly assembly in brokenAssembly)
                 {
