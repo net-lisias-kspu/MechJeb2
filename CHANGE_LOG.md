@@ -1,5 +1,9 @@
 # MechJeb2 :: Change Log
 
+* 2019-1115: 2.9.1.0 (MuMech) for KSP 1.9
+	+ ReflectionTypeLoadException will now list the DLLs that are the actual source of the exception in the log. 
+	+ tinygrox on GithUb took on the huge work required to add localization to MJ. People who want to translate MJ should have a look at this file
+	+ The DeltaV window now has buttons to hide the empty stages and switch between s and dhms for burn time
 * 2019-1019: 2.9.0.0 (MuMech) for KSP 1.8
 	+ Build for KSP 1.8
 	+ Added "Land somewhere" and "Land target" KSP Action
