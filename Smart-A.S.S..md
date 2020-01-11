@@ -6,7 +6,7 @@ The _Smart A.S.S._ module provides aids for vessel pitch control. Please note th
 
 * OFF: Switch off Smart A.S.S.
 * KILL ROT: "Kills" the spacecraft's rotation (counters rotation/tumbling).
-* NODE:
+* NODE: Orients the spacecraft to the current maneuver node
 
 # Mode buttons
 
@@ -23,7 +23,7 @@ The _Smart A.S.S._ module provides aids for vessel pitch control. Please note th
 * NML -: Orient to orbital anti-normal (change inclination).
 * RAD +: Orient to radial outward (away from SOI).
 * RAD -: Orient to radial inward (towards SOI).
-* Force roll: 
+* Force roll: Rotates to a specific angle. 
 
 ## Surface mode
 
@@ -52,3 +52,27 @@ In the SURF mode, there are three tunables:
 * PAR -: Orient antiparallel to the target's orientation. If the target is a docking node it orients the ship along the docking axis, pointing toward the node.
 
 ## Advanced mode
+* Reference:
+  * Inertial
+  * Orbit
+  * Orbit_Horizontal
+  * Surface_North
+  * Target
+  * Relative_Velocity
+  * Target_Orientation
+  * Maneuver_Node
+  * Sun
+  * Surface_Horizontal
+* Direction:
+  * Forward
+  * Back
+  * Up
+  * Down
+  * Right
+  * Left
+* Force Roll: Rolls the spacecraft to a specific angle.
+* EXECUTE: Apply the selected orientation
+
+Advanced Mode allows you to orient the spacecraft relative to a specific reference.  As an example, this can be useful for orienting a spacecraft to maximize energy harvested by the solar panels.  On a spacecraft where all of the solar panels are on the bottom, selecting SUN as the reference and UP as the direction will optimally position the spacecraft for energy harvesting.  For spacecraft with the solar arrays on the top of the spacecraft select DOWN as the orientation.  Clicking execute applies the orientation change.
+
+Another use for this is in positioning surveillance and planetary data satellites.  Selecting ORBIT - DOWN - EXECUTE will keep the spacecraft pointed at the planet or moon.
