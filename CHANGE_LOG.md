@@ -1,5 +1,11 @@
 # MechJeb2 :: Change Log
 
+* 2020-0214: 2.9.2.0 (MuMech) for KSP 1.9
+	+ Localization support with included Simplified Chinese Localization
+	+ Improved integrator and Brent's Method for maneuvers
+	+ Fix the ApR and SMA maneuvers
+	+ Support Multi-Node maneuvers
+	+ Various fixes and code improvements
 * 2019-1115: 2.9.1.0 (MuMech) for KSP 1.9
 	+ ReflectionTypeLoadException will now list the DLLs that are the actual source of the exception in the log. 
 	+ tinygrox on GithUb took on the huge work required to add localization to MJ. People who want to translate MJ should have a look at this file
