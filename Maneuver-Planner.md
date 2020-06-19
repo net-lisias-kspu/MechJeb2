@@ -18,7 +18,7 @@ For the trip back, you can use "Return from a moon" mode.
 
 There are series of modes to change your: periapsis, apoapsis, inclination, longitude of ascending node, combination of those and few other.
 
-## Curcularize
+## Circularize
 
 This mode creates a manevuer to match your apoapsis to periapsis. To match apoapsis to periapsis, select "at periapsis", to match periapsis to , select "at apoapsis". Theese are the most efficient, but it can also create node at specific height or after specific time.
 
