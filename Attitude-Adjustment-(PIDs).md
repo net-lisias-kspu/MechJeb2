@@ -92,7 +92,7 @@ which may also increase overshoot which is why the tuning recommendation is to s
 
 This is cause by gains being too high, or by the Kd derivative term.  The first thing to do is to reduce Kd to zero in order to eliminate that from consideration.  Then generally decrease Kp.  Setting
 a very small value of LD, though, is also a gain, and increasing LD may be able to reduce jitter as well.  Generally you want an LD value like 0.1 or 0.2 which should not contribute much to jitter and then
-increase Kp until jitter appears then decrease LD until overshoot appears.  Dropping LD does not usually produce as much jitter as Kp does, which is why Kp is set first.
+increase Kp until jitter appears then decrease LD until overshoot appears.  Dropping LD does not usually produce as much jitter as increasing Kp does, which is why Kp is set first.
 
 Wobble Rockets
 --------------
