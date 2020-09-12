@@ -27,7 +27,7 @@ BetterController Design
 
 The Design of the BetterController is based on the [`ALT_HOLD` mode of ArduCopter 2.9](https://archive.is/NqoUm).  Since MechJeb is concerned with holding an attitude in pitch, yaw and roll and not in fly-by-wire enhancement of user-supplied pitch, yaw and roll the altitude hold mode is more appropriate than the pitch, yaw and roll PIDs that ArduCopter uses.  The user input is treated as an external disturbance to be corrected to get back to the reference attitude.
 
-The BetterController does not use the third cascade stage for Acceleration control since this information was not reliable enough and didn't seem to produce any benefits in stability.  The first two stages are implemented with the same kind of P/sqrt(P) angular position to PID control of angular velocity.  The result is a PID controller which is fast, with minimal overshoot, with the same smooth decrease in Acceleration.
+The BetterController does not use the third cascade stage for Acceleration control since this information was not reliable enough and didn't seem to produce any benefits in stability.  The first two stages are implemented with the same kind of P/sqrt(P) control of angular position to PID control of angular velocity.  The result is a PID controller which is fast, with minimal overshoot, with the same smooth decrease in Acceleration.
 
 BetterController Settings
 -------------------------
