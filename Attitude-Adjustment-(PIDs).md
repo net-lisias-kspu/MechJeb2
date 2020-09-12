@@ -76,10 +76,21 @@ Note that the default tuning values produce good results with larger vessels wit
 BetterController Troubleshooting
 --------------------------------
 
-In order to troubleshoot it may be better to just go through the PID tuning advice above in order.
+In order to troubleshoot it may be better to just go through the PID tuning advice above in order.  Any behavior is due to a combination of tuning effects so there is no one knob to turn in order
+to eliminate some behavior.
 
-How to remove overshoot:
+#### Too much overshoot
 
+This generally requires increasing the gains on Kp first.  The whole point about finding the highest tolerable Kp value is to decrease overshoot and make the PID more responsive and track velocity
+better.  Then increasing the LD will help slow down the PID as it approaches the target (but will cost time in settling, while increasing Kp is "free" up until jitter appears).  A bit of Kd may also
+damp overshooting to find the velocity which will reduce overshooting in position as well, but generally increasing Kd quickly results in jitter.  Applying Ki will cause an integration term to appear
+which may also increase overshoot which is why the tuning recommendation is to start Ki at zero and generally to not use Ki at all.
+
+#### Too much jitter
+
+This is cause by gains being too high, or by the Kd derivative term.  The first thing to do is to reduce Kd to zero in order to eliminate that from consideration.  Then generally decrease Kp.  Setting
+a very small value of LD, though, is also a gain, and increasing LD may be able to reduce jitter as well.  Generally you want an LD value like 0.1 or 0.2 which should not contribute much to jitter and then
+increase Kp until jitter appears then decrease LD until overshoot appears.  Dropping LD does not usually produce as much jitter as Kp does, which is why Kp is set first.
 
 Wobble Rockets
 --------------
