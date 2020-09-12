@@ -37,7 +37,8 @@ BetterController Settings
     seconds of RCS fuel to initiate a turn and 2 seconds to stop.  For vessels with large amounts of SAS (i.e. stock) this will make no difference since they will turn much faster (default: 2 seconds).
 
 -   **Minimum Flip Time (sec)**
-    For very large vessels/bases with underpowered torque the Maximum Stopping Time can result in incredibly long times to slew around in a circle.  This setting overrides the Maximum Stopping Time
+    For very large vessels/bases with underpowered torque the Maximum Stopping Time can result in incredibly long times to slew around in a circle.  We care about conserving RCS fuel, but then we get
+    impatient.  This setting overrides the Maximum Stopping Time
     setting to increase the allowed angular velocity for vessels that will take a very long time to slew around.  This is expressed as the time to turn 180 degrees, not including the additional spin-up
     and spin-down time (default: 20 seconds).
 
