@@ -68,7 +68,9 @@ The first thing to do is to use SMART A.S.S to either KILL ROT or point at some 
 
 Once you have found the highest tolerable Kp value that does not produce jitter, start to adjust LD.  Do this by observing when you change the target (normal to anti-normal and back or whatever) that the motion is smooth and fast and without overshoot.  You want to find the lowest value which does not produce any overshoot.  Lower LD values is effectively higher gain.  Watch the pitch and yaw controls as you approach the target.  They should be saturated opposing the motion and then "snap" down to about 50% and then smoothly settle on zero.  If there is no "snap" then LD probably has room to become more aggressive and to be reduced.  If it "oversnaps" and reverses itself then you have overshoot and should increase LD a bit.
 
-For bonus points you can attempt to add some Kd up until you start to see the controls jitter, which may allow you to push the LD slightly lower and produce more optimally effective controls.
+For bonus points you can attempt to add some Kd up until you start to see the controls jitter, which may allow you to push the LD slightly lower and produce more optimally effective controls.  The values of Kd which do not produce jitter are typically around 0.1 though which is also not particularly useful to smooth out overshoot.
+
+It isn't clear that the use of the Ki term on the velocity controller is of much use, since it is not useful to remove steady state error in position.  It's recommended value is zero, and any other values may produce some windup and overshoot.
 
 Note that the default tuning values produce good results with larger vessels with insufficient control, keeping them reasonably fast with little to no overshoot, while allowing a little bit more overshoot for smaller rockets with excessive torque.
 
