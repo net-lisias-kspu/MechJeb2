@@ -32,10 +32,43 @@ The BetterController does not use the third cascade stage for Acceleration contr
 BetterController Settings
 -------------------------
 
+-   **Maximum Stopping Time (sec)**    
+    This option is primarily meant for conserving RCS fuel and caps the maximum angular velocity by the time it will take to stop.  Setting this to 2 seconds means that vessels will typically use 2
+    seconds of RCS fuel to initiate a turn and 2 seconds to stop.  For vessels with large amounts of SAS (i.e. stock) this will make no difference since they will turn much faster (default: 2 seconds).
+
+-   **Minimum Flip Time (sec)**
+    For very large vessels/bases with underpowered torque the Maximum Stopping Time can result in incredibly long times to slew around in a circle.  This setting overrides the Maximum Stopping Time
+    setting to increase the allowed angular velocity for vessels that will take a very long time to slew around.  This is expressed as the time to turn 180 degrees, not including the additional spin-up
+    and spin-down time (default: 20 seconds).
+
+-   **Roll Control Range (deg)**
+    When the error in the attitude is greater than this value, the controller will kill the roll velocity and focus on correcting pitch and yaw.  When the error is within this range the vessel will
+    adjust the roll error (default: 5 degrees).
+
+-   **LD (rad)**
+    This is the only setting for the error in the angular position.  It controls how far away from zero the transition is between the linear-P and sqrt(P) behavior.  Adjusting this value down is 
+    effectively more gain, but produces more overshoot.  Adjusting it up will increase the time taken to settle on the correct attitude (default: 0.1).
+
+-   **Kp**
+    This is the P gain of the velocity PID.  The higher this value is the less overshoot and the more snappy the control will be.  Adjusting this too high will result in jittering controls (default: 50.0)
+
+-   **Ki**
+    This is the I gain of the velocity PID.  It is not recommended to set this different from zero (default: 0.0).
+
+-   **Kd**
+    This is the D gain of the velocity PID.  Small amounts of D gain may reduce overshoot and allow the velocity to track better and reduce overshoot, larger amounts produce jitter (default: 0.0).
 
 
 BetterController Tuning
 -----------------------
+
+The first think to do is to use SMART A.S.S to either KILL ROT or point at some direction (e.g. normal or anti-normal).  Set the LD to something reasonable like 0.10 and Ki and Kd to 0.0.  Bring the Kp up until there is observable jitter in the pitch/yaw/roll controls.  For excessive jitter the "Actuation" column may be flipping between +1.000 and -1.000 so fast that the KSP UI output of the controls isn't jittering, but the vessel is slowly losing tracking control, back down until the "Actuation" column shows numbers near 0.001 or just 0.000.  When you find a value where it starts to jitter (reducing it 5-10% eliminates the jitter) then drop the Kp value by half of that value.  There may still be a little bit of noise less than 0.010 which should be fine.  Typical values will be in the range of 10-100.
+
+Once you have found the highest tolerable Kp value that does not produce jitter, start to adjust LD.  Do this by observing when you change the target (normal to anti-normal and back or whatever) that the motion is smooth and fast and without overshoot.  You want to find the lowest value which does not produce any overshoot.  Lower LD values is effectively higher gain.
+
+For bonus points you can attempt to add some Kd up until you start to see the controls jitter, which may allow you to push the LD slightly lower and produce more optimally "snappy" controls.
+
+Note that the default tuning values produce good results with larger vessels with insufficient control, keeping them reasonably fast with little to no overshoot, while allowing a little bit more overshoot for smaller rockets with excessive torque.
 
 Wobble Rockets
 --------------
