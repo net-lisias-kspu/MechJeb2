@@ -14,12 +14,12 @@ PID Controller Selection
 
 There are several different PID controllers to choose from:
 
-- MJController
-- KoSController
+- MJAttitudeController
+- KosAttitudeController
 - HybridController
 - BetterController
 
-The MJController is the original historical PID controller, this was supplimented with the PID controller from KoS and and "Hybrid" version that merged some of the code from the old MJ controller.  The
+The MJController is the original historical PID controller, this was supplemented with the PID controller from Kos and and "Hybrid" version that merged some of the code from the old MJ controller.  The
 current recommended controller is the "BetterController" which is what this document will be concerned with.  There is no other documentation for the other PID controllers other than the source code.
 
 BetterController Design
@@ -31,6 +31,8 @@ The BetterController does not use the third cascade stage for Acceleration contr
 
 BetterController Settings
 -------------------------
+
+
 
 BetterController Tuning
 -----------------------
