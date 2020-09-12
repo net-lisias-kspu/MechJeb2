@@ -7,6 +7,7 @@ Table of contents
 - [BetterController Design](#bettercontroller-design)
 - [BetterController Settings](#bettercontroller-settings)
 - [BetterController Tuning](#bettercontroller-tuning)
+- [BetterController Troubleshooting](#bettercontroller-troubleshooting)
 - [Wobble Rockets](#wobble-rockets)
 
 PID Controller Selection
@@ -70,6 +71,15 @@ Once you have found the highest tolerable Kp value that does not produce jitter,
 For bonus points you can attempt to add some Kd up until you start to see the controls jitter, which may allow you to push the LD slightly lower and produce more optimally effective controls.
 
 Note that the default tuning values produce good results with larger vessels with insufficient control, keeping them reasonably fast with little to no overshoot, while allowing a little bit more overshoot for smaller rockets with excessive torque.
+
+
+BetterController Troubleshooting
+--------------------------------
+
+In order to troubleshoot it may be better to just go through the PID tuning advice above in order.
+
+How to remove overshoot:
+
 
 Wobble Rockets
 --------------
