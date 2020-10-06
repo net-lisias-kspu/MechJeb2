@@ -1,5 +1,10 @@
 # MechJeb2 :: Change Log
 
+* 2020-0820: 2.11.0.0 (MuMech) for KSP ['1.10.1', '1.10']
+	+ Landing AP fixes and improvements
+	+ Plane landing AP fixes and improvements
+	+ Rover AP fixes and improvements
+	+ Updated Chinese loc
 * 2020-0705: 2.10.0.0 (MuMech) for KSP 1.10
 	+ Built for KSP 1.10
 	+ Compact UI now the default
