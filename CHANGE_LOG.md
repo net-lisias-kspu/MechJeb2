@@ -1,5 +1,16 @@
 # MechJeb2 :: Change Log
 
+* 2020-0705: 2.10.0.0 (MuMech) for KSP 1.10
+	+ Built for KSP 1.10
+	+ Compact UI now the default
+	+ Spanish translation
+	+ Russian translation
+	+ Updated Chinese translation
+	+ Principia node execution (WIP)
+	+ Many PVG updates
+	+ Plane Landing and autopilot improvements
+	+ Stuff I missed in the commit logs
+	+ Various fix and improvements
 * 2020-0214: 2.9.2.0 (MuMech) for KSP 1.9
 	+ Localization support with included Simplified Chinese Localization
 	+ Improved integrator and Brent's Method for maneuvers
