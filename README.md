@@ -42,7 +42,8 @@ This work is licensed under the [GPL 3.0](https://www.gnu.org/licenses/gpl-3.0.t
 	- You recognize and respect any trademarks
 	- You don't impersonate the authors, neither redistribute a derivative that could be misrepresented as theirs.
 	- You credit the author and republish the copyright notices on your works where the code is used.
-	- You relicense (and fully comply) your works using GPL 2.0 (or later)
+	- You relicense (and fully comply) your works using GPL 3.0
+		- Please note that upgrading the license to GPLv3 **IS NOT ALLOWED** for this work, as the author **DID NOT** added the "or (at your option) any later version" on the license.
 	- You don't mix your work with GPL incompatible works.
 
 Thanks to CardBoardBoxProcessor and Keptin for their amazing MechJeb models.
