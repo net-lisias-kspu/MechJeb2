@@ -14,7 +14,7 @@ This option is used to plan transfer to target in single sphere of influence. It
 
 For the trip back, you can use "Return from a moon" mode.
 
-## Change apsis
+## Change apsis
 
 There are series of modes to change your: periapsis, apoapsis, inclination, longitude of ascending node, combination of those and few other.
 
