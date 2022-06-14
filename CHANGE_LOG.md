@@ -1,5 +1,7 @@
 # MechJeb2 :: Change Log
 
+* 2021-0112: 2.12.0.0 (MuMech) for KSP 1.11.0
+	+ [Stuff](/linkout?remoteUrl=https%253a%252f%252fksp.sarbian.com%252fjenkins%252fjob%252fMechJeb2-Release%252f29%252f)
 * 2020-0820: 2.11.0.0 (MuMech) for KSP ['1.10.1', '1.10']
 	+ Landing AP fixes and improvements
 	+ Plane landing AP fixes and improvements
