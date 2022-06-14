@@ -932,17 +932,6 @@ namespace MuMech
                     GetComputerModule<MechJebModuleCustomWindowEditor>().AddDefaultWindows();
                 }
             }
-            catch (ReflectionTypeLoadException ex)
-            {
-                Log.err("caught a ReflectionTypeLoadException. Those DLL meeds maintenance and can cause serious collateral effects on the system if not fixed:");
-                var brokenAssembly = ex.Types.Where(x => x != null).Select(x => x.Assembly).Distinct();
-                foreach (Assembly assembly in brokenAssembly)
-                {
-                    Log.err("{0} {1} {2}",
-                            assembly.GetName().Name, assembly.GetName().Version, assembly.Location.Remove(0, Path.GetFullPath(KSPUtil.ApplicationRootPath).Length)
-                        );
-                }
-            }
             catch (Exception e)
             {
                 Log.err(e, "caught exception in core OnLoad: {0}", e);
