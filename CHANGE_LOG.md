@@ -1,5 +1,10 @@
 # MechJeb2 :: Change Log
 
+* 2022-0331: 2.14.0.0 (MuMech) for KSP ['1.12.3', '1.12.2', '1.12.1', '1.12.0']
+	+ UI refactor of the Ascent Guidance
+	+ Improved Principia node Execution
+	+ Performance fix and optimization
+	+ [Stuff](/linkout?remoteUrl=https%253a%252f%252fksp.sarbian.com%252fjenkins%252fjob%252fMechJeb2-Release%252fchanges)
 * 2021-0112: 2.12.0.0 (MuMech) for KSP 1.11.0
 	+ [Stuff](/linkout?remoteUrl=https%253a%252f%252fksp.sarbian.com%252fjenkins%252fjob%252fMechJeb2-Release%252f29%252f)
 * 2020-0820: 2.11.0.0 (MuMech) for KSP ['1.10.1', '1.10']
