@@ -1,5 +1,7 @@
 # MechJeb2 :: Change Log
 
+* 2022-0401: 2.14.1.0 (MuMech) for KSP ['1.12.3', '1.12.2', '1.12.1', '1.12.0'] PRE-RELEASE
+	+ Fix a bug with the infoItems
 * 2022-0331: 2.14.0.0 (MuMech) for KSP ['1.12.3', '1.12.2', '1.12.1', '1.12.0']
 	+ UI refactor of the Ascent Guidance
 	+ Improved Principia node Execution
