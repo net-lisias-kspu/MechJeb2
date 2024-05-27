@@ -1,5 +1,10 @@
 # MechJeb2 :: Change Log
 
+* 2023-0328: 2.14.3.0 (MuMech) for KSP ['1.12.3', '1.12.2', '1.12.1', '1.12.0']
+	+ Localization fix
+	+ fix related to radian vs degree
+	+ New infoItems about the Target ( MeanAnomaly, TrueLongitude, LDN, TimeToAn, TimeToDN ) that nay be of use to Principia players
+	+ More work on PVG
 * 2022-0909: 2.14.2.0 (MuMech) for KSP ['1.12.3', '1.12.2', '1.12.1', '1.12.0']
 	+ Delete alglib_info.cs 
 * 2022-0401: 2.14.1.0 (MuMech) for KSP ['1.12.3', '1.12.2', '1.12.1', '1.12.0'] PRE-RELEASE
