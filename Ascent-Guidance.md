@@ -106,6 +106,9 @@ Main Options
     - **Stop at stage**    
       Staging will not occur beyond this stage number
 
+-   **Enable hot staging**    
+    Will hot stage any engine(s) with the entered delay before staging the next stage. (make sure the engine(s) are in their own separate stage)
+
 -   **Auto-deploy solar panels**    
     Automatically deploy solar panels when safe (verify! **TODO**).
     
