@@ -1,4 +1,5 @@
 MechJeb2 contains several modules. In career mode, some of these modules first need to be enabled by researching certain nodes in the R&D tree or upgrading the tracking station.
+The menu that contains these modules in-game can be moved around the screen using the settings in Options, or by using Right Click + Drag.
 
 * [[Aircraft Autopilot]]
 * [[Ascent Guidance]]
