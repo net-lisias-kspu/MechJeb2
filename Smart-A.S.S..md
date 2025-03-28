@@ -1,6 +1,6 @@
 _Please help expanding this page. The Smart A.S.S. module is in need of more thorough documentation._
 
-The _Smart A.S.S._ module provides aids for vessel pitch control. Please note that the Smart A.S.S autopilot calculates it's pitch, bank and roll according to the orbital flight path and will not follow the flight path marker on the artifical horizon but will instead calculate it's own flight path marker from the orbital speed. NOT the surface or current speed mode selected or shown on the artificial horizon.
+The _Smart A.S.S._ module provides aids for vessel pitch control. Please note that the Smart A.S.S autopilot calculates its pitch, bank and roll according to the orbital flight path and will not follow the flight path marker on the artifical horizon but will instead calculate it's own flight path marker from the orbital speed. NOT the surface or current speed mode selected or shown on the artificial horizon.
 
 # Main buttons
 
