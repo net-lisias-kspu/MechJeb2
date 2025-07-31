@@ -7,6 +7,8 @@ Welcome to the MechJeb2 wiki!
 
 [Tutorial: Moon landing using mods](https://wiki.kerbalspaceprogram.com/wiki/Tutorial:Moon_landing_using_mods) like MechJeb of ksp wiki.
 
+[Troubleshooting Mechjeb PVG](https://github.com/KSP-RO/RP-1/wiki/TroubleshootingMechJebPVG)
+
 ## How to help
 
 - Fly with MechJeb! Use it on your rockets, experiment with its features, and let us know what would make it better.
