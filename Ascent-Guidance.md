@@ -1,4 +1,5 @@
-
+> [!WARNING]
+> This page is quite outdated, especially in regards to PEG, which is no longer in MechJeb and has been replaced with PVG. Information on PVG can be found [here](https://github.com/KSP-RO/RP-1/wiki/TroubleshootingMechJebPVG).
 
 The Ascent Guidance of Mechjeb allows to easily get a rocket into a stable,
 circular orbit with a variety of options. Launches can also be timed to
